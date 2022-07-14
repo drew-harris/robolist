@@ -10,11 +10,11 @@ export default async function handler(
     res: NextApiResponse<APIRegisterResponse>
 ) {
     if (req?.method != "POST") {
-        res.status(405).json({ error: { message: "This method is not available" } });
+        return res.status(405).json({ error: { message: "This method is not available" } });
     }
 
     if (!req.body.email || !req.body.password) {
-        res.status(400).json({ error: { message: "Missing field" } });
+        return res.status(400).json({ error: { message: "Missing field" } });
     }
 
     const body: APILoginRequest = req.body;
@@ -56,7 +56,7 @@ export default async function handler(
         }
 
         // Return jwt
-        res.status(200).json({
+        return res.status(200).json({
             jwt: jwt
         });
 
