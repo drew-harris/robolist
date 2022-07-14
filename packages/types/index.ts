@@ -1,2 +1,2 @@
+export const specialMessage: String = "Hey vercel";
 
-export const specialMessage: String = "Hey vercel"
