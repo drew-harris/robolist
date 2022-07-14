@@ -1,4 +1,2 @@
-export type Animal = {
-    name: String,
-    numLegs: Number
-}
+
+export const specialMessage: String = "Hey vercel"
