@@ -1,2 +1,3 @@
-export const specialMessage: String = "Hey vercel";
+import type { User } from "@prisma/client"
 
+export type UserWithoutPassword = Omit<User, "password">

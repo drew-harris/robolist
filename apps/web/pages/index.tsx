@@ -1,6 +1,5 @@
 import { Button } from "@mantine/core";
 import { useState } from "react";
-import { specialMessage } from "types";
 
 export default function Web() {
   const [count, setCount] = useState(0);
@@ -9,7 +8,6 @@ export default function Web() {
       <h1>{count}</h1>
       <button onClick={() => setCount((prev) => prev + 1)}>increase</button>
       <br />
-      {specialMessage}
       <Button>Hello there</Button>
     </div>
   );
