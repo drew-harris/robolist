@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import type { APIRegisterResponse } from "types/api"
+import type { APIError, APIRegisterResponse } from "types/api"
 import * as EmailValidator from "email-validator"
 import * as bcrypt from "bcrypt"
 import * as JWT from "jsonwebtoken"
@@ -19,10 +19,15 @@ export default async function handler(
 
   // Signup starts here
   const body: Prisma.UserCreateInput = req.body;
+
   if (!body.name || !body.email || !body.password) {
     res.status(400).json({ error: { message: "Missing field" }, jwt: null });
     return;
   }
+
+  body.email = body.email.trim().toLowerCase();
+  body.name = body.name.trim();
+  body.password = body.password.trim();
 
   // Validate email
   if (!EmailValidator.validate(req.body.email)) {
@@ -36,6 +41,24 @@ export default async function handler(
     return;
   }
 
+  // Check if user with that email already exists
+  const prisma = new PrismaClient();
+  try {
+    const users = await prisma.user.findFirst({
+      where: {
+        email: body.email
+      }
+    })
+
+    if (users) {
+      res.status(400).json({ error: { message: "A user with that email already exists" } });
+      return;
+    }
+  } catch (error: any) {
+    res.status(400).json({ error: { message: "Internal Error", error: error.message } });
+    return;
+  }
+
   // Encrypt password
   const salt = await bcrypt.genSalt(6);
   const hashed = await bcrypt.hash(body.password, salt);
@@ -43,7 +66,6 @@ export default async function handler(
   // Save to database
   let user: User;
   try {
-    const prisma = new PrismaClient();
     user = await prisma.user.create({
       data: {
         email: body.email,
