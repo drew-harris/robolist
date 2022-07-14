@@ -13,16 +13,14 @@ export default async function handler(
   res: NextApiResponse<APIRegisterResponse>
 ) {
   if (req?.method != "POST") {
-    res.status(405).json({ error: { message: "Method not allowed" }, jwt: null });
-    return;
+    return res.status(405).json({ error: { message: "Method not allowed" } });
   }
 
   // Signup starts here
   const body: Prisma.UserCreateInput = req.body;
 
   if (!body.name || !body.email || !body.password) {
-    res.status(400).json({ error: { message: "Missing field" }, jwt: null });
-    return;
+    return res.status(400).json({ error: { message: "Missing field" } });
   }
 
   body.email = body.email.trim().toLowerCase();
@@ -31,14 +29,12 @@ export default async function handler(
 
   // Validate email
   if (!EmailValidator.validate(req.body.email)) {
-    res.status(400).json({ error: { message: "Invalid Email" } });
-    return;
+    return res.status(400).json({ error: { message: "Invalid Email" } });
   }
 
   // Validate password
   if (body.password.length < PASSWORD_MIN_LENGTH) {
-    res.status(400).json({ error: { message: "Password must be 6 characters or longer" } });
-    return;
+    return res.status(400).json({ error: { message: "Password must be 6 characters or longer" } });
   }
 
   // Check if user with that email already exists
@@ -51,12 +47,10 @@ export default async function handler(
     })
 
     if (users) {
-      res.status(400).json({ error: { message: "A user with that email already exists" } });
-      return;
+      return res.status(400).json({ error: { message: "A user with that email already exists" } });
     }
   } catch (error: any) {
-    res.status(400).json({ error: { message: "Internal Error", error: error.message } });
-    return;
+    return res.status(400).json({ error: { message: "Internal Error", error: error.message } });
   }
 
   // Encrypt password
@@ -75,12 +69,11 @@ export default async function handler(
     });
   } catch (error: any) {
     console.error(error);
-    res.status(500).json({ error: { message: "Could not save new user to database", error: error.message } })
-    return;
+    return res.status(500).json({ error: { message: "Could not save new user to database", error: error.message } })
   }
 
   // Sign jwt
-  let jwt: String
+  let jwt: string
   try {
     const payload: UserWithoutPassword = {
       name: user.email,
@@ -90,14 +83,12 @@ export default async function handler(
 
     const secret: JWT.Secret | undefined = process.env.JWT_SECRET
     if (!secret) {
-      res.status(500).json({ error: { message: "Could not load secret to sign credentials" } })
-      return
+      return res.status(500).json({ error: { message: "Could not load secret to sign credentials" } })
     }
     jwt = JWT.sign(payload, secret)
 
   } catch (error: any) {
-    res.status(500).json({ error: { message: "Could not sign credentials", error: error.message } })
-    return
+    return res.status(500).json({ error: { message: "Could not sign credentials", error: error.message } })
   }
 
   // Return jwt

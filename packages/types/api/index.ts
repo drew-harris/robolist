@@ -1,9 +1,14 @@
 export type APIRegisterResponse = {
     error?: APIError,
-    jwt?: String | null
+    jwt?: string
+}
+
+export type APILoginRequest = {
+    email: string,
+    password: string
 }
 
 export type APIError = {
-    message: String,
-    error?: String,
+    message: string,
+    error?: string,
 }
