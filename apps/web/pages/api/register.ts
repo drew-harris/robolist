@@ -5,6 +5,7 @@ import * as bcrypt from "bcrypt"
 import * as JWT from "jsonwebtoken"
 import { Prisma, PrismaClient, User } from "@prisma/client";
 import { UserWithoutPassword } from "types";
+import { setCookie } from "cookies-next";
 
 const PASSWORD_MIN_LENGTH = 5;
 
@@ -90,6 +91,16 @@ export default async function handler(
   } catch (error: any) {
     return res.status(500).json({ error: { message: "Could not sign credentials", error: error.message } })
   }
+
+  const date = new Date()
+  date.setDate(date.getDate() + 7)
+
+  setCookie("jwt", jwt, {
+    expires: date,
+    req,
+    res,
+  })
+
 
   // Return jwt
   res.status(200).json({
