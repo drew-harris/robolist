@@ -1,11 +1,11 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import type { APIError, APIRegisterResponse } from "types/api"
-import * as EmailValidator from "email-validator"
-import * as bcrypt from "bcrypt"
-import * as JWT from "jsonwebtoken"
 import { Prisma, PrismaClient, User } from "@prisma/client";
-import { UserWithoutPassword } from "types";
+import * as bcrypt from "bcrypt";
 import { setCookie } from "cookies-next";
+import * as EmailValidator from "email-validator";
+import * as JWT from "jsonwebtoken";
+import { NextApiRequest, NextApiResponse } from "next";
+import type { APIRegisterResponse } from "types";
+import { UserWithoutPassword } from "types";
 
 const PASSWORD_MIN_LENGTH = 5;
 
@@ -93,14 +93,13 @@ export default async function handler(
   }
 
   const date = new Date()
-  date.setDate(date.getDate() + 7)
+  date.setDate(date.getDate() + 20)
 
   setCookie("jwt", jwt, {
     expires: date,
     req,
     res,
   })
-
 
   // Return jwt
   res.status(200).json({

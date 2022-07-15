@@ -1,10 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { NextApiRequest, NextApiResponse } from "next";
-import { APILoginRequest, APIRegisterResponse } from "types/api";
-import * as bcrypt from "bcrypt"
-import * as JWT from "jsonwebtoken"
-import { UserWithoutPassword } from "types";
+import * as bcrypt from "bcrypt";
 import { setCookie } from "cookies-next";
+import * as JWT from "jsonwebtoken";
+import { NextApiRequest, NextApiResponse } from "next";
+import { APILoginRequest, APIRegisterResponse, UserWithoutPassword } from "types";
 
 export default async function handler(
   req: NextApiRequest,
@@ -58,7 +57,7 @@ export default async function handler(
 
     // Date 1 week from now
     const date = new Date()
-    date.setDate(date.getDate() + 7)
+    date.setDate(date.getDate() + 20)
 
     setCookie("jwt", jwt, {
       expires: date,

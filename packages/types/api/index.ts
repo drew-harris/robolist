@@ -1,14 +1,14 @@
-export type APIRegisterResponse = {
-    error?: APIError,
-    jwt?: string
+export interface APIRegisterResponse {
+  error?: APIError,
+  jwt?: string
 }
 
-export type APILoginRequest = {
-    email: string,
-    password: string
+export interface APILoginRequest {
+  email: string,
+  password: string
 }
 
-export type APIError = {
-    message: string,
-    error?: string,
+export interface APIError {
+  message: string,
+  error?: string,
 }
