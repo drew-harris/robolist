@@ -35,7 +35,9 @@ export default async function handler(
 
   // Validate password
   if (body.password.length < PASSWORD_MIN_LENGTH) {
-    return res.status(400).json({ error: { message: "Password must be 6 characters or longer" } });
+    return res
+      .status(400)
+      .json({ error: { message: "Password must be 6 characters or longer" } });
   }
 
   // Check if user with that email already exists
@@ -43,15 +45,20 @@ export default async function handler(
   try {
     const users = await prisma.user.findFirst({
       where: {
-        email: body.email
-      }
-    })
+        email: body.email,
+      },
+    });
 
     if (users) {
-      return res.status(400).json({ error: { message: "A user with that email already exists" } });
+      return res
+        .status(400)
+        .json({ error: { message: "A user with that email already exists" } });
     }
   } catch (error: any) {
-    return res.status(400).json({ error: { message: "Internal Error", error: error.message } });
+    console.error(error);
+    return res
+      .status(400)
+      .json({ error: { message: "Internal Error", error: error.message } });
   }
 
   // Encrypt password
@@ -65,44 +72,53 @@ export default async function handler(
       data: {
         email: body.email,
         name: body.name,
-        password: hashed
-      }
+        password: hashed,
+      },
     });
   } catch (error: any) {
     console.error(error);
-    return res.status(500).json({ error: { message: "Could not save new user to database", error: error.message } })
+    return res.status(500).json({
+      error: {
+        message: "Could not save new user to database",
+        error: error.message,
+      },
+    });
   }
 
   // Sign jwt
-  let jwt: string
+  let jwt: string;
   try {
     const payload: UserWithoutPassword = {
       name: user.email,
       email: user.email,
       id: user.id,
-    }
+    };
 
-    const secret: JWT.Secret | undefined = process.env.JWT_SECRET
+    const secret: JWT.Secret | undefined = process.env.JWT_SECRET;
     if (!secret) {
-      return res.status(500).json({ error: { message: "Could not load secret to sign credentials" } })
+      return res.status(500).json({
+        error: { message: "Could not load secret to sign credentials" },
+      });
     }
-    jwt = JWT.sign(payload, secret)
-
+    jwt = JWT.sign(payload, secret);
   } catch (error: any) {
-    return res.status(500).json({ error: { message: "Could not sign credentials", error: error.message } })
+    console.log(error);
+    return res.status(500).json({
+      error: { message: "Could not sign credentials", error: error.message },
+    });
   }
 
-  const date = new Date()
-  date.setDate(date.getDate() + 20)
+  const date = new Date();
+  date.setDate(date.getDate() + 20);
 
   setCookie("jwt", jwt, {
     expires: date,
     req,
     res,
-  })
+  });
 
   // Return jwt
   res.status(200).json({
-    jwt: jwt
+    jwt: jwt,
   });
 }

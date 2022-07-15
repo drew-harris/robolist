@@ -5,6 +5,8 @@ import { GetServerSidePropsContext } from 'next';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useState } from 'react';
+import LayoutShell from '../components/layout/LayoutShell';
+import "../global.css";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -17,13 +19,17 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   };
 
   const theme: MantineThemeOverride = {
-    colorScheme
+    colorScheme,
+    fontFamily: "Inter, sans-serif",
+    headings: {
+      fontFamily: "Inter, sans-serif",
+    }
   }
 
   return (
     <>
       <Head>
-        <title>Mantine next example</title>
+        <title>Robolist</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
@@ -31,7 +37,9 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
       <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
         <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
           <NotificationsProvider>
-            <Component {...pageProps} />
+            <LayoutShell>
+              <Component {...pageProps} />
+            </LayoutShell>
           </NotificationsProvider>
         </MantineProvider>
       </ColorSchemeProvider>
