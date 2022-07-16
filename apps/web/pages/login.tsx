@@ -23,7 +23,7 @@ const Login = () => {
         Welcome back!
       </Title>
       <Text color="dimmed" size="sm" align="center" mt={5}>
-        Don't have an account yet?{" "}
+        {"Don't have an account yet?   "}
         <Anchor<"a">
           href="#"
           size="sm"
