@@ -6,7 +6,7 @@ export default function Logo() {
   return (
     <Link href="/">
       <Title
-        order={2}
+        order={3}
         sx={(theme) => ({
           fontWeight: 700,
           letterSpacing: -1.5,
