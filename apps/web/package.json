@@ -16,6 +16,7 @@
     "@mantine/modals": "^4.2.12",
     "@mantine/next": "^4.2.12",
     "@mantine/notifications": "^4.2.12",
+    "@mantine/spotlight": "^4.2.12",
     "@prisma/client": "^4.0.0",
     "bcrypt": "^5.0.1",
     "cookies-next": "^2.1.1",
