@@ -1,18 +1,20 @@
 import {
   Anchor,
   Button,
+  Center,
   Container,
+  LoadingOverlay,
   Paper,
   PasswordInput,
+  Text,
   TextInput,
   Title,
-  Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
 import { setCookie } from "cookies-next";
 import { NextRouter, useRouter } from "next/router";
-import { APILoginRequest } from "types";
+import { useState } from "react";
+import { APILoginRequest, APIRegisterResponse } from "types";
 
 interface SignupForm extends APILoginRequest {
   confirmPassword: string;
@@ -28,15 +30,17 @@ export default function SignUp() {
     },
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
     console.log(form.values);
     const values = form.values;
     if (values.password !== values.confirmPassword) {
-      showNotification({
-        message: "Passwords do not match",
-        color: "red",
-      });
+      setError("Passwords do not match");
+      setLoading(false);
       return;
     }
 
@@ -54,11 +58,9 @@ export default function SignUp() {
       setCookie("jwt", data.jwt);
       router.replace("/tasks");
     } else {
-      const data = await response.json();
-      showNotification({
-        message: data.error.message,
-        color: "red",
-      });
+      const data: APIRegisterResponse = await response.json();
+      setError(data.error?.message || "Unknown error");
+      setLoading(false);
     }
   };
 
@@ -84,7 +86,15 @@ export default function SignUp() {
         </Anchor>
       </Text>
 
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+      <Paper
+        withBorder
+        style={{ position: "relative" }}
+        shadow="md"
+        p={30}
+        mt={30}
+        radius="md"
+      >
+        <LoadingOverlay radius={"md"} visible={loading} />
         <form onSubmit={handleSubmit}>
           <TextInput
             label="Email"
@@ -106,6 +116,15 @@ export default function SignUp() {
             mt="md"
             {...form.getInputProps("confirmPassword")}
           />
+
+          {error && (
+            <Center mt={"md"}>
+              <Text size="sm" color="red">
+                {error}
+              </Text>
+            </Center>
+          )}
+
           <Button type="submit" fullWidth mt="xl">
             Sign Up
           </Button>

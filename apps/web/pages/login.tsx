@@ -1,9 +1,9 @@
 import {
   Anchor,
   Button,
-  Checkbox,
+  Center,
   Container,
-  Group,
+  LoadingOverlay,
   Paper,
   PasswordInput,
   Text,
@@ -11,12 +11,16 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
-import { showNotification } from "@mantine/notifications";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/router";
-import { APILoginRequest } from "types";
+import { useState } from "react";
+import { APILoginRequest, APIRegisterResponse } from "types";
 const Login = () => {
   const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const form = useForm<APILoginRequest>({
     initialValues: {
       email: "",
@@ -26,6 +30,7 @@ const Login = () => {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setLoading(true);
     console.log(form.values);
     const response = await fetch("/api/login", {
       method: "POST",
@@ -41,11 +46,9 @@ const Login = () => {
       router.replace("/tasks");
       console.log(data);
     } else {
-      const data = await response.json();
-      showNotification({
-        message: data.error.message,
-        color: "red",
-      });
+      const data: APIRegisterResponse = await response.json();
+      setError(data.error?.message || "Unknown error");
+      setLoading(false);
     }
   }
 
@@ -71,7 +74,15 @@ const Login = () => {
         </Anchor>
       </Text>
 
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+      <Paper
+        withBorder
+        style={{ position: "relative" }}
+        shadow="md"
+        p={30}
+        mt={30}
+        radius="md"
+      >
+        <LoadingOverlay visible={loading} radius="md" />
         <form onSubmit={handleSubmit}>
           <TextInput
             label="Email"
@@ -86,16 +97,15 @@ const Login = () => {
             mt="md"
             {...form.getInputProps("password")}
           />
-          <Group position="apart" mt="md">
-            <Checkbox label="Remember me" />
-            <Anchor<"a">
-              onClick={(event) => event.preventDefault()}
-              href="#"
-              size="sm"
-            >
-              Forgot password?
-            </Anchor>
-          </Group>
+
+          {error && (
+            <Center mt={"md"}>
+              <Text size="sm" color="red">
+                {error}
+              </Text>
+            </Center>
+          )}
+
           <Button fullWidth mt="xl" type="submit">
             Sign in
           </Button>
