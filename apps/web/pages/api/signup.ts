@@ -20,12 +20,11 @@ export default async function handler(
   // Signup starts here
   const body: Prisma.UserCreateInput = req.body;
 
-  if (!body.name || !body.email || !body.password) {
+  if (!body.email || !body.password) {
     return res.status(400).json({ error: { message: "Missing field" } });
   }
 
   body.email = body.email.trim().toLowerCase();
-  body.name = body.name.trim();
   body.password = body.password.trim();
 
   // Validate email
@@ -71,7 +70,6 @@ export default async function handler(
     user = await prisma.user.create({
       data: {
         email: body.email,
-        name: body.name,
         password: hashed,
       },
     });
@@ -89,7 +87,6 @@ export default async function handler(
   let jwt: string;
   try {
     const payload: UserWithoutPassword = {
-      name: user.email,
       email: user.email,
       id: user.id,
     };

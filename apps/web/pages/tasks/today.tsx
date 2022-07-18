@@ -1,26 +1,21 @@
 import { Box, Container, Title } from "@mantine/core";
 import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
-import Link from "next/link";
-import { getUserFromJWT } from "../utils";
+import { getUserFromJWT } from "../../utils";
 
 export default function Web() {
-  return (
-    <Container mt={89}>
-      <Title>The Easiest Way To Get Things Done</Title>
-    </Container>
-  );
+  return <Box>Today</Box>;
 }
 
-export async function getServerSideProps(
+export function getServerSideProps(
   context: NextPageContext
-): Promise<GetServerSidePropsResult<{}>> {
+): GetServerSidePropsResult<{}> {
   const jwt = getCookie("jwt", context);
   const user = getUserFromJWT(jwt?.toString());
-  if (user) {
+  if (!user) {
     return {
       redirect: {
-        destination: "/tasks/",
+        destination: "/",
         permanent: false,
       },
     };

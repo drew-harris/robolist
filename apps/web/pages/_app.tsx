@@ -4,6 +4,7 @@ import {
   MantineProvider,
   MantineThemeOverride,
 } from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
 import { NotificationsProvider } from "@mantine/notifications";
 import { getCookie, setCookies } from "cookies-next";
 import { GetServerSidePropsContext } from "next";
@@ -11,6 +12,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import { useState } from "react";
 import LayoutShell from "../components/layout/LayoutShell";
+import SpotlightMenu from "../components/layout/SpotlightMenu";
 import "../global.css";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
@@ -52,11 +54,15 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
         toggleColorScheme={toggleColorScheme}
       >
         <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
-          <NotificationsProvider>
-            <LayoutShell>
-              <Component {...pageProps} />
-            </LayoutShell>
-          </NotificationsProvider>
+          <ModalsProvider>
+            <NotificationsProvider>
+              <SpotlightMenu>
+                <LayoutShell>
+                  <Component {...pageProps} />
+                </LayoutShell>
+              </SpotlightMenu>
+            </NotificationsProvider>
+          </ModalsProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </>

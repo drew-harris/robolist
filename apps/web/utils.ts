@@ -16,7 +16,6 @@ export function getUserFromJWT(
     return {
       email: payload.email,
       id: payload.id,
-      name: payload.name,
     };
   } catch (error) {
     return null;

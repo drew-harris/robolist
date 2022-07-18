@@ -3,12 +3,14 @@ import {
   AppShell,
   Group,
   Header,
-  Kbd,
+  MantineTheme,
   Navbar,
   Text,
   ThemeIcon,
   UnstyledButton,
 } from "@mantine/core";
+import { useHotkeys } from "@mantine/hooks";
+import { openSpotlight } from "@mantine/spotlight";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import { ReactElement } from "react";
@@ -36,7 +38,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
   const sidebarLinks: SidebarLink[] = [
     { href: "/tasks/today", label: "Today", icon: <Calendar></Calendar> },
-    { href: "/tasks/all", label: "All Tasks", icon: <List></List> },
+    { href: "/tasks/", label: "All Tasks", icon: <List></List> },
   ];
 
   const linkComponents = sidebarLinks.map((link) => (
@@ -68,7 +70,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
   const headerContent = (
     <Group
       sx={(theme) => ({
-        paddingInline: theme.spacing.md,
+        paddingInline: theme.spacing.lg,
         height: "100%",
       })}
       position="apart"
@@ -85,7 +87,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
             </Link>
           </>
         ) : (
-          <UnstyledButton>
+          <UnstyledButton onClick={openSpotlight}>
             <ThemeIcon variant="light">
               <Command width={20} height={20} />
             </ThemeIcon>
@@ -98,7 +100,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
   );
 
   const navbarContent = (
-    <Navbar width={{ base: 300 }} p="xs">
+    <Navbar width={{ base: 230 }} p="xs">
       <Navbar.Section>{linkComponents}</Navbar.Section>
     </Navbar>
   );
@@ -113,7 +115,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
       padding="md"
       navbar={hideSidebar ? undefined : navbarContent}
       header={<Header height={60}>{headerContent}</Header>}
-      styles={(theme) => ({
+      styles={(theme: MantineTheme) => ({
         main: {
           backgroundColor:
             theme.colorScheme === "dark"
