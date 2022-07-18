@@ -11,6 +11,7 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { ModalsContext } from "@mantine/modals/lib/context";
 import { setCookie } from "cookies-next";
 import { NextRouter, useRouter } from "next/router";
 import { useState } from "react";
