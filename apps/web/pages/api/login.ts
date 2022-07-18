@@ -50,30 +50,25 @@ export default async function handler(
     let jwt: string;
     try {
       const payload: UserWithoutPassword = {
-        name: user.email,
         email: user.email,
         id: user.id,
       };
 
       const secret: JWT.Secret | undefined = process.env.JWT_SECRET;
       if (!secret) {
-        return res
-          .status(500)
-          .json({
-            error: { message: "Could not load secret to sign credentials" },
-          });
+        return res.status(500).json({
+          error: { message: "Could not load secret to sign credentials" },
+        });
       }
       jwt = JWT.sign(payload, secret);
     } catch (error: any) {
       console.error(error);
-      return res
-        .status(500)
-        .json({
-          error: {
-            message: "Could not sign credentials",
-            error: error.message,
-          },
-        });
+      return res.status(500).json({
+        error: {
+          message: "Could not sign credentials",
+          error: error.message,
+        },
+      });
     }
 
     // Date 1 week from now
