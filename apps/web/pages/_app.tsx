@@ -14,12 +14,20 @@ import { useState } from "react";
 import LayoutShell from "../components/layout/LayoutShell";
 import SpotlightMenu from "../components/layout/SpotlightMenu";
 import "../global.css";
+import {
+  Hydrate,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
   const [colorScheme, setColorScheme] = useState<ColorScheme>(
     props.colorScheme
   );
+
+  const [queryClient] = useState(() => new QueryClient());
 
   const toggleColorScheme = (value?: ColorScheme) => {
     const nextColorScheme =
@@ -49,22 +57,27 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
 
-      <ColorSchemeProvider
-        colorScheme={colorScheme}
-        toggleColorScheme={toggleColorScheme}
-      >
-        <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
-          <ModalsProvider>
-            <NotificationsProvider>
-              <SpotlightMenu>
-                <LayoutShell>
-                  <Component {...pageProps} />
-                </LayoutShell>
-              </SpotlightMenu>
-            </NotificationsProvider>
-          </ModalsProvider>
-        </MantineProvider>
-      </ColorSchemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <ReactQueryDevtools />
+          <ColorSchemeProvider
+            colorScheme={colorScheme}
+            toggleColorScheme={toggleColorScheme}
+          >
+            <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
+              <ModalsProvider>
+                <NotificationsProvider>
+                  <SpotlightMenu>
+                    <LayoutShell>
+                      <Component {...pageProps} />
+                    </LayoutShell>
+                  </SpotlightMenu>
+                </NotificationsProvider>
+              </ModalsProvider>
+            </MantineProvider>
+          </ColorSchemeProvider>
+        </Hydrate>
+      </QueryClientProvider>
     </>
   );
 }

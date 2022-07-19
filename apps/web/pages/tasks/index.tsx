@@ -12,7 +12,6 @@ export function getServerSideProps(
 ): GetServerSidePropsResult<{}> {
   const jwt = getCookie("jwt", context);
   const user = getUserFromJWT(jwt?.toString());
-  console.log(user);
   if (!user) {
     return {
       redirect: {

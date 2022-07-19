@@ -23,3 +23,8 @@ export interface APICreateClassResponse {
   error?: APIError;
   class?: Class;
 }
+
+export interface APIGetClassesResponse {
+  error?: APIError;
+  classes?: Class[];
+}

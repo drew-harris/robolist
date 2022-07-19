@@ -1,21 +1,38 @@
-import { Box, SimpleGrid, Title } from "@mantine/core";
-import { Class, PrismaClient } from "@prisma/client";
+import { SimpleGrid, Title, Text } from "@mantine/core";
+import { Class } from "@prisma/client";
+import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
+import { getClasses } from "../../clientapi/classes";
 import ClassSquare from "../../components/data-display/ClassSquare";
+import { getClassesFromId } from "../../serverapi/classes";
 import { getUserFromJWT } from "../../utils";
 
 interface ClassPageProps {
-  classes: Class[];
+  dehydratedState: any;
 }
-const ClassesPage = ({ classes }: ClassPageProps) => {
-  const classElements = classes.map((class_) => {
-    return <ClassSquare class={class_} />;
-  });
+const ClassesPage = () => {
+  const { data: classes, error } = useQuery<Class[], Error>(
+    ["classes"],
+    getClasses
+  );
+
+  const classElements = classes
+    ? classes.map((class_) => {
+        return <ClassSquare key={class_.id} class={class_} />;
+      })
+    : null;
+
   return (
     <>
       <Title mb="md">Classes</Title>
-      <SimpleGrid cols={4}>{classElements}</SimpleGrid>
+      {error ? (
+        <Text color="red" size="lg" ml="lg">
+          {error.message}
+        </Text>
+      ) : (
+        <SimpleGrid cols={4}>{classElements}</SimpleGrid>
+      )}
     </>
   );
 };
@@ -27,7 +44,6 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<ClassPageProps>> {
   const jwt = getCookie("jwt", context);
   const user = getUserFromJWT(jwt?.toString());
-  console.log(user);
   if (!user) {
     return {
       redirect: {
@@ -37,18 +53,16 @@ export async function getServerSideProps(
     };
   }
 
-  const prisma = new PrismaClient();
-  const classes = await prisma.class.findMany({
-    where: {
-      userId: user.id,
-    },
-  });
+  const client = new QueryClient();
 
-  console.log(classes);
+  await client.prefetchQuery(["classes"], async () => {
+    const classes = await getClassesFromId(user.id);
+    return classes;
+  });
 
   return {
     props: {
-      classes: classes,
+      dehydratedState: dehydrate(client),
     }, // will be passed to the page component as props
   };
 }

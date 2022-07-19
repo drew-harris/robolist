@@ -1,13 +1,8 @@
-import {
-  Button,
-  LoadingOverlay,
-  Stack,
-  TextInput,
-  useMantineTheme,
-} from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useModals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { APIClassCreate } from "types";
 import { colorChoices } from "types";
@@ -16,6 +11,8 @@ import ThemeColorSelector from "../input/ThemeColorSelector";
 export default function NewClassModal() {
   const [loading, setLoading] = useState(false);
   const modals = useModals();
+  const queryClient = useQueryClient();
+
   const form = useForm<APIClassCreate>({
     initialValues: {
       color: colorChoices[5],
@@ -54,6 +51,7 @@ export default function NewClassModal() {
         message: "Class created",
         color: "green",
       });
+      queryClient.invalidateQueries(["classes"]);
       modals.closeModal("new-class");
     }
   }

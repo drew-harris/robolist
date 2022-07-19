@@ -1,23 +1,21 @@
 import { Class, Prisma, PrismaClient } from "@prisma/client";
 import { getCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
-import { APIClassCreate, APICreateClassResponse, colorChoices } from "types";
+import {
+  APIClassCreate,
+  APICreateClassResponse,
+  APIGetClassesResponse,
+  colorChoices,
+  UserWithoutPassword,
+} from "types";
+import { getClassesFromId } from "../../serverapi/classes";
 import { getUserFromJWT, unauthorizedResponse } from "../../utils";
 
-export default async function handler(
+async function createClass(
   req: NextApiRequest,
-  res: NextApiResponse<APICreateClassResponse>
+  res: NextApiResponse<APICreateClassResponse>,
+  user: UserWithoutPassword
 ) {
-  if (req?.method != "POST") {
-    return res.status(405).json({ error: { message: "Method not allowed" } });
-  }
-  const jwt = getCookie("jwt", { req, res });
-  const user = getUserFromJWT(jwt?.toString());
-
-  if (!user) {
-    return res.status(401).json(unauthorizedResponse);
-  }
-
   const data: APIClassCreate = req.body;
   if (!data.color || !data.name) {
     return res.status(400).json({ error: { message: "Missing field" } });
@@ -66,5 +64,43 @@ export default async function handler(
         message: "Error saving to database",
       },
     });
+  }
+}
+
+async function getClasses(
+  req: NextApiRequest,
+  res: NextApiResponse<APIGetClassesResponse>,
+  user: UserWithoutPassword
+) {
+  try {
+    const classes = await getClassesFromId(user.id);
+    return res.json({
+      classes: classes,
+    });
+  } catch (error: any) {
+    console.error(error);
+    return res.status(405).json({
+      error: { message: "Internal Server Error", error: error.message },
+    });
+  }
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const jwt = getCookie("jwt", { req, res });
+  const user = getUserFromJWT(jwt?.toString());
+
+  if (!user) {
+    return res.status(401).json(unauthorizedResponse);
+  }
+
+  if (req.method == "POST") {
+    return await createClass(req, res, user);
+  } else if (req.method == "GET") {
+    return await getClasses(req, res, user);
+  } else {
+    return res.status(405).json({ error: { message: "Method not allowed" } });
   }
 }
