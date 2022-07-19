@@ -5,6 +5,7 @@ import {
   Header,
   MantineTheme,
   Navbar,
+  Space,
   Text,
   ThemeIcon,
   UnstyledButton,
@@ -14,7 +15,7 @@ import { openSpotlight } from "@mantine/spotlight";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import { ReactElement } from "react";
-import { Calendar, Command, List } from "tabler-icons-react";
+import { Calendar, Command, List, Plus, School } from "tabler-icons-react";
 import { ColorSchemeToggle } from "../ColorSchemeToggle";
 
 import Logo from "../small/Logo";
@@ -29,19 +30,12 @@ interface SidebarLink {
   icon: ReactElement;
 }
 
-export default function LayoutShell({ children }: LayoutShellProps) {
-  const router: NextRouter = useRouter();
-  const showUserLinks =
-    router.pathname === "/" ||
-    router.pathname === "/login" ||
-    router.pathname === "/signup";
+interface SidebarGroupProps {
+  links: SidebarLink[];
+}
 
-  const sidebarLinks: SidebarLink[] = [
-    { href: "/tasks/today", label: "Today", icon: <Calendar></Calendar> },
-    { href: "/tasks/", label: "All Tasks", icon: <List></List> },
-  ];
-
-  const linkComponents = sidebarLinks.map((link) => (
+function SidebarGroup({ links }: SidebarGroupProps) {
+  const elements = links.map((link) => (
     <Link href={link.href} key={link.href}>
       <UnstyledButton
         sx={(theme) => ({
@@ -66,6 +60,24 @@ export default function LayoutShell({ children }: LayoutShellProps) {
       </UnstyledButton>
     </Link>
   ));
+
+  return <Navbar.Section>{elements}</Navbar.Section>;
+}
+
+export default function LayoutShell({ children }: LayoutShellProps) {
+  const router: NextRouter = useRouter();
+  const showUserLinks =
+    router.pathname === "/" ||
+    router.pathname === "/login" ||
+    router.pathname === "/signup";
+
+  const tasksGroup: SidebarLink[] = [
+    { href: "/tasks/today", label: "Today", icon: <Calendar></Calendar> },
+    { href: "/tasks/", label: "All Tasks", icon: <List></List> },
+  ];
+  const classesGroup: SidebarLink[] = [
+    { href: "/classes/", label: "Classes", icon: <School /> },
+  ];
 
   const headerContent = (
     <Group
@@ -101,7 +113,9 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
   const navbarContent = (
     <Navbar width={{ base: 230 }} p="xs">
-      <Navbar.Section>{linkComponents}</Navbar.Section>
+      <SidebarGroup links={tasksGroup} />
+      <Space h="md" />
+      <SidebarGroup links={classesGroup} />
     </Navbar>
   );
 
