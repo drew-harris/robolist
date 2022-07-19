@@ -7,7 +7,7 @@ import { getUserFromJWT } from "../utils";
 export default function Web() {
   return (
     <Container mt={89}>
-      <Title>The Easiest Way To Get Things Done</Title>
+      <Title>Hero Page Here</Title>
     </Container>
   );
 }
