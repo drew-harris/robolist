@@ -9,12 +9,13 @@ import { getClassesFromId } from "../../serverapi/classes";
 import { getUserFromJWT } from "../../utils";
 
 interface ClassPageProps {
-  dehydratedState: any;
+  classes: Class[];
 }
-const ClassesPage = () => {
+const ClassesPage = ({ classes: initialClasses }: ClassPageProps) => {
   const { data: classes, error } = useQuery<Class[], Error>(
     ["classes"],
-    getClasses
+    getClasses,
+    { initialData: initialClasses }
   );
 
   const classElements = classes
@@ -55,14 +56,11 @@ export async function getServerSideProps(
 
   const client = new QueryClient();
 
-  await client.prefetchQuery(["classes"], async () => {
-    const classes = await getClassesFromId(user.id);
-    return classes;
-  });
+  const classes = await getClassesFromId(user.id);
 
   return {
     props: {
-      dehydratedState: dehydrate(client),
+      classes,
     }, // will be passed to the page component as props
   };
 }

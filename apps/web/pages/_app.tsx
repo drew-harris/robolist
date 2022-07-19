@@ -58,25 +58,23 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
       </Head>
 
       <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
-          <ColorSchemeProvider
-            colorScheme={colorScheme}
-            toggleColorScheme={toggleColorScheme}
-          >
-            <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
-              <ModalsProvider>
-                <NotificationsProvider>
-                  <SpotlightMenu>
-                    <LayoutShell>
-                      <Component {...pageProps} />
-                    </LayoutShell>
-                  </SpotlightMenu>
-                </NotificationsProvider>
-              </ModalsProvider>
-            </MantineProvider>
-          </ColorSchemeProvider>
-        </Hydrate>
+        {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
+        <ColorSchemeProvider
+          colorScheme={colorScheme}
+          toggleColorScheme={toggleColorScheme}
+        >
+          <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
+            <ModalsProvider>
+              <NotificationsProvider>
+                <SpotlightMenu>
+                  <LayoutShell>
+                    <Component {...pageProps} />
+                  </LayoutShell>
+                </SpotlightMenu>
+              </NotificationsProvider>
+            </ModalsProvider>
+          </MantineProvider>
+        </ColorSchemeProvider>
       </QueryClientProvider>
     </>
   );
