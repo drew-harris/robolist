@@ -9,7 +9,7 @@ export default function Logo() {
         order={3}
         sx={(theme) => ({
           fontWeight: 700,
-          letterSpacing: -1.5,
+          letterSpacing: -1.3,
           cursor: "pointer",
         })}
       >
