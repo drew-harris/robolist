@@ -23,4 +23,4 @@ jobs:
           vercel-args: "--prod"
           vercel-org-id: ${{ secrets.ORG_ID}} #Required
           vercel-project-id: ${{ secrets.PROJECT_ID}} #Required
-          working-directory: ./apps/web
+          working-directory: apps/web
