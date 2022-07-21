@@ -1,4 +1,4 @@
-name: Deploy to vercel
+name: Deploy prod to vercel
 
 on:
   push:

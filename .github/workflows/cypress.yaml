@@ -1,0 +1,29 @@
+name: End-to-end tests
+on: [pull_request]
+
+env:
+  DATABASE_URL: ${{secrets.DEV_DATABASE_URL}}
+  JWT_SECRET: ${{secrets.JWT_SECRET}}
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - run: npm ci
+
+      - run: npx prisma generate
+        working-directory: packages/prisma-schema
+
+      - run: npm run ci:dev
+        working-directory: apps/web
+
+      - uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID}}
+          vercel-project-id: ${{ secrets.PROJECT_ID}}
