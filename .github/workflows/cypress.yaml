@@ -14,5 +14,4 @@ jobs:
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - run: npm ci && cd packages/prisma-schema && npx prisma generate && cd ../../
-      - run: cd apps/web
-      - run: npm run ci
+      - run: cd apps/web && npm run ci
