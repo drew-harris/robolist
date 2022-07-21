@@ -19,9 +19,3 @@ jobs:
         working-directory: packages/prisma-schema
 
       - run: cd apps/web && npm run ci:dev
-      - name: Cypress run
-        uses: cypress-io/github-action@v4
-        with:
-          working-directory: apps/web
-          build: npm run build
-          start: npm run start
