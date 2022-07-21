@@ -9,7 +9,8 @@
     "lint": "next lint",
     "cypress": "cypress open",
     "cypress:run": "cypress run",
-    "ci": "next build && start-server-and-test start http://localhost:3000/api cypress:run"
+    "ci": "next build && start-server-and-test start http://localhost:3000 cypress:run",
+    "ci:dev": "start-server-and-test dev 'http://localhost:3000' cypress:run"
   },
   "dependencies": {
     "@mantine/core": "^4.2.12",
