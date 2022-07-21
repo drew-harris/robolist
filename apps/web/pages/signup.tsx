@@ -13,6 +13,7 @@ import {
 import { useForm } from "@mantine/form";
 import { ModalsContext } from "@mantine/modals/lib/context";
 import { setCookie } from "cookies-next";
+import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import { useState } from "react";
 import { APILoginRequest, APIRegisterResponse } from "types";
@@ -78,13 +79,11 @@ export default function SignUp() {
       </Title>
       <Text color="dimmed" size="sm" align="center" mt={5}>
         {"Already have an account?   "}
-        <Anchor<"a">
-          href="#"
-          size="sm"
-          onClick={(event) => event.preventDefault()}
-        >
-          Log In
-        </Anchor>
+        <Link href="/login">
+          <Anchor<"a"> size="sm" onClick={(event) => event.preventDefault()}>
+            Log In
+          </Anchor>
+        </Link>
       </Text>
 
       <Paper
