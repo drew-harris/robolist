@@ -32,8 +32,8 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
         modals.openModal({
           children: <NewTaskModal />,
           title: "New Task",
-          size: "xl",
           id: "new-task",
+          size: "lg",
         });
       },
     },

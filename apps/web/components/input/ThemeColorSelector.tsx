@@ -15,6 +15,7 @@ interface ThemeColorSelectorProps {
 export default function ThemeColorSelector(props: ThemeColorSelectorProps) {
   const swatchElements = colorChoices.map((color: string) => (
     <Swatch
+      key={color}
       selected={props.value}
       color={color}
       onSelect={props.onChange}
