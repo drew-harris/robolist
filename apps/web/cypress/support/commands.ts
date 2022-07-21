@@ -1,4 +1,9 @@
 /// <reference types="cypress" />
+
+import user from "../fixtures/login-details.json";
+
+import cypress from "cypress";
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -25,15 +30,17 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 //
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      login(): Chainable<void>;
+      drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>;
+      dismiss(
+        subject: string,
+        options?: Partial<TypeOptions>
+      ): Chainable<Element>;
+    }
+  }
+}
 
 export {};
