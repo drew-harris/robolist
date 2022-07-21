@@ -1,5 +1,5 @@
 name: End-to-end tests
-on: [pull_request]
+on: [push]
 
 env:
   DATABASE_URL: ${{secrets.DEV_DATABASE_URL}}
