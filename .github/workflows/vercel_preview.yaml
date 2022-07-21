@@ -2,7 +2,7 @@ name: Vercel Preview
 
 on:
   workflow_run:
-    workflows: [End-to-end tests]
+    workflows: ["End-to-end tests"]
     types:
       - completed
 
