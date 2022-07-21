@@ -16,9 +16,11 @@ jobs:
       - run: npm ci
 
       - run: npx prisma generate
+        name: Generate prisma package
         working-directory: packages/prisma-schema
 
-      - run: npm run ci:dev
+      - run: npm run ci
+        name: Run tests
         working-directory: apps/web
 
       - uses: amondnet/vercel-action@v20
