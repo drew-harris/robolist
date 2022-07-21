@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
 import { setCookie } from "cookies-next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { APILoginRequest, APIRegisterResponse } from "types";
@@ -65,13 +66,9 @@ const Login = () => {
       </Title>
       <Text color="dimmed" size="sm" align="center" mt={5}>
         {"Don't have an account yet?   "}
-        <Anchor<"a">
-          href="#"
-          size="sm"
-          onClick={(event) => event.preventDefault()}
-        >
-          Create account
-        </Anchor>
+        <Link href="/signup">
+          <Anchor<"a"> size="sm">Create account</Anchor>
+        </Link>
       </Text>
 
       <Paper
@@ -87,6 +84,7 @@ const Login = () => {
           <TextInput
             label="Email"
             placeholder="you@robolist.net"
+            className="email-field"
             required
             {...form.getInputProps("email")}
           />

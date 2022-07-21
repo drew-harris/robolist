@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cypress": "cypress open",
+    "cypress:run": "cypress run",
+    "ci": "next build && start-server-and-test start http://localhost:3000/api cypress:run",
   },
   "dependencies": {
     "@mantine/core": "^4.2.12",
@@ -36,9 +39,11 @@
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^17.0.12",
     "@types/react": "17.0.37",
+    "cypress": "^10.3.1",
     "eslint": "7.32.0",
     "eslint-config-custom": "*",
     "next-transpile-modules": "9.0.0",
+    "start-server-and-test": "^1.14.0",
     "tsconfig": "*",
     "typescript": "^4.5.3"
   }
