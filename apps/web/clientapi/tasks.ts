@@ -1,6 +1,6 @@
 import { TaskWithClass } from "types";
 
-export async function getClasses(): Promise<TaskWithClass[]> {
+export async function getTasks(): Promise<TaskWithClass[]> {
   try {
     const data = await fetch("/api/tasks");
     const json = await data.json();

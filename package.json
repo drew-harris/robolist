@@ -31,7 +31,9 @@
     "@mantine/modals": "^4.2.12",
     "@mantine/next": "^4.2.12",
     "@mantine/notifications": "^4.2.12",
-    "dayjs": "^1.11.3"
+    "babel-plugin-superjson-next": "^0.4.3",
+    "dayjs": "^1.11.3",
+    "superjson": "^1.9.1"
   },
   "packageManager": "npm@8.12.1"
 }
