@@ -8,8 +8,12 @@ interface TaskProps {
 const Task = ({ task }: TaskProps) => {
   const theme = useMantineTheme();
   const defaultBgColor =
-    theme.colorScheme === "dark" ? theme.colors.gray[9] : "white";
-  const backgroundColor = task.class?.color || defaultBgColor;
+    theme.colorScheme === "dark" ? theme.colors.gray[9] : theme.colors.gray[2];
+
+  const backgroundColor = task?.class
+    ? theme.colors[task.class.color][9]
+    : defaultBgColor;
+
   const mainBoxSx: Sx = (theme) => {
     return {
       padding: theme.spacing.md,
