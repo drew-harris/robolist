@@ -9,6 +9,7 @@ import {
   UserWithoutPassword,
 } from "types";
 import { getClassesFromId } from "../../serverapi/classes";
+import { getPrismaPool } from "../../serverapi/prismapool";
 import { getUserFromJWT, unauthorizedResponse } from "../../utils";
 
 async function createClass(
@@ -28,7 +29,7 @@ async function createClass(
   }
 
   try {
-    const prisma = new PrismaClient();
+    const prisma = getPrismaPool();
 
     const currentClass = await prisma.class.findFirst({
       where: {

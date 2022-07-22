@@ -6,6 +6,7 @@ import * as JWT from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import type { APIRegisterResponse } from "types";
 import { UserWithoutPassword } from "types";
+import { getPrismaPool } from "../../serverapi/prismapool";
 
 const PASSWORD_MIN_LENGTH = 5;
 
@@ -40,7 +41,7 @@ export default async function handler(
   }
 
   // Check if user with that email already exists
-  const prisma = new PrismaClient();
+  const prisma = getPrismaPool();
   try {
     const users = await prisma.user.findFirst({
       where: {

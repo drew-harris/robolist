@@ -2,7 +2,9 @@ import {
   Box,
   Button,
   Checkbox,
+  Divider,
   LoadingOverlay,
+  MediaQuery,
   Stack,
   Textarea,
   TextInput,
@@ -14,6 +16,7 @@ import { showNotification } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { APINewTaskRequest } from "types";
+import ClassIdPicker from "../input/ClassIdPicker";
 
 export default function NewTaskModal() {
   const [loading, setLoading] = useState(false);
@@ -82,6 +85,10 @@ export default function NewTaskModal() {
     minDate: new Date(),
   };
 
+  const handleClassChange = (classId: string) => {
+    form.setFieldValue("classId", classId);
+  };
+
   const maxDate = form.values.dueDate || undefined;
 
   return (
@@ -105,30 +112,36 @@ export default function NewTaskModal() {
             label="Description"
           />
         )}
-        <Box
-          sx={(theme) => ({
-            display: "flex",
-            gap: theme.spacing.md,
-          })}
-        >
-          <DatePicker
-            style={{ flexGrow: "1" }}
-            {...form.getInputProps("dueDate")}
-            clearable={false}
-            label="Due Date"
-            {...datePickerProps}
-          />
-          <DatePicker
-            style={{ flexGrow: "1" }}
-            {...form.getInputProps("workDate")}
-            clearable={false}
-            label="Work Date"
-            disabled={!form.values.dueDate}
-            maxDate={maxDate}
-            {...datePickerProps}
-          />
-        </Box>
-        <Button type="submit">Submit</Button>
+        <ClassIdPicker form={form} />
+        <MediaQuery smallerThan={"xs"} styles={{ flexDirection: "column" }}>
+          <Box
+            sx={(theme) => ({
+              display: "flex",
+              gap: theme.spacing.md,
+            })}
+            mt="lg"
+          >
+            <DatePicker
+              style={{ flexGrow: "1" }}
+              {...form.getInputProps("dueDate")}
+              clearable={false}
+              label="Due Date"
+              {...datePickerProps}
+            />
+            <DatePicker
+              style={{ flexGrow: "1" }}
+              {...form.getInputProps("workDate")}
+              clearable={false}
+              label="Work Date"
+              disabled={!form.values.dueDate}
+              maxDate={maxDate}
+              {...datePickerProps}
+            />
+          </Box>
+        </MediaQuery>
+        <Button mt="md" type="submit">
+          Submit
+        </Button>
       </Stack>
     </form>
   );

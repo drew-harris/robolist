@@ -1,9 +1,10 @@
 import { PrismaClient, Task } from "@prisma/client";
 import { TaskWithClass } from "types";
+import { getPrismaPool } from "./prismapool";
 
 export async function getTasksFromId(userId: string): Promise<TaskWithClass[]> {
   try {
-    const prisma = new PrismaClient();
+    const prisma = getPrismaPool();
     const tasks = await prisma.task.findMany({
       where: {
         userId: userId,

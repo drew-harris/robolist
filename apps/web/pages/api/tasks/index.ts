@@ -6,6 +6,7 @@ import {
   APINewTaskRequest,
   UserWithoutPassword,
 } from "types";
+import { getPrismaPool } from "../../../serverapi/prismapool";
 import { getTasksFromId } from "../../../serverapi/tasks";
 import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
 
@@ -21,7 +22,7 @@ async function createTask(
   }
 
   try {
-    const prisma = new PrismaClient();
+    const prisma = getPrismaPool();
 
     const classDoc = data.classId
       ? {
