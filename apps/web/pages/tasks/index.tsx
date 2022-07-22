@@ -24,7 +24,7 @@ export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
   };
 
   const taskElements = tasks
-    ? tasks.sort(taskSortingMethod).map((task) => {
+    ? tasks.map((task) => {
         return <Task key={task.id} task={task} />;
       })
     : null;
