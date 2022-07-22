@@ -1,4 +1,4 @@
-name: End-to-end tests
+name: Test and Preview
 on: [pull_request]
 
 env:
@@ -6,7 +6,7 @@ env:
   JWT_SECRET: ${{secrets.JWT_SECRET}}
 
 jobs:
-  cypress-run:
+  test-and-preview:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
@@ -29,3 +29,5 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-org-id: ${{ secrets.ORG_ID}}
           vercel-project-id: ${{ secrets.PROJECT_ID}}
+          alias-domains: | #Optional
+            staging.robolist.net

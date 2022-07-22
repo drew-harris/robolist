@@ -12,7 +12,8 @@
     "cypress": "cypress run --headed",
     "ci:dev": "start-server-and-test dev 'http://localhost:3000' cypress:run",
     "ci": "npm run build && start-server-and-test start  http://127.0.0.1:3000 'cypress:run'",
-    "ci-open": "npm run build && start-server-and-test start  http://127.0.0.1:3000 'cypress'"
+    "ci-open": "npm run build && start-server-and-test start  http://127.0.0.1:3000 'cypress'",
+    "list-files": "ls -l -a"
   },
   "dependencies": {
     "@mantine/core": "^4.2.12",
