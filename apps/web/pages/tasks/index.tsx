@@ -1,4 +1,4 @@
-import { Box, Space, Text, Title } from "@mantine/core";
+import { Box, Space, Stack, Text, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
@@ -34,7 +34,7 @@ export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
       <Title order={3}>All Tasks</Title>
       <Space h="md" />
       {error?.message}
-      <Box>{taskElements}</Box>
+      <Stack spacing="sm">{taskElements}</Stack>
     </>
   );
 }
