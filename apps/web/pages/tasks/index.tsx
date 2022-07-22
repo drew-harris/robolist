@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box, Space, Text, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
@@ -19,14 +19,21 @@ export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
     { initialData: initialTasks }
   );
 
+  const taskSortingMethod = (a: TaskWithClass, b: TaskWithClass): number => {
+    return a.dueDate.getTime() > b.dueDate.getTime() ? 1 : -1;
+  };
+
   const taskElements = tasks
-    ? tasks.map((class_) => {
-        return <Task key={class_.id} task={class_} />;
+    ? tasks.sort(taskSortingMethod).map((task) => {
+        return <Task key={task.id} task={task} />;
       })
     : null;
 
   return (
     <>
+      <Title order={3}>All Tasks</Title>
+      <Space h="md" />
+      {error?.message}
       <Box>{taskElements}</Box>
     </>
   );
@@ -47,6 +54,7 @@ export async function getServerSideProps(
   }
 
   const tasks = await getTasksFromId(user.id);
+  console.log(typeof tasks[0].dueDate);
   return {
     props: {
       tasks,

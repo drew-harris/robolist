@@ -6,7 +6,11 @@ interface TaskProps {
 }
 
 const Task = (props: TaskProps) => {
-  return <Box>{props.task.title}</Box>;
+  return (
+    <Box>
+      {props.task.title} . {props.task.dueDate.toLocaleDateString()}
+    </Box>
+  );
 };
 
 export default Task;
