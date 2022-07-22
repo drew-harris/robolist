@@ -32,3 +32,4 @@ jobs:
           alias-domains: | #Optional
             staging.robolist.net
             pr-{{PR_NUMBER}}.robolist.net
+          working-directory: apps/web/.next
