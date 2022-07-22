@@ -1,6 +1,7 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, Task } from "@prisma/client";
 import type { Class } from "@prisma/client";
 import { ClassNames } from "@emotion/react";
+import { TaskWithClass } from "..";
 
 export interface APIRegisterResponse {
   error?: APIError;
@@ -27,4 +28,23 @@ export interface APICreateClassResponse {
 export interface APIGetClassesResponse {
   error?: APIError;
   classes?: Class[];
+}
+
+export interface APICreateTaskResponse {
+  error?: APIError;
+  task?: Task;
+}
+
+export interface APIGetTasksResponse {
+  tasks?: TaskWithClass[];
+  error?: APIError;
+}
+
+export interface APINewTaskRequest {
+  dueDate: Date | null;
+  workDate: Date | null;
+  title: string;
+  classId: string | null;
+  description?: string | null;
+  workTime?: number | null;
 }
