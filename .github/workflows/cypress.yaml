@@ -31,4 +31,3 @@ jobs:
           vercel-project-id: ${{ secrets.PROJECT_ID}}
           alias-domains: | #Optional
             staging.robolist.net
-            ${{ github.ref_name }}.robolist.net
