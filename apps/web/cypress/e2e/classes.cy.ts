@@ -1,37 +1,18 @@
 import user from "../fixtures/login-details.json";
 describe("Classes", () => {
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce("jwt");
+    cy.login(user.email, user.password);
   });
-  it("logs in", () => {
-    cy.visit("http://localhost:3000/login");
-    cy.get(".mantine-TextInput-root").type(user.email);
-    cy.get(".mantine-PasswordInput-root").type(user.password);
-    cy.get(".mantine-Button-filled").click();
-  });
-
-  it("navigates to classes", () => {
-    cy.get(
-      ":nth-child(3) > .mantine-UnstyledButton-root > .mantine-Group-root"
-    ).click();
+  it("Create new class", () => {
+    cy.visit("/classes");
     cy.contains("Classes");
-  });
+    cy.get(".mantine-ThemeIcon-root > .icon").first().click();
+    cy.get("*").contains("New Class").click();
 
-  it("clicks overview menu", () => {
-    cy.get(".mantine-ThemeIcon-root").click();
-    const newClassButton = cy.get(".mantine-1j0qvum > :nth-child(2)");
-    newClassButton.should("be.visible");
-    newClassButton.click();
-    cy.contains("New Class");
-  });
-
-  it("fills out form", () => {
-    const classNameInput = cy.get("label");
-    classNameInput.should("be.visible");
-    // Add random number suffix
-    cy.get(".mantine-Button-filled").click();
-    cy.contains("Name is required");
-    cy.get(".mantine-121w2fi > .mantine-ActionIcon-hover").click();
+    const className = "Stats - " + Math.floor(Math.random() * 100);
+    cy.get("#class-name-input").type(className);
+    cy.get("button").contains("Submit").click();
+    cy.contains(className);
   });
 });
 

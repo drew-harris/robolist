@@ -16,11 +16,14 @@ jobs:
       - run: npm ci
 
       - run: npx prisma generate
-        name: Generate prisma package
+        name: Generate Prisma Package
         working-directory: packages/prisma-schema
 
+      - run: npm run database-reset
+        name: Reset Developement Database
+
       - run: npm run ci
-        name: Run tests
+        name: Run Tests
         working-directory: apps/web
 
       - uses: amondnet/vercel-action@v20
@@ -29,5 +32,5 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-org-id: ${{ secrets.ORG_ID}}
           vercel-project-id: ${{ secrets.PROJECT_ID}}
-          alias-domains: | #Optional
+          alias-domains: |
             staging.robolist.net

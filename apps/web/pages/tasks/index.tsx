@@ -54,7 +54,6 @@ export async function getServerSideProps(
   }
 
   const tasks = await getTasksFromId(user.id);
-  console.log(typeof tasks[0].dueDate);
   return {
     props: {
       tasks,

@@ -16,7 +16,6 @@ async function createTask(
   user: UserWithoutPassword
 ) {
   const data: APINewTaskRequest = req.body;
-  console.log(data);
   if (!data.title || !data.workDate || !data.dueDate) {
     return res.status(400).json({ error: { message: "Missing field" } });
   }

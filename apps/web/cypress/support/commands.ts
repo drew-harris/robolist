@@ -33,7 +33,7 @@ import cypress from "cypress";
 declare global {
   namespace Cypress {
     interface Chainable {
-      login(): Chainable<void>;
+      login(username: string, password: string): Chainable<void>;
       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>;
       dismiss(
         subject: string,
@@ -42,5 +42,19 @@ declare global {
     }
   }
 }
+
+Cypress.Commands.add("login", (email, password) => {
+  cy.session([email, password], () => {
+    cy.request({
+      method: "POST",
+      url: "/api/login",
+      body: { email, password },
+    }).then(({ body }) => {
+      // Set cookie
+      cy.log(body.jwt);
+      cy.setCookie("jwt", body.jwt);
+    });
+  });
+});
 
 export {};
