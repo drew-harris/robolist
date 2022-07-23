@@ -30,6 +30,31 @@ try {
       },
     },
   });
+
+  const oneWeekFromNow = new Date();
+  oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 7);
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const learnToFetch = await prisma.task.create({
+    data: {
+      dueDate: oneWeekFromNow,
+      workDate: tomorrow,
+      title: "Learn to fetch",
+      class: {
+        connect: {
+          id: dogTraining.id,
+        },
+      },
+      user: {
+        connect: {
+          id: testUser.id,
+        },
+      },
+    },
+  });
 } catch (error) {
   console.error(error);
+  process.exit(1);
 }
