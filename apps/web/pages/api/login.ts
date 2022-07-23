@@ -8,6 +8,7 @@ import {
   APIRegisterResponse,
   UserWithoutPassword,
 } from "types";
+import { getPrismaPool } from "../../serverapi/prismapool";
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,7 +26,7 @@ export default async function handler(
 
   const body: APILoginRequest = req.body;
 
-  const prisma = new PrismaClient();
+  const prisma = getPrismaPool();
   try {
     const user = await prisma.user.findFirst({
       where: {

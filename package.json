@@ -12,7 +12,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "studio": "cd packages/prisma-schema && npx prisma studio",
-    "ci": "cd apps/web && npm run ci"
+    "ci": "cd apps/web && npm run ci",
+    "database-reset": "cd apps/reset && npm run reset"
   },
   "devDependencies": {
     "eslint-config-custom": "*",

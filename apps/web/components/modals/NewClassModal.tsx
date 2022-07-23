@@ -60,7 +60,11 @@ export default function NewClassModal() {
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <Stack spacing="md" style={{ position: "relative" }}>
         <LoadingOverlay radius="md" visible={loading}></LoadingOverlay>
-        <TextInput {...form.getInputProps("name")} label="Class Name" />
+        <TextInput
+          id="class-name-input"
+          {...form.getInputProps("name")}
+          label="Class Name"
+        />
         <ThemeColorSelector
           value={form.values.color}
           onChange={handleColorChange}

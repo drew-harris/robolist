@@ -1,8 +1,9 @@
 import { Class, PrismaClient } from "@prisma/client";
+import { getPrismaPool } from "./prismapool";
 
 export async function getClassesFromId(userId: string): Promise<Class[]> {
   try {
-    const prisma = new PrismaClient();
+    const prisma = getPrismaPool();
     const classes = await prisma.class.findMany({
       where: {
         userId: userId,
