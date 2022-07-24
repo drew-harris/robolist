@@ -44,6 +44,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
     headings: {
       fontFamily: "Inter, sans-serif",
     },
+    primaryColor: "blue",
   };
 
   return (

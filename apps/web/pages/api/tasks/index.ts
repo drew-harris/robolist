@@ -43,7 +43,7 @@ async function createTask(
       class: classDoc,
       complete: false,
       description: data.description,
-      workTime: null,
+      workTime: data.workTime || 20,
     };
 
     const task = await prisma.task.create({
@@ -52,6 +52,7 @@ async function createTask(
 
     return res.json({ task });
   } catch (error: any) {
+    console.error(error.message);
     return res.status(500).json({
       error: { message: "Internal Server Error", error: error.message },
     });

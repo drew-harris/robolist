@@ -2,6 +2,7 @@ import type { Class, Task, User } from "@prisma/client";
 export type UserWithoutPassword = Omit<User, "password">;
 
 export * from "./api";
+
 export const colorChoices: string[] = [
   "red",
   "pink",
@@ -20,3 +21,9 @@ export const colorChoices: string[] = [
 export type TaskWithClass = Task & {
   class: Class | null;
 };
+
+export interface DateAggregation {
+  _count: number;
+  _sum: { workTime: number | null };
+  workDate: Date;
+}

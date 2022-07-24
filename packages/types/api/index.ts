@@ -1,7 +1,7 @@
 import { Prisma, Task } from "@prisma/client";
 import type { Class } from "@prisma/client";
 import { ClassNames } from "@emotion/react";
-import { TaskWithClass } from "..";
+import { DateAggregation, TaskWithClass } from "..";
 
 export interface APIRegisterResponse {
   error?: APIError;
@@ -47,4 +47,9 @@ export interface APINewTaskRequest {
   classId: string | null;
   description?: string | null;
   workTime?: number | null;
+}
+
+export interface APIDateAggregationResponse {
+  error?: APIError;
+  dates?: DateAggregation[];
 }

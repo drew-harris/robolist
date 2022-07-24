@@ -1,4 +1,4 @@
-import { Box, Group, Sx, Text, useMantineTheme } from "@mantine/core";
+import { Badge, Group, Paper, Sx, Text, useMantineTheme } from "@mantine/core";
 import { TaskWithClass } from "types";
 
 interface TaskProps {
@@ -7,25 +7,21 @@ interface TaskProps {
 
 const Task = ({ task }: TaskProps) => {
   const theme = useMantineTheme();
-  const defaultBgColor =
-    theme.colorScheme === "dark" ? theme.colors.gray[9] : theme.colors.gray[2];
 
-  const backgroundColor = task?.class
-    ? theme.colors[task.class.color][9]
-    : defaultBgColor;
-
-  const mainBoxSx: Sx = (theme) => {
-    return {
-      padding: theme.spacing.md,
-      backgroundColor: backgroundColor,
-      borderRadius: theme.radius.sm,
-    };
+  const groupSx: Sx = (theme) => {
+    return {};
   };
   return (
-    <Group sx={mainBoxSx}>
-      <Text>{task.title}</Text>
-      <Text>{task.class?.name}</Text>
-    </Group>
+    <Paper p="md" sx={groupSx}>
+      <Group>
+        <Text>{task.title}</Text>
+        {task.class && (
+          <Badge size="sm" color={task.class.color}>
+            {task.class?.name}
+          </Badge>
+        )}
+      </Group>
+    </Paper>
   );
 };
 

@@ -14,6 +14,7 @@ try {
 
   const testUser = await prisma.user.create({
     data: {
+      id: "testuserid",
       email: "testuser@robolist.net",
       password: hashed,
     },
@@ -42,6 +43,7 @@ try {
       dueDate: oneWeekFromNow,
       workDate: tomorrow,
       title: "Learn to fetch",
+      workTime: 20,
       class: {
         connect: {
           id: dogTraining.id,
