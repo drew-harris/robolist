@@ -10,12 +10,18 @@ import {
   ThemeIcon,
   UnstyledButton,
 } from "@mantine/core";
-import { useHotkeys } from "@mantine/hooks";
 import { openSpotlight } from "@mantine/spotlight";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import { ReactElement } from "react";
-import { Calendar, Command, List, Plus, School } from "tabler-icons-react";
+import {
+  Calendar,
+  Command,
+  List,
+  Plus,
+  School,
+  Settings,
+} from "tabler-icons-react";
 import { ColorSchemeToggle } from "../ColorSchemeToggle";
 
 import Logo from "../small/Logo";
@@ -88,7 +94,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
       position="apart"
     >
       <Logo></Logo>
-      <Group spacing={42}>
+      <Group spacing={22}>
         {showUserLinks ? (
           <>
             <Link href="/login">
@@ -99,11 +105,18 @@ export default function LayoutShell({ children }: LayoutShellProps) {
             </Link>
           </>
         ) : (
-          <UnstyledButton onClick={openSpotlight}>
-            <ThemeIcon variant="light">
-              <Command width={20} height={20} />
-            </ThemeIcon>
-          </UnstyledButton>
+          <>
+            <UnstyledButton onClick={openSpotlight}>
+              <ThemeIcon variant="filled">
+                <Command width={20} height={20} />
+              </ThemeIcon>
+            </UnstyledButton>
+            <UnstyledButton onClick={() => router.replace("/settings")}>
+              <ThemeIcon variant="light">
+                <Settings width={20} height={20} />
+              </ThemeIcon>
+            </UnstyledButton>
+          </>
         )}
 
         <ColorSchemeToggle />

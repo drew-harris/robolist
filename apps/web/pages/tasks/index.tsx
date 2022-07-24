@@ -2,9 +2,11 @@ import { Box, Space, Stack, Text, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
+import { useContext, useEffect } from "react";
 import { TaskWithClass } from "types";
 import { getTasks } from "../../clientapi/tasks";
 import Task from "../../components/data-display/Task";
+import { SettingsContext } from "../../contexts/SettingsContext";
 import { getTasksFromId } from "../../serverapi/tasks";
 import { getUserFromJWT } from "../../utils";
 
@@ -13,11 +15,16 @@ interface TasksPageProps {
 }
 
 export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
+  const { settings } = useContext(SettingsContext);
   const { data: tasks, error } = useQuery<TaskWithClass[], Error>(
     ["tasks"],
     getTasks,
     { initialData: initialTasks }
   );
+
+  useEffect(() => {
+    console.log(settings);
+  }, []);
 
   const taskSortingMethod = (a: TaskWithClass, b: TaskWithClass): number => {
     return a.dueDate.getTime() > b.dueDate.getTime() ? 1 : -1;
