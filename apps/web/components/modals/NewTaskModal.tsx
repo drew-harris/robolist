@@ -12,14 +12,17 @@ import { useForm } from "@mantine/form";
 import { useModals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { APINewTaskRequest } from "types";
+import { SettingsContext } from "../../contexts/SettingsContext";
 import ClassIdPicker from "../input/ClassIdPicker";
 import HeatmapDatePicker from "../input/HeatmapDatePicker";
 
 export default function NewTaskModal() {
   const [loading, setLoading] = useState(false);
   const [maxDate, setMaxDate] = useState<Date | null>(null);
+
+  const { settings } = useContext(SettingsContext);
 
   const modals = useModals();
   const queryClient = useQueryClient();
@@ -91,7 +94,7 @@ export default function NewTaskModal() {
       setLoading(false);
     } else {
       showNotification({
-        message: "Class created",
+        message: "Task created",
         color: "green",
       });
       queryClient.invalidateQueries(["tasks"]);
@@ -102,8 +105,8 @@ export default function NewTaskModal() {
 
   const datePickerProps: DatePickerProps = {
     minDate: new Date(),
-    firstDayOfWeek: "sunday",
-    dropdownType: "modal",
+    firstDayOfWeek: settings.firstDayOfWeek,
+    dropdownType: settings.datePickerFormat,
     clearable: false,
   };
 
@@ -125,14 +128,16 @@ export default function NewTaskModal() {
             mt="lg"
           >
             <ClassIdPicker form={form} />
-            <NumberInput
-              style={{ flexGrow: "3" }}
-              {...form.getInputProps("workTime")}
-              label="Estimated Work Time (minutes)"
-              step={5}
-              stepHoldDelay={500}
-              stepHoldInterval={200}
-            />
+            {settings.useTimeEstimate && (
+              <NumberInput
+                style={{ flexGrow: "3" }}
+                {...form.getInputProps("workTime")}
+                label="Estimated Work Time (minutes)"
+                step={5}
+                stepHoldDelay={500}
+                stepHoldInterval={200}
+              />
+            )}
           </Box>
         </MediaQuery>
         <MediaQuery smallerThan={"xs"} styles={{ flexDirection: "column" }}>

@@ -20,6 +20,8 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import SettingsContext from "../contexts/SettingsContext";
+import SettingsContextProvider from "../contexts/SettingsContext";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -65,15 +67,17 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           toggleColorScheme={toggleColorScheme}
         >
           <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
-            <ModalsProvider>
-              <NotificationsProvider>
-                <SpotlightMenu>
-                  <LayoutShell>
-                    <Component {...pageProps} />
-                  </LayoutShell>
-                </SpotlightMenu>
-              </NotificationsProvider>
-            </ModalsProvider>
+            <SettingsContextProvider>
+              <ModalsProvider>
+                <NotificationsProvider>
+                  <SpotlightMenu>
+                    <LayoutShell>
+                      <Component {...pageProps} />
+                    </LayoutShell>
+                  </SpotlightMenu>
+                </NotificationsProvider>
+              </ModalsProvider>
+            </SettingsContextProvider>
           </MantineProvider>
         </ColorSchemeProvider>
       </QueryClientProvider>
