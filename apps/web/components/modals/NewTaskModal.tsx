@@ -39,7 +39,11 @@ export default function NewTaskModal() {
         }
       },
       dueDate: (value, form) => {
-        if (value && form.workDate && value < new Date(Date.now())) {
+        if (
+          value &&
+          form.workDate &&
+          value.getTime() < new Date(Date.now()).setHours(0, 0, 0, 0)
+        ) {
           return "Due date must be in the future";
         }
       },
@@ -51,7 +55,17 @@ export default function NewTaskModal() {
     form.validateField("dueDate");
 
     if (form.values.dueDate) {
-      setMaxDate(new Date(form.values.dueDate.getTime() - 24 * 60 * 60 * 1000));
+      // If due date is today, set it to tomorrow
+      const today = new Date(Date.now());
+      today.setHours(0, 0, 0, 0);
+
+      if (form.values.dueDate.getTime() === today.getTime()) {
+        setMaxDate(new Date(form.values.dueDate.getTime()));
+      } else {
+        setMaxDate(
+          new Date(form.values.dueDate.getTime() - 24 * 60 * 60 * 1000)
+        );
+      }
     }
   }, [form.values]);
 
@@ -95,7 +109,7 @@ export default function NewTaskModal() {
 
   return (
     <form onSubmit={form.onSubmit(submit)}>
-      <Stack spacing={"sm"} style={{ position: "relative" }}>
+      <Stack style={{ position: "relative" }}>
         <LoadingOverlay radius="md" visible={loading} />
         <TextInput
           data-autofocus
@@ -135,6 +149,7 @@ export default function NewTaskModal() {
               clearable={false}
               label="Due Date"
               {...datePickerProps}
+              placeholder="Select a Date"
             />
             <HeatmapDatePicker
               style={{ flexGrow: "1" }}
@@ -143,6 +158,11 @@ export default function NewTaskModal() {
               disabled={!form.values.dueDate}
               maxDate={maxDate}
               {...datePickerProps}
+              placeholder={
+                form.values.dueDate
+                  ? "Select a Date"
+                  : "Select a Due Date First"
+              }
             />
           </Box>
         </MediaQuery>

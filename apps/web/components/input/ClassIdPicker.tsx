@@ -35,6 +35,8 @@ export default function ClassIdPicker(props: IdPickerProps) {
       style={{ flexGrow: "3" }}
       data={classLabels}
       disabled={classes.length === 0}
+      placeholder="No Class Selected"
+      clearable={true}
     ></Select>
   );
 }
