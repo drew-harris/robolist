@@ -6,6 +6,7 @@ const defaultSettings: Settings = {
   datePickerFormat: "modal",
   firstDayOfWeek: "sunday",
   useTimeEstimate: true,
+  confettiEffect: true,
 };
 
 export const SettingsContext = createContext<{

@@ -125,7 +125,8 @@ export default function LayoutShell({ children }: LayoutShellProps) {
   );
 
   const navbarContent = (
-    <Navbar width={{ base: 230 }} p="xs">
+    // 0 z index so confetti can be seen infront of the navbar
+    <Navbar style={{ zIndex: 0 }} width={{ base: 230 }} p="xs">
       <SidebarGroup links={tasksGroup} />
       <Space h="md" />
       <SidebarGroup links={classesGroup} />

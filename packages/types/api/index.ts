@@ -53,3 +53,13 @@ export interface APIDateAggregationResponse {
   error?: APIError;
   dates?: DateAggregation[];
 }
+
+export interface APICompleteRequest {
+  id: string;
+  complete: boolean;
+}
+
+export interface APICompleteResponse {
+  error?: APIError;
+  task?: TaskWithClass;
+}
