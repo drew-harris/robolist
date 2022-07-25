@@ -31,10 +31,6 @@ export default function SettingsContextProvider({ children }: any) {
     defaultValue: defaultSettings,
   });
 
-  useEffect(() => {
-    console.log(settings);
-  }, []);
-
   return (
     <SettingsContext.Provider value={{ settings, setSettings }}>
       {children}
