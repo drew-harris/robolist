@@ -1,9 +1,11 @@
-import { Checkbox } from "@mantine/core";
+import { Box, Checkbox } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React from "react";
 import { APICompleteRequest, TaskWithClass } from "types";
 import { markTaskStatus } from "../../../clientapi/tasks";
+import Confetti from "react-dom-confetti";
+import { useContext, useState } from "react";
+import { SettingsContext } from "../../../contexts/SettingsContext";
 
 interface TaskCheckboxProps {
   task: TaskWithClass;
@@ -11,6 +13,23 @@ interface TaskCheckboxProps {
 }
 
 export default function TaskCheckbox({ task, disabled }: TaskCheckboxProps) {
+  const { settings } = useContext(SettingsContext);
+  const confettiConfig = {
+    angle: 90,
+    spread: 360,
+    startVelocity: 32,
+    elementCount: 51,
+    dragFriction: 0.12,
+    duration: 1010,
+    stagger: 3,
+    width: "10px",
+    height: "10px",
+    perspective: "500px",
+    colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"],
+  };
+
+  const [showConfetti, setShowConfetti] = useState(false);
+
   const queryClient = useQueryClient();
   const checkMutation = useMutation(
     (state: APICompleteRequest) => {
@@ -18,6 +37,9 @@ export default function TaskCheckbox({ task, disabled }: TaskCheckboxProps) {
     },
     {
       onMutate: async (state) => {
+        if (state.complete && settings.confettiEffect) {
+          setShowConfetti(true);
+        }
         await queryClient.cancelQueries(["tasks"]);
 
         await queryClient.setQueriesData(
@@ -74,11 +96,14 @@ export default function TaskCheckbox({ task, disabled }: TaskCheckboxProps) {
   };
 
   return (
-    <Checkbox
-      aria-label="Complete task"
-      checked={task.complete}
-      onChange={onCheck}
-      disabled={disabled}
-    />
+    <Box>
+      <Checkbox
+        aria-label="Complete task"
+        checked={task.complete}
+        onChange={onCheck}
+        disabled={disabled}
+      />
+      <Confetti active={showConfetti} config={confettiConfig} />
+    </Box>
   );
 }

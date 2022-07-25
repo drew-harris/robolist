@@ -12,7 +12,7 @@ describe("changes settings", () => {
     cy.get('[type="checkbox"]').eq(0).should("not.be.checked");
     cy.get('[type="checkbox"]').eq(0).check();
     cy.get('[type="checkbox"]').eq(0).should("be.checked");
-    cy.contains("Use Time Estimate");
+    cy.contains("Use Time Estimation");
 
     cy.get(":nth-child(1) > .mantine-ThemeIcon-root").click();
     cy.get(
@@ -28,7 +28,7 @@ describe("changes settings", () => {
     // Turn on checkbox
     cy.get('[type="checkbox"]').eq(0).uncheck();
     cy.get('[type="checkbox"]').eq(0).should("not.be.checked");
-    cy.contains("Use Time Estimate");
+    cy.contains("Use Time Estimation");
 
     cy.get(":nth-child(1) > .mantine-ThemeIcon-root").click();
     cy.get(

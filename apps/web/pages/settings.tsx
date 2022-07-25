@@ -1,5 +1,4 @@
 import {
-  Box,
   Checkbox,
   Select,
   Space,
@@ -67,10 +66,15 @@ export default function SettingsPage() {
           ></Select>
 
           <Checkbox
-            label="Use Time Estimate"
+            label="Use Time Estimation"
             {...form.getInputProps("useTimeEstimate")}
             checked={form.values.useTimeEstimate}
-          ></Checkbox>
+          />
+          <Checkbox
+            label="Confetti Effect"
+            {...form.getInputProps("confettiEffect")}
+            checked={form.values.confettiEffect}
+          />
         </Stack>
       </form>
     </>
