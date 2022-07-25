@@ -58,7 +58,7 @@ export default function NewClassModal() {
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
-      <Stack spacing="md" style={{ position: "relative" }}>
+      <Stack p="sm" style={{ position: "relative" }}>
         <LoadingOverlay radius="md" visible={loading}></LoadingOverlay>
         <TextInput
           id="class-name-input"

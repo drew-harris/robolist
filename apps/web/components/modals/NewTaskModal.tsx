@@ -73,6 +73,7 @@ export default function NewTaskModal() {
   }, [form.values]);
 
   const submit = async (values: APINewTaskRequest) => {
+    setLoading(true);
     console.log(JSON.stringify(values));
     const response = await fetch("/api/tasks", {
       method: "POST",
@@ -112,8 +113,8 @@ export default function NewTaskModal() {
 
   return (
     <form onSubmit={form.onSubmit(submit)}>
-      <Stack style={{ position: "relative" }}>
-        <LoadingOverlay radius="md" visible={loading} />
+      <Stack style={{ position: "relative" }} p="sm">
+        <LoadingOverlay radius="sm" visible={loading} />
         <TextInput
           data-autofocus
           {...form.getInputProps("title")}

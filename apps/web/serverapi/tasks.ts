@@ -13,7 +13,10 @@ export async function getTasksFromId(userId: string): Promise<TaskWithClass[]> {
           workDate: "asc",
         },
         {
-          updatedAt: "asc",
+          complete: "asc",
+        },
+        {
+          updatedAt: "desc",
         },
       ],
       include: {
@@ -48,7 +51,10 @@ export async function getTodayTasksFromId(
           workDate: "asc",
         },
         {
-          updatedAt: "asc",
+          complete: "asc",
+        },
+        {
+          updatedAt: "desc",
         },
       ],
       include: {
