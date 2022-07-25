@@ -8,9 +8,14 @@ export async function getTasksFromId(userId: string): Promise<TaskWithClass[]> {
       where: {
         userId: userId,
       },
-      orderBy: {
-        workDate: "asc",
-      },
+      orderBy: [
+        {
+          workDate: "asc",
+        },
+        {
+          id: "asc",
+        },
+      ],
       include: {
         class: true,
       },
@@ -35,6 +40,14 @@ export async function getTodayTasksFromId(
         userId: userId,
         workDate: today,
       },
+      orderBy: [
+        {
+          workDate: "asc",
+        },
+        {
+          id: "asc",
+        },
+      ],
       include: {
         class: true,
       },

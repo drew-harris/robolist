@@ -8,6 +8,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { TaskWithClass } from "types";
+import TaskCheckbox from "./TaskCheckbox";
 
 type TaskProps = TaskOptionProps & {
   task: TaskWithClass;
@@ -31,15 +32,17 @@ const Task = ({
   ...props
 }: TaskProps) => {
   const theme = useMantineTheme();
+
   const groupSx: Sx = (theme) => {
-    return {};
+    return {
+      opacity: task.complete ? 0.4 : 1,
+      transition: "opacity .20s linear",
+    };
   };
   return (
     <Paper p="md" shadow="xs" sx={groupSx}>
       <Group>
-        {!hideCheckbox && (
-          <Checkbox checked={task.complete} disabled={disableCheck} />
-        )}
+        {!hideCheckbox && <TaskCheckbox task={task} disabled={disableCheck} />}
         <Text>{task.title}</Text>
         {task.class && !hideClassLabel && (
           <Badge size="sm" color={task.class.color}>

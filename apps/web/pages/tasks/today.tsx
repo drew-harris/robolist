@@ -20,7 +20,7 @@ export default function TodayTasksPage({
     data: tasks,
     error,
   } = useQuery<TaskWithClass[], Error>(
-    ["today-tasks", "tasks"],
+    ["tasks", { type: "today" }],
     getTodayTasks,
     {
       initialData: initialTasks,
