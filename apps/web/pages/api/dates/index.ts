@@ -17,7 +17,10 @@ export default async function handler(
     return res.status(401).json(unauthorizedResponse);
   }
 
-  const dates = await getDates(user);
-  console.log(dates);
-  res.json({ dates });
+  try {
+    const dates = await getDates(user);
+    return res.json({ dates });
+  } catch (error: any) {
+    return res.status(500).json({ error: { message: error.message } });
+  }
 }

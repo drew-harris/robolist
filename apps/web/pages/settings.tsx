@@ -29,7 +29,7 @@ export default function SettingsPage() {
 
   return (
     <>
-      <Title order={2}>Settings</Title>
+      <Title order={3}>Settings</Title>
       <Space h={theme.spacing.md} />
       <form>
         <Stack
