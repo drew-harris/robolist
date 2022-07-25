@@ -32,13 +32,16 @@ export async function getTodayTasksFromId(
 ): Promise<TaskWithClass[]> {
   try {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const twentyFourHoursAgo = new Date(today.getTime() - 24 * 60 * 60 * 1000);
 
     const prisma = getPrismaPool();
     const tasks = await prisma.task.findMany({
       where: {
         userId: userId,
-        workDate: today,
+        workDate: {
+          lte: today,
+          gte: twentyFourHoursAgo,
+        },
       },
       orderBy: [
         {
