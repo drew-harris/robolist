@@ -1,6 +1,7 @@
-import { SimpleGrid, Title, Text } from "@mantine/core";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { SimpleGrid, Text, Title } from "@mantine/core";
 import { Class } from "@prisma/client";
-import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
 import { getClasses } from "../../clientapi/classes";
@@ -12,6 +13,7 @@ interface ClassPageProps {
   classes: Class[];
 }
 const ClassesPage = ({ classes: initialClasses }: ClassPageProps) => {
+  const [parent] = useAutoAnimate<HTMLDivElement>();
   const { data: classes, error } = useQuery<Class[], Error>(
     ["classes"],
     getClasses,
@@ -34,7 +36,9 @@ const ClassesPage = ({ classes: initialClasses }: ClassPageProps) => {
           {error.message}
         </Text>
       ) : (
-        <SimpleGrid cols={4}>{classElements}</SimpleGrid>
+        <SimpleGrid ref={parent} cols={4}>
+          {classElements}
+        </SimpleGrid>
       )}
     </>
   );
@@ -56,13 +60,11 @@ export async function getServerSideProps(
     };
   }
 
-  const client = new QueryClient();
-
   const classes = await getClassesFromId(user.id);
 
   return {
     props: {
       classes,
-    }, // will be passed to the page component as props
+    },
   };
 }
