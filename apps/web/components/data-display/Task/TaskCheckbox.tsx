@@ -3,7 +3,7 @@ import { showNotification } from "@mantine/notifications";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { APICompleteRequest, TaskWithClass } from "types";
 import { markTaskStatus } from "../../../clientapi/tasks";
-import Confetti from "react-dom-confetti";
+import Confetti, { ConfettiConfig } from "react-dom-confetti";
 import { useContext, useState } from "react";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 
@@ -14,17 +14,16 @@ interface TaskCheckboxProps {
 
 export default function TaskCheckbox({ task, disabled }: TaskCheckboxProps) {
   const { settings } = useContext(SettingsContext);
-  const confettiConfig = {
+  const confettiConfig: ConfettiConfig = {
     angle: 90,
-    spread: 360,
-    startVelocity: 32,
-    elementCount: 51,
+    spread: 350,
+    startVelocity: 30,
+    elementCount: 100,
     dragFriction: 0.12,
-    duration: 1010,
-    stagger: 3,
+    duration: 1000,
+    stagger: 0,
     width: "10px",
     height: "10px",
-    perspective: "500px",
     colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"],
   };
 

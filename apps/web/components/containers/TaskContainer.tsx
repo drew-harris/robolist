@@ -4,7 +4,7 @@ import Task, { TaskOptionProps } from "../data-display/Task";
 import TaskSkeleton from "../skeletons/TaskSkeleton";
 
 type TaskContainerProps = TaskOptionProps & {
-  tasks: TaskWithClass[];
+  tasks: TaskWithClass[] | undefined;
   options?: TaskOptionProps;
   skeletonLength?: number;
   loading?: boolean;
@@ -24,11 +24,11 @@ export default function TaskContainer({
       })
     : null;
 
-  if (loading) {
+  if (loading || !tasks) {
     return (
       <Stack spacing="sm">
         {[...Array(skeletonLength)].map((e, i) => (
-          <TaskSkeleton key={i} />
+          <TaskSkeleton key={i} {...options} />
         ))}
       </Stack>
     );

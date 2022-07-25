@@ -13,11 +13,13 @@ interface TasksPageProps {
 }
 
 export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
-  const { data: tasks, error } = useQuery<TaskWithClass[], Error>(
-    ["tasks"],
-    getTasks,
-    { initialData: initialTasks }
-  );
+  const {
+    data: tasks,
+    error,
+    status,
+  } = useQuery<TaskWithClass[], Error>(["tasks", { type: "all" }], getTasks, {
+    initialData: initialTasks,
+  });
 
   return (
     <>
@@ -25,7 +27,12 @@ export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
         All Tasks
       </Title>
       {error?.message}
-      <TaskContainer tasks={tasks} />
+      <TaskContainer
+        loading={status === "loading"}
+        options={{ hideCheckbox: true }}
+        tasks={tasks}
+        skeletonLength={2}
+      />
     </>
   );
 }
