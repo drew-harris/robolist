@@ -1,12 +1,10 @@
-import { Space, Title } from "@mantine/core";
+import { Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
-import { useContext, useEffect } from "react";
 import { TaskWithClass } from "types";
 import { getTasks } from "../../clientapi/tasks";
 import TaskContainer from "../../components/containers/TaskContainer";
-import { SettingsContext } from "../../contexts/SettingsContext";
 import { getTasksFromId } from "../../serverapi/tasks";
 import { getUserFromJWT } from "../../utils";
 
@@ -50,6 +48,6 @@ export async function getServerSideProps(
   return {
     props: {
       tasks,
-    }, // will be passed to the page component as props
+    },
   };
 }

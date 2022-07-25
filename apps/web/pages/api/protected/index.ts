@@ -9,12 +9,12 @@ export default async function handler(
   if (req?.method != "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }
-  const jwt = getCookie("jwt", { req, res })
-  const user = getUserFromJWT(jwt?.toString())
+  const jwt = getCookie("jwt", { req, res });
+  const user = getUserFromJWT(jwt?.toString());
   if (!user) {
-    res.status(401).json(unauthorizedResponse)
+    res.status(401).json(unauthorizedResponse);
   }
 
   // Begins here
-  res.json({ user })
+  res.json({ user });
 }
