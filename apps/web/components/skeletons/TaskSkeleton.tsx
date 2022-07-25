@@ -1,5 +1,6 @@
 import {
   Badge,
+  Box,
   Checkbox,
   Group,
   Paper,
@@ -19,10 +20,8 @@ const TaskSkeleton = ({
   disableQuickSettings = false,
   ...props
 }: TaskOptionProps) => {
-  const theme = useMantineTheme();
-
-  const [width, setWidth] = React.useState(
-    Math.floor(Math.random() * 100) + 100
+  const [fakeTitle] = React.useState(
+    "a".repeat(Math.floor(Math.random() * 10) + 6)
   );
 
   // random width between 100 and 200
@@ -30,7 +29,9 @@ const TaskSkeleton = ({
     <Paper p="md" shadow="xs">
       <Group>
         {!hideCheckbox && <Skeleton width={20} height={20} />}
-        <Skeleton width={width} height={8}></Skeleton>
+        <Box>
+          <Skeleton visible={true}>{fakeTitle}</Skeleton>
+        </Box>
       </Group>
     </Paper>
   );
