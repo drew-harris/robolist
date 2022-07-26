@@ -7,6 +7,7 @@ const defaultSettings: Settings = {
   firstDayOfWeek: "sunday",
   useTimeEstimate: true,
   confettiEffect: true,
+  useFocusMode: false,
 };
 
 export const SettingsContext = createContext<{

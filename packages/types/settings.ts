@@ -3,4 +3,5 @@ export interface Settings {
   firstDayOfWeek: "sunday" | "monday";
   useTimeEstimate: boolean;
   confettiEffect: boolean;
+  useFocusMode: boolean;
 }

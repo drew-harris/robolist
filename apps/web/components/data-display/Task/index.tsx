@@ -7,8 +7,11 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core";
+import { useContext } from "react";
 import { TaskWithClass } from "types";
+import { SettingsContext } from "../../../contexts/SettingsContext";
 import TaskCheckbox from "./TaskCheckbox";
+import TaskPlayButton from "./TaskPlayButton";
 
 type TaskProps = TaskOptionProps & {
   task: TaskWithClass;
@@ -31,7 +34,7 @@ const Task = ({
   hideClassLabel = false,
   ...props
 }: TaskProps) => {
-  const theme = useMantineTheme();
+  const { settings } = useContext(SettingsContext);
 
   const groupSx: Sx = (theme) => {
     return {
@@ -39,10 +42,17 @@ const Task = ({
       transition: "opacity .20s linear",
     };
   };
+
+  const checkboxElement = settings.useFocusMode ? (
+    <TaskPlayButton task={task} />
+  ) : (
+    <TaskCheckbox task={task} disabled={disableCheck} key={task.id} />
+  );
+
   return (
     <Paper p="md" shadow="xs" sx={groupSx}>
       <Group>
-        {!hideCheckbox && <TaskCheckbox task={task} disabled={disableCheck} />}
+        {!hideCheckbox && checkboxElement}
         <Text>{task.title}</Text>
         {task.class && !hideClassLabel && (
           <Badge size="sm" color={task.class.color}>
