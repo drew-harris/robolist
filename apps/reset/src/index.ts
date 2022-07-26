@@ -1,22 +1,16 @@
 import { PrismaClient } from "@prisma/client";
-import * as bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
 try {
-  await prisma.task.deleteMany({});
-  await prisma.class.deleteMany({});
-  await prisma.user.deleteMany({});
-
-  const salt = await bcrypt.genSalt(6);
-  const password = "testuser";
-  const hashed = await bcrypt.hash(password, salt);
-
-  const testUser = await prisma.user.create({
-    data: {
-      id: "testuserid",
-      email: "testuser@robolist.net",
-      password: hashed,
+  await prisma.task.deleteMany({
+    where: {
+      userId: "testuser",
+    },
+  });
+  await prisma.class.deleteMany({
+    where: {
+      userId: "testuser",
     },
   });
 
@@ -26,7 +20,7 @@ try {
       name: "Dog Training",
       user: {
         connect: {
-          id: testUser.id,
+          id: "testuser",
         },
       },
     },
@@ -34,9 +28,10 @@ try {
 
   const oneWeekFromNow = new Date();
   oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 7);
+  oneWeekFromNow.setHours(0, 0, 0, 0);
 
   const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(0, 0, 0, 0);
 
   const learnToFetch = await prisma.task.create({
     data: {
@@ -51,7 +46,7 @@ try {
       },
       user: {
         connect: {
-          id: testUser.id,
+          id: "testuser",
         },
       },
     },
