@@ -3,6 +3,7 @@ export type UserWithoutPassword = Omit<User, "password">;
 
 export * from "./settings";
 export * from "./api";
+export * from "./focus";
 
 export const colorChoices: string[] = [
   "red",

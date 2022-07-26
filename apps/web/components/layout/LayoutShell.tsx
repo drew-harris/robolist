@@ -13,15 +13,10 @@ import {
 import { openSpotlight } from "@mantine/spotlight";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
-import { ReactElement } from "react";
-import {
-  Calendar,
-  Command,
-  List,
-  Plus,
-  School,
-  Settings,
-} from "tabler-icons-react";
+import { ReactElement, useContext } from "react";
+import { Calendar, Command, List, School, Settings } from "tabler-icons-react";
+import { SettingsContext } from "../../contexts/SettingsContext";
+import FocusModeDisplay from "../affixes/FocusModeDisplay";
 import { ColorSchemeToggle } from "../ColorSchemeToggle";
 
 import Logo from "../small/Logo";
@@ -76,6 +71,8 @@ export default function LayoutShell({ children }: LayoutShellProps) {
     router.pathname === "/" ||
     router.pathname === "/login" ||
     router.pathname === "/signup";
+
+  const { settings } = useContext(SettingsContext);
 
   const tasksGroup: SidebarLink[] = [
     { href: "/tasks/today", label: "Today", icon: <Calendar></Calendar> },
@@ -153,6 +150,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
         },
       })}
     >
+      {settings.useFocusMode && <FocusModeDisplay />}
       {children}
     </AppShell>
   );

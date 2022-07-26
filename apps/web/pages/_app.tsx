@@ -6,7 +6,7 @@ import {
 } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 import { NotificationsProvider } from "@mantine/notifications";
-import { getCookie, setCookies } from "cookies-next";
+import { getCookie, setCookie, setCookies } from "cookies-next";
 import { GetServerSidePropsContext } from "next";
 import { AppProps } from "next/app";
 import Head from "next/head";
@@ -22,6 +22,7 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import SettingsContext from "../contexts/SettingsContext";
 import SettingsContextProvider from "../contexts/SettingsContext";
+import FocusContextProvider from "../contexts/FocusContext";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -35,7 +36,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
     const nextColorScheme =
       value || (colorScheme === "dark" ? "light" : "dark");
     setColorScheme(nextColorScheme);
-    setCookies("mantine-color-scheme", nextColorScheme, {
+    setCookie("mantine-color-scheme", nextColorScheme, {
       maxAge: 60 * 60 * 24 * 30,
     });
   };
@@ -68,15 +69,17 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
         >
           <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
             <SettingsContextProvider>
-              <ModalsProvider>
-                <NotificationsProvider>
-                  <SpotlightMenu>
-                    <LayoutShell>
-                      <Component {...pageProps} />
-                    </LayoutShell>
-                  </SpotlightMenu>
-                </NotificationsProvider>
-              </ModalsProvider>
+              <FocusContextProvider>
+                <ModalsProvider>
+                  <NotificationsProvider>
+                    <SpotlightMenu>
+                      <LayoutShell>
+                        <Component {...pageProps} />
+                      </LayoutShell>
+                    </SpotlightMenu>
+                  </NotificationsProvider>
+                </ModalsProvider>
+              </FocusContextProvider>
             </SettingsContextProvider>
           </MantineProvider>
         </ColorSchemeProvider>

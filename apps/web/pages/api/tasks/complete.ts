@@ -1,6 +1,7 @@
+import { Prisma } from "@prisma/client";
 import { getCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
-import { TaskWithClass } from "types";
+import { APICompleteRequest, TaskWithClass } from "types";
 import { getPrismaPool } from "../../../serverapi/prismapool";
 import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
 
@@ -17,20 +18,28 @@ export default async function handler(
     res.status(401).json(unauthorizedResponse);
   }
 
-  const body = req.body;
+  const body: APICompleteRequest = req.body;
   if (!body.id || !body.hasOwnProperty("complete")) {
     return res
       .status(400)
       .json({ error: { message: "Missing id or complete" } });
   }
 
+  let updateDoc: Prisma.TaskUpdateInput = {
+    complete: body.complete,
+  };
+  if (!!body.minutes) {
+    updateDoc = {
+      ...updateDoc,
+      workTime: body.minutes,
+    };
+  }
+
   try {
     const prisma = getPrismaPool();
     const task: TaskWithClass = await prisma.task.update({
       where: { id: body.id },
-      data: {
-        complete: body.complete,
-      },
+      data: updateDoc,
       include: {
         class: true,
       },

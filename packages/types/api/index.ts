@@ -57,6 +57,7 @@ export interface APIDateAggregationResponse {
 export interface APICompleteRequest {
   id: string;
   complete: boolean;
+  minutes?: number;
 }
 
 export interface APICompleteResponse {

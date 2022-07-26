@@ -43,7 +43,8 @@ export async function getTodayTasks(): Promise<TaskWithClass[]> {
 
 export async function markTaskStatus(
   id: string,
-  complete: boolean
+  complete: boolean,
+  minutes?: number
 ): Promise<TaskWithClass> {
   try {
     const data = await fetch(`/api/tasks/complete`, {
@@ -54,6 +55,7 @@ export async function markTaskStatus(
       body: JSON.stringify({
         id,
         complete,
+        minutes,
       }),
     });
     // Parse with superjson

@@ -75,6 +75,11 @@ export default function SettingsPage() {
             {...form.getInputProps("confettiEffect")}
             checked={form.values.confettiEffect}
           />
+          <Checkbox
+            label="Use focus timer"
+            {...form.getInputProps("useFocusMode")}
+            checked={form.values.useFocusMode}
+          />
         </Stack>
       </form>
     </>
