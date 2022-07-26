@@ -5,12 +5,12 @@ const prisma = new PrismaClient();
 try {
   await prisma.task.deleteMany({
     where: {
-      userId: "testuser",
+      userId: "testuserid",
     },
   });
   await prisma.class.deleteMany({
     where: {
-      userId: "testuser",
+      userId: "testuserid",
     },
   });
 
@@ -20,7 +20,7 @@ try {
       name: "Dog Training",
       user: {
         connect: {
-          id: "testuser",
+          id: "testuserid",
         },
       },
     },
@@ -46,7 +46,7 @@ try {
       },
       user: {
         connect: {
-          id: "testuser",
+          id: "testuserid",
         },
       },
     },
