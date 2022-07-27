@@ -10,7 +10,7 @@ import { getCookie, setCookie, setCookies } from "cookies-next";
 import { GetServerSidePropsContext } from "next";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import LayoutShell from "../components/layout/LayoutShell";
 import SpotlightMenu from "../components/layout/SpotlightMenu";
 import "../global.css";
@@ -41,13 +41,15 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
     });
   };
 
+  const [themeDefaultColor, setThemeDefaultColor] = useState("blue");
+
   const theme: MantineThemeOverride = {
     colorScheme,
     fontFamily: "Inter, sans-serif",
     headings: {
       fontFamily: "Inter, sans-serif",
     },
-    primaryColor: "blue",
+    primaryColor: themeDefaultColor,
   };
 
   return (
@@ -68,7 +70,11 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           toggleColorScheme={toggleColorScheme}
         >
           <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
-            <SettingsContextProvider>
+            <SettingsContextProvider
+              onColorChange={(color) => {
+                setThemeDefaultColor(color);
+              }}
+            >
               <FocusContextProvider>
                 <ModalsProvider>
                   <NotificationsProvider>
