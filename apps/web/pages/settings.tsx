@@ -11,6 +11,7 @@ import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
 import { useContext, useEffect } from "react";
 import { Settings } from "types";
+import ThemeColorSelector from "../components/input/ThemeColorSelector";
 import { SettingsContext } from "../contexts/SettingsContext";
 import { getUserFromJWT } from "../utils";
 
@@ -79,6 +80,12 @@ export default function SettingsPage() {
             label="Use focus timer"
             {...form.getInputProps("useFocusMode")}
             checked={form.values.useFocusMode}
+          />
+          <ThemeColorSelector
+            value={form.values.themeColor}
+            onChange={(color) => {
+              form.setFieldValue("themeColor", color);
+            }}
           />
         </Stack>
       </form>

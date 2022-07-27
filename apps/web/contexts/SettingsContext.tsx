@@ -1,3 +1,4 @@
+import { MantineColor } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { createContext, Dispatch, SetStateAction, useEffect } from "react";
 import type { Settings } from "types";
@@ -8,6 +9,7 @@ const defaultSettings: Settings = {
   useTimeEstimate: true,
   confettiEffect: true,
   useFocusMode: false,
+  themeColor: "blue",
 };
 
 export const SettingsContext = createContext<{
@@ -18,7 +20,14 @@ export const SettingsContext = createContext<{
   setSettings: () => {},
 });
 
-export default function SettingsContextProvider({ children }: any) {
+interface SettingsContextProviderProps {
+  onColorChange: (color: MantineColor) => void;
+  children: React.ReactNode;
+}
+export default function SettingsContextProvider({
+  children,
+  onColorChange,
+}: SettingsContextProviderProps) {
   const [settings, setSettings] = useLocalStorage<Settings>({
     key: "settings",
     serialize: (settings) => JSON.stringify(settings),
@@ -31,6 +40,12 @@ export default function SettingsContextProvider({ children }: any) {
     },
     defaultValue: defaultSettings,
   });
+
+  useEffect(() => {
+    if (settings.themeColor) {
+      onColorChange(settings.themeColor);
+    }
+  }, [settings.themeColor]);
 
   return (
     <SettingsContext.Provider value={{ settings, setSettings }}>
