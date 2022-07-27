@@ -109,6 +109,7 @@ export default function NewTaskModal() {
     firstDayOfWeek: settings.firstDayOfWeek,
     dropdownType: settings.datePickerFormat,
     clearable: false,
+    hideOutsideDates: true,
   };
 
   return (

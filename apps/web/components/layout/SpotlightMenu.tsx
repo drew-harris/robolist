@@ -4,6 +4,7 @@ import { SpotlightAction, SpotlightProvider } from "@mantine/spotlight";
 import { useRouter } from "next/router";
 import {
   Calendar,
+  CalendarEvent,
   List,
   Moon2,
   Plus,
@@ -76,6 +77,15 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
         router.replace("/settings/");
       },
     },
+    {
+      title: "Calendar",
+      icon: <CalendarEvent />,
+      id: "calendar",
+      onTrigger: () => {
+        router.replace("/calendar");
+      },
+    },
+
     {
       title: "Toggle Dark Mode",
       icon: <Moon2 />,
