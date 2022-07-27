@@ -14,13 +14,15 @@ import { showNotification } from "@mantine/notifications";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Head from "next/head";
 import { useContext } from "react";
-import { Check, PlayerPause, PlayerPlay, X } from "tabler-icons-react";
+import { BsPlayFill } from "react-icons/bs";
+import { TbCheck, TbX } from "react-icons/tb";
+import { TiMediaPause } from "react-icons/ti";
 import { APICompleteRequest, TaskWithClass } from "types";
 import { markTaskStatus } from "../../clientapi/tasks";
 import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
 
-const iconSize = 20;
+const iconSize = 25;
 
 export default function FocusModeDisplay() {
   const { focusState, fn: focusFn } = useContext(FocusContext);
@@ -190,7 +192,7 @@ export default function FocusModeDisplay() {
               <Group>
                 <Tooltip openDelay={300} label="Stop Working">
                   <ActionIcon onClick={cancelTask} color="red" size={iconSize}>
-                    <X />
+                    <TbX size={iconSize} />
                   </ActionIcon>
                 </Tooltip>
                 <Tooltip openDelay={300} label="Mark as Done">
@@ -200,14 +202,14 @@ export default function FocusModeDisplay() {
                     size={iconSize}
                     onClick={completeTask}
                   >
-                    <Check />
+                    <TbCheck size={iconSize} />
                   </ActionIcon>
                 </Tooltip>
                 <ActionIcon onClick={toggleWorking}>
                   {focusState.working ? (
-                    <PlayerPause size={iconSize} />
+                    <TiMediaPause size={iconSize} />
                   ) : (
-                    <PlayerPlay size={iconSize} />
+                    <BsPlayFill size={iconSize} />
                   )}
                 </ActionIcon>
 
@@ -217,13 +219,15 @@ export default function FocusModeDisplay() {
                     textAlign: "center",
                   })}
                 >
-                  <Text color={theme.primaryColor}>
+                  <Text color={theme.primaryColor} weight="bold">
                     {secondToTimeDisplay(focusState.secondsElapsed)}
                   </Text>
                 </Box>
 
                 {!!focusState.task && (
-                  <Text size="sm">{focusState.task.title}</Text>
+                  <Text size="sm" weight={600}>
+                    {focusState.task.title}
+                  </Text>
                 )}
               </Group>
             </Paper>

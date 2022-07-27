@@ -1,6 +1,9 @@
-import { ActionIcon, Loader } from "@mantine/core";
+import { ActionIcon, Loader, Tooltip, Text } from "@mantine/core";
+import { useModals } from "@mantine/modals";
 import { useContext } from "react";
-import { Check, PlayerPlay } from "tabler-icons-react";
+
+import { BsCheck } from "react-icons/bs";
+import { FaStopwatch } from "react-icons/fa";
 import { TaskWithClass } from "types";
 import { FocusContext } from "../../../contexts/FocusContext";
 
@@ -13,13 +16,37 @@ const iconSize = 18;
 export default function TaskPlayButton({ task }: TaskPlayButtonProps) {
   const { focusState, fn: focusFn } = useContext(FocusContext);
 
+  const modals = useModals();
+
   const startTask = () => {
-    console.log("startTask");
-    focusFn.startTask(task);
+    if (focusState.task) {
+      modals.openConfirmModal({
+        title: "Change Tasks?",
+        onConfirm: () => {
+          focusFn.startTask(task);
+        },
+        children: (
+          <>
+            <Text size="sm">
+              Are you sure you want to switch tasks and <u>lose progress?</u>
+            </Text>
+          </>
+        ),
+        labels: {
+          confirm: "Change Task",
+          cancel: "Keep Working",
+        },
+        confirmProps: {
+          color: "red",
+        },
+      });
+    } else {
+      focusFn.startTask(task);
+    }
   };
 
   if (task.complete) {
-    return <Check size={iconSize} />;
+    return <BsCheck size={iconSize} />;
   }
 
   return (
@@ -27,9 +54,11 @@ export default function TaskPlayButton({ task }: TaskPlayButtonProps) {
       {focusState.task?.id === task.id ? (
         <Loader variant="dots" size={iconSize} />
       ) : (
-        <ActionIcon onClick={startTask} size={iconSize}>
-          <PlayerPlay size={iconSize} />
-        </ActionIcon>
+        <Tooltip label="Start working" openDelay={200}>
+          <ActionIcon onClick={startTask} size={iconSize}>
+            <FaStopwatch size={iconSize} />
+          </ActionIcon>
+        </Tooltip>
       )}
     </>
   );
