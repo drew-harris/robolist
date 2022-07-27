@@ -132,7 +132,7 @@ export default function NewTaskModal() {
             <ClassIdPicker form={form} />
             {settings.useTimeEstimate && (
               <NumberInput
-                style={{ flexGrow: "3" }}
+                style={{ flexGrow: 3 }}
                 {...form.getInputProps("workTime")}
                 label="Estimated Work Time (minutes)"
                 step={5}
@@ -151,7 +151,7 @@ export default function NewTaskModal() {
             mt="lg"
           >
             <DatePicker
-              style={{ flexGrow: "1" }}
+              style={{ flexGrow: 1 }}
               {...form.getInputProps("dueDate")}
               clearable={false}
               label="Due Date"
