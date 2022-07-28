@@ -50,7 +50,7 @@ const Task = ({
   );
 
   return (
-    <Paper p="md" shadow="xs" sx={groupSx}>
+    <Paper withBorder p="md" shadow="xs" sx={groupSx}>
       <Group>
         {!hideCheckbox && checkboxElement}
         <Text>{task.title}</Text>

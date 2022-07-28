@@ -179,6 +179,7 @@ export default function FocusModeDisplay() {
           {(styles) => (
             <Paper
               p="md"
+              withBorder
               style={styles}
               radius="md"
               sx={(theme) => ({
