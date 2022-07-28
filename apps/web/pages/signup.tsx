@@ -17,6 +17,7 @@ import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import { useState } from "react";
 import { APILoginRequest, APIRegisterResponse } from "types";
+import { logEvent } from "../lib/ga";
 
 interface SignupForm extends APILoginRequest {
   confirmPassword: string;
@@ -57,6 +58,10 @@ export default function SignUp() {
     if (response.ok) {
       const data = await response.json();
       console.log(data.jwt);
+      logEvent("sign_up", {
+        category: "user",
+        value: values.email,
+      });
       setCookie("jwt", data.jwt);
       router.replace("/tasks");
     } else {

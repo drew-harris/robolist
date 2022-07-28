@@ -2,6 +2,7 @@ import { MantineColor } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { createContext, Dispatch, SetStateAction, useEffect } from "react";
 import type { Settings } from "types";
+import { logEvent } from "../lib/ga";
 
 const defaultSettings: Settings = {
   datePickerFormat: "modal",
