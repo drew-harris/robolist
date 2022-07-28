@@ -3,6 +3,7 @@ import * as bcrypt from "bcrypt";
 import { setCookie } from "cookies-next";
 import * as JWT from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
+import { log, withAxiom } from "next-axiom";
 import {
   APILoginRequest,
   APIRegisterResponse,
@@ -10,17 +11,19 @@ import {
 } from "types";
 import { getPrismaPool } from "../../serverapi/prismapool";
 
-export default async function handler(
+async function handler(
   req: NextApiRequest,
   res: NextApiResponse<APIRegisterResponse>
 ) {
   if (req?.method != "POST") {
+    log.warn("Method not allowed", { method: req.method });
     return res
       .status(405)
       .json({ error: { message: "This method is not available" } });
   }
 
   if (!req.body.email || !req.body.password) {
+    log.warn("Missing field", { email: req.body.email });
     return res.status(400).json({ error: { message: "Missing field" } });
   }
 
@@ -35,6 +38,7 @@ export default async function handler(
     });
 
     if (!user) {
+      log.info("Incorrect email", { email: body.email });
       return res
         .status(400)
         .json({ error: { message: "Email or password is incorrect" } });
@@ -42,6 +46,7 @@ export default async function handler(
 
     const match = await bcrypt.compare(body.password, user.password);
     if (!match) {
+      log.info("Incorrect password", { email: body.email });
       return res
         .status(400)
         .json({ error: { message: "Email or password is incorrect" } });
@@ -57,13 +62,14 @@ export default async function handler(
 
       const secret: JWT.Secret | undefined = process.env.JWT_SECRET;
       if (!secret) {
+        log.error("JWT_SECRET not set");
         return res.status(500).json({
           error: { message: "Could not load secret to sign credentials" },
         });
       }
       jwt = JWT.sign(payload, secret);
     } catch (error: any) {
-      console.error(error);
+      log.error("Error signing JWT", { error: error.message });
       return res.status(500).json({
         error: {
           message: "Could not sign credentials",
@@ -85,10 +91,12 @@ export default async function handler(
     return res.status(200).json({
       jwt: jwt,
     });
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    log.error("Error logging in", { error: error.message });
     return res
       .status(500)
       .json({ error: { message: "Internal Server Error" } });
   }
 }
+
+export default withAxiom(handler);

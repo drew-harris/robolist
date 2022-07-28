@@ -7,10 +7,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import type { APIRegisterResponse } from "types";
 import { UserWithoutPassword } from "types";
 import { getPrismaPool } from "../../serverapi/prismapool";
+import { log, withAxiom } from "next-axiom";
 
 const PASSWORD_MIN_LENGTH = 5;
 
-export default async function handler(
+async function handler(
   req: NextApiRequest,
   res: NextApiResponse<APIRegisterResponse>
 ) {
@@ -50,12 +51,15 @@ export default async function handler(
     });
 
     if (users) {
+      log.warn("User already exists", { email: body.email });
       return res
         .status(400)
         .json({ error: { message: "A user with that email already exists" } });
     }
   } catch (error: any) {
-    console.error(error);
+    log.error("Error checking if user already exists", {
+      message: error.message,
+    });
     return res
       .status(400)
       .json({ error: { message: "Internal Error", error: error.message } });
@@ -75,7 +79,9 @@ export default async function handler(
       },
     });
   } catch (error: any) {
-    console.error(error);
+    log.error("Error saving NEW user to database", {
+      error: error.message,
+    });
     return res.status(500).json({
       error: {
         message: "Could not save new user to database",
@@ -100,7 +106,8 @@ export default async function handler(
     }
     jwt = JWT.sign(payload, secret);
   } catch (error: any) {
-    console.log(error);
+    log.error("Error signing JWT", error.message);
+
     return res.status(500).json({
       error: { message: "Could not sign credentials", error: error.message },
     });
@@ -115,8 +122,12 @@ export default async function handler(
     res,
   });
 
+  log.info("User signed up!", user);
+
   // Return jwt
   res.status(200).json({
     jwt: jwt,
   });
 }
+
+export default withAxiom(handler);

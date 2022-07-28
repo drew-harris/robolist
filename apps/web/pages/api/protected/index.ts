@@ -1,11 +1,9 @@
 import { getCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
+import { withAxiom } from "next-axiom";
 import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req?.method != "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -18,3 +16,5 @@ export default async function handler(
   // Begins here
   res.json({ user });
 }
+
+export default withAxiom(handler);
