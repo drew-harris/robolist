@@ -5,7 +5,7 @@ import { APIDateAggregationResponse } from "types";
 import { getDates } from "../../../serverapi/dates";
 import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
 
-async function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<APIDateAggregationResponse>
 ) {
@@ -28,5 +28,3 @@ async function handler(
     return res.status(500).json({ error: { message: error.message } });
   }
 }
-
-export default withAxiom(handler);

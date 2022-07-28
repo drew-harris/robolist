@@ -84,7 +84,10 @@ async function getTasks(
   }
 }
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const jwt = getCookie("jwt", { req, res });
   const user = getUserFromJWT(jwt?.toString());
 
@@ -101,5 +104,3 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(405).json({ error: { message: "Method not allowed" } });
   }
 }
-
-export default withAxiom(handler);

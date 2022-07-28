@@ -11,7 +11,7 @@ import {
 } from "types";
 import { getPrismaPool } from "../../serverapi/prismapool";
 
-async function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<APIRegisterResponse>
 ) {
@@ -98,5 +98,3 @@ async function handler(
       .json({ error: { message: "Internal Server Error" } });
   }
 }
-
-export default withAxiom(handler);
