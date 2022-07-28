@@ -6,6 +6,7 @@ import { markTaskStatus } from "../../../clientapi/tasks";
 import Confetti, { ConfettiConfig } from "react-dom-confetti";
 import { useContext, useState } from "react";
 import { SettingsContext } from "../../../contexts/SettingsContext";
+import { logEvent } from "../../../lib/ga";
 
 interface TaskCheckboxProps {
   task: TaskWithClass;
@@ -92,6 +93,11 @@ export default function TaskCheckbox({ task, disabled }: TaskCheckboxProps) {
       id: task.id,
       complete: event.target.checked,
     });
+    if (event.target.checked) {
+      logEvent("complete_task", {
+        label: "task_component",
+      });
+    }
   };
 
   return (

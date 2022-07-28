@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { APIClassCreate } from "types";
 import { colorChoices } from "types";
+import { logEvent } from "../../lib/ga";
 import ThemeColorSelector from "../input/ThemeColorSelector";
 
 export default function NewClassModal() {
@@ -53,6 +54,9 @@ export default function NewClassModal() {
       });
       queryClient.invalidateQueries(["classes"]);
       modals.closeModal("new-class");
+      logEvent("create_class", {
+        value: values.name,
+      });
     }
   }
 

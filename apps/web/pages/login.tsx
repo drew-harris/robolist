@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { APILoginRequest, APIRegisterResponse } from "types";
+import { logEvent } from "../lib/ga";
 const Login = () => {
   const router = useRouter();
 
@@ -44,6 +45,9 @@ const Login = () => {
     if (response.ok) {
       const data = await response.json();
       setCookie("jwt", data.jwt);
+      logEvent("login", {
+        category: "user",
+      });
       router.replace("/tasks");
       console.log(data);
     } else {

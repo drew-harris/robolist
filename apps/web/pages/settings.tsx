@@ -13,6 +13,7 @@ import { useContext, useEffect } from "react";
 import { Settings } from "types";
 import ThemeColorSelector from "../components/input/ThemeColorSelector";
 import { SettingsContext } from "../contexts/SettingsContext";
+import { logEvent } from "../lib/ga";
 import { getUserFromJWT } from "../utils";
 
 export default function SettingsPage() {
@@ -84,6 +85,9 @@ export default function SettingsPage() {
           <ThemeColorSelector
             value={form.values.themeColor}
             onChange={(color) => {
+              logEvent("change_theme_color", {
+                value: color,
+              });
               form.setFieldValue("themeColor", color);
             }}
           />

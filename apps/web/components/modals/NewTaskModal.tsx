@@ -15,6 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
 import { APINewTaskRequest } from "types";
 import { SettingsContext } from "../../contexts/SettingsContext";
+import { logEvent } from "../../lib/ga";
 import ClassIdPicker from "../input/ClassIdPicker";
 import HeatmapDatePicker from "../input/HeatmapDatePicker";
 
@@ -99,6 +100,10 @@ export default function NewTaskModal() {
         color: "green",
       });
       queryClient.invalidateQueries(["tasks"]);
+      logEvent("create_task", {
+        value: values.title,
+        category: "tasks",
+      });
       console.log(json.task);
       modals.closeModal("new-class");
     }

@@ -21,6 +21,7 @@ import { APICompleteRequest, TaskWithClass } from "types";
 import { markTaskStatus } from "../../clientapi/tasks";
 import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
+import { logEvent } from "../../lib/ga";
 
 const iconSize = 25;
 
@@ -114,6 +115,10 @@ export default function FocusModeDisplay() {
       },
       onConfirm: () => {
         focusFn.cancel();
+        logEvent("cancel_focus_task", {
+          category: "focus",
+          label: "focus_mode",
+        });
       },
     });
   };
@@ -141,6 +146,9 @@ export default function FocusModeDisplay() {
           complete: true,
           id: focusState.task.id,
           minutes: Math.floor(focusState.secondsElapsed / 60),
+        });
+        logEvent("complete_task", {
+          label: "focus_mode",
         });
       },
     });

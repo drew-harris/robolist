@@ -6,6 +6,7 @@ import { BsCheck } from "react-icons/bs";
 import { FaStopwatch } from "react-icons/fa";
 import { TaskWithClass } from "types";
 import { FocusContext } from "../../../contexts/FocusContext";
+import { logEvent } from "../../../lib/ga";
 
 interface TaskPlayButtonProps {
   task: TaskWithClass;
@@ -42,6 +43,7 @@ export default function TaskPlayButton({ task }: TaskPlayButtonProps) {
       });
     } else {
       focusFn.startTask(task);
+      logEvent("start_task");
     }
   };
 
