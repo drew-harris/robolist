@@ -48,9 +48,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
       /* invoke analytics function only for production */
-      // if (isProduction) pageview(url);
-      // TODO:
-      pageview(url);
+      if (isProduction) pageview(url);
     };
     router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
