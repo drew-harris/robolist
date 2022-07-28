@@ -32,7 +32,7 @@ export default function ClassIdPicker(props: IdPickerProps) {
     <Select
       {...props.form.getInputProps("classId")}
       label="Class"
-      style={{ flexGrow: "3" }}
+      style={{ flexGrow: 3 }}
       data={classLabels}
       disabled={classes.length === 0}
       placeholder="No Class Selected"
