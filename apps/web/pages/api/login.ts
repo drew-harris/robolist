@@ -11,7 +11,7 @@ import {
 } from "types";
 import { getPrismaPool } from "../../serverapi/prismapool";
 
-export default async function handler(
+async function handler(
   req: NextApiRequest,
   res: NextApiResponse<APIRegisterResponse>
 ) {
@@ -88,6 +88,8 @@ export default async function handler(
       res,
     });
 
+    log.info("User logged in!", { email: user.email });
+
     return res.status(200).json({
       jwt: jwt,
     });
@@ -98,3 +100,5 @@ export default async function handler(
       .json({ error: { message: "Internal Server Error" } });
   }
 }
+
+export default withAxiom(handler);

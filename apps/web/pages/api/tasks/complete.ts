@@ -7,10 +7,7 @@ import { logEvent } from "../../../lib/ga";
 import { getPrismaPool } from "../../../serverapi/prismapool";
 import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req?.method != "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -57,3 +54,5 @@ export default async function handler(
   }
   // Begins here
 }
+
+export default withAxiom(handler);

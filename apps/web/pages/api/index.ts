@@ -1,10 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { log, withAxiom } from "next-axiom";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   log.info("Hello World called");
   if (req?.method != "GET") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -15,3 +12,5 @@ export default async function handler(
     message: "Robolist: The easiest way to get work done",
   });
 }
+
+export default withAxiom(handler);

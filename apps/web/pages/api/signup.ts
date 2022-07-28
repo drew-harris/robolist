@@ -11,7 +11,7 @@ import { log, withAxiom } from "next-axiom";
 
 const PASSWORD_MIN_LENGTH = 5;
 
-export default async function handler(
+async function handler(
   req: NextApiRequest,
   res: NextApiResponse<APIRegisterResponse>
 ) {
@@ -129,3 +129,5 @@ export default async function handler(
     jwt: jwt,
   });
 }
+
+export default withAxiom(handler);
