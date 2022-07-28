@@ -11,7 +11,7 @@ import { getPrismaPool } from "../../../serverapi/prismapool";
 import { getTasksFromId } from "../../../serverapi/tasks";
 import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
 
-export default async function createTask(
+async function createTask(
   req: NextApiRequest,
   res: NextApiResponse<APICreateTaskResponse>,
   user: UserWithoutPassword
@@ -102,4 +102,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-// export default withAxiom(handler);
+export default withAxiom(handler);
