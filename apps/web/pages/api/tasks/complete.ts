@@ -1,7 +1,9 @@
 import { Prisma } from "@prisma/client";
 import { getCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
+import { log, withAxiom } from "next-axiom";
 import { APICompleteRequest, TaskWithClass } from "types";
+import { logEvent } from "../../../lib/ga";
 import { getPrismaPool } from "../../../serverapi/prismapool";
 import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
 
@@ -15,6 +17,7 @@ export default async function handler(
   const jwt = getCookie("jwt", { req, res });
   const user = getUserFromJWT(jwt?.toString());
   if (!user) {
+    log.warn("User not logged in to complete task");
     res.status(401).json(unauthorizedResponse);
   }
 
@@ -44,9 +47,10 @@ export default async function handler(
         class: true,
       },
     });
+    log.info("Task updated", { task, user });
     res.json({ task });
   } catch (error: any) {
-    console.error(error);
+    log.error("Error completing task", { error });
     return res
       .status(500)
       .json({ error: { message: "Internal server error" } });

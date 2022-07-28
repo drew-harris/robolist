@@ -1,6 +1,7 @@
 import { Class, Prisma, PrismaClient } from "@prisma/client";
 import { getCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
+import { log, withAxiom } from "next-axiom";
 import {
   APIClassCreate,
   APICreateClassResponse,
@@ -23,6 +24,9 @@ async function createClass(
   }
 
   if (!colorChoices.includes(data.color)) {
+    log.error("user tried to create a class with an invalid color", {
+      color: data.color,
+    });
     return res
       .status(400)
       .json({ error: { message: "That color is not an option" } });
@@ -39,6 +43,9 @@ async function createClass(
     });
 
     if (currentClass) {
+      log.warn("user tried to create a class with a name that already exists", {
+        name: data.name,
+      });
       return res.json({
         error: { message: "You already have a class with the same name" },
       });
@@ -56,9 +63,11 @@ async function createClass(
       data: createDoc,
     });
 
+    log.info("user created a class", createdClass);
     // Begins here
     return res.json({ class: createdClass });
   } catch (error: any) {
+    log.error("user tried to create a class", { error: error.message });
     return res.json({
       error: {
         error: error.message || "unknown error",
@@ -75,11 +84,12 @@ async function getClasses(
 ) {
   try {
     const classes = await getClassesFromId(user.id);
+    log.info("user retrieved classes", classes);
     return res.json({
       classes: classes,
     });
   } catch (error: any) {
-    console.error(error);
+    log.error("user tried to retrieve classes", { error: error.message });
     return res.status(405).json({
       error: { message: "Internal Server Error", error: error.message },
     });

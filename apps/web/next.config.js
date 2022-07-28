@@ -1,5 +1,7 @@
 const withTM = require("next-transpile-modules")(["types"]);
+const { withAxiom } = require('next-axiom')
 
-module.exports = withTM({
+
+module.exports = withAxiom(withTM({
   reactStrictMode: true,
-});
+}));

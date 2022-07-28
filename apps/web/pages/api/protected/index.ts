@@ -1,5 +1,6 @@
 import { getCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
+import { withAxiom } from "next-axiom";
 import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
 
 export default async function handler(

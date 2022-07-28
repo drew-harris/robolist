@@ -22,6 +22,8 @@ import SettingsContextProvider from "../contexts/SettingsContext";
 import "../global.css";
 import { pageview } from "../lib/ga";
 
+export { reportWebVitals } from "next-axiom";
+
 const isProduction = process.env.NODE_ENV === "production";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
