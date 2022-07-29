@@ -27,12 +27,7 @@ export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
         All Tasks
       </Title>
       {error?.message}
-      <TaskContainer
-        loading={status === "loading"}
-        options={{ hideCheckbox: true }}
-        tasks={tasks}
-        skeletonLength={2}
-      />
+      <TaskContainer loading={status === "loading"} tasks={tasks} />
     </>
   );
 }

@@ -36,6 +36,9 @@ export default function TodayTasksPage({
       <TaskContainer
         loading={status == "loading"}
         skeletonLength={3}
+        checkbox
+        rescheduleButton
+        menu={{}}
         tasks={tasks}
       />
     </>

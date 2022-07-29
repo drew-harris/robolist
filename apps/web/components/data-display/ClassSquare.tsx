@@ -1,4 +1,4 @@
-import { Box, MantineTheme, Sx } from "@mantine/core";
+import { Box, MantineTheme, Paper, Sx } from "@mantine/core";
 import { Class } from "@prisma/client";
 
 interface ClassSquareProps {
@@ -10,12 +10,16 @@ const ClassSquare = (props: ClassSquareProps) => {
     backgroundColor:
       theme.colorScheme == "dark"
         ? theme.fn.darken(theme.colors[props.class.color][9], 0.2)
-        : theme.colors[props.class.color][0],
+        : theme.colors[props.class.color][4],
     padding: theme.spacing.lg,
-    borderRadius: theme.radius.lg,
+    borderRadius: theme.radius.sm,
     fontWeight: 600,
   });
-  return <Box sx={squareSx}>{props.class.name}</Box>;
+  return (
+    <Paper sx={squareSx} shadow="md">
+      {props.class.name}
+    </Paper>
+  );
 };
 
 export default ClassSquare;

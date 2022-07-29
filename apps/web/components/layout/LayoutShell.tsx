@@ -14,7 +14,14 @@ import { openSpotlight } from "@mantine/spotlight";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import { ReactElement, useContext } from "react";
-import { Calendar, Command, List, School, Settings } from "tabler-icons-react";
+import {
+  Calendar,
+  Clock,
+  Command,
+  List,
+  School,
+  Settings,
+} from "tabler-icons-react";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import FocusModeDisplay from "../affixes/FocusModeDisplay";
 import { ColorSchemeToggle } from "../ColorSchemeToggle";
@@ -75,8 +82,9 @@ export default function LayoutShell({ children }: LayoutShellProps) {
   const { settings } = useContext(SettingsContext);
 
   const tasksGroup: SidebarLink[] = [
-    { href: "/tasks/today", label: "Today", icon: <Calendar></Calendar> },
-    { href: "/tasks/", label: "All Tasks", icon: <List></List> },
+    { href: "/tasks/today", label: "Today", icon: <Clock /> },
+    { href: "/tasks/", label: "All Tasks", icon: <List /> },
+    { href: "/calendar/", label: "Calendar", icon: <Calendar /> },
   ];
   const classesGroup: SidebarLink[] = [
     { href: "/classes/", label: "Classes", icon: <School /> },
