@@ -29,3 +29,7 @@ export interface DateAggregation {
   _sum: { workTime: number | null };
   workDate: Date;
 }
+export interface RescheduleInput {
+  task: TaskWithClass;
+  date: Date;
+}

@@ -38,7 +38,7 @@ export default function TodayTasksPage({
         skeletonLength={3}
         checkbox
         rescheduleButton
-        menu={{}}
+        menu={{ delete: true }}
         tasks={tasks}
       />
     </>

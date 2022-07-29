@@ -96,5 +96,9 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
       },
     },
   ];
-  return <SpotlightProvider actions={actions}>{children}</SpotlightProvider>;
+  return (
+    <SpotlightProvider overlayBlur={0} actions={actions}>
+      {children}
+    </SpotlightProvider>
+  );
 }

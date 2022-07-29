@@ -1,29 +1,22 @@
 import {
   ActionIcon,
   Badge,
-  Button,
-  Checkbox,
   Group,
   Menu,
   MenuItem,
   Paper,
-  Space,
   Sx,
   Text,
   Tooltip,
-  useMantineTheme,
 } from "@mantine/core";
+import { useModals } from "@mantine/modals";
+import { ModalsContext } from "@mantine/modals/lib/context";
 import { useContext } from "react";
-import {
-  ArrowLeftRight,
-  ArrowsLeftRight,
-  ArrowsRandom,
-  Calendar,
-  Rotate360,
-} from "tabler-icons-react";
+import { Calendar, Rotate360, Trash } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
-import { dateIsToday } from "../../../utils";
+import useTaskMutation from "../../../hooks/useTaskMutation";
+import RescheduleButton from "./RescheduleButton";
 import TaskCheckbox from "./TaskCheckbox";
 import TaskPlayButton from "./TaskPlayButton";
 
@@ -39,7 +32,9 @@ export interface TaskOptionProps {
   menu?: TaskMenuOptions;
 }
 
-export interface TaskMenuOptions {}
+export interface TaskMenuOptions {
+  delete?: boolean;
+}
 
 const Task = ({
   task,
@@ -47,10 +42,14 @@ const Task = ({
   checkbox = false,
   rescheduleButton = false,
   hideClassLabel = false,
-  menu: menuOptions,
+  menu: menuOptions = {
+    delete: false,
+  },
   ...props
 }: TaskProps) => {
   const { settings } = useContext(SettingsContext);
+  const modals = useModals();
+  const { deleteMutation } = useTaskMutation();
 
   const checkboxElement = settings.useFocusMode ? (
     <TaskPlayButton task={task} />
@@ -63,16 +62,34 @@ const Task = ({
     task.dueDate && !task.complete && task.workDate < oneDayAgo;
   const isOverdue = task.dueDate && !task.complete && task.dueDate < new Date();
 
+  const promptDelete = () => {
+    modals.openConfirmModal({
+      title: "Delete Task?",
+      onConfirm: () => {
+        deleteMutation.mutate(task);
+      },
+      children: (
+        <>
+          <Text size="sm">Are you sure you want to delete this task?</Text>
+        </>
+      ),
+      labels: {
+        confirm: "Delete",
+        cancel: "Cancel",
+      },
+      confirmProps: {
+        color: "red",
+      },
+    });
+  };
+
   const menuComponent = menuOptions ? (
     <Menu size="sm">
-      <MenuItem
-        onClick={() => {
-          alert("Test");
-        }}
-        icon={<Calendar />}
-      >
-        Test
-      </MenuItem>
+      {menuOptions.delete && (
+        <MenuItem color="red" onClick={promptDelete} icon={<Trash />}>
+          Delete
+        </MenuItem>
+      )}
     </Menu>
   ) : null;
 
@@ -107,13 +124,7 @@ const Task = ({
           )}
         </Group>
         <Group>
-          {rescheduleButton && (
-            <Tooltip label="Reschedule" openDelay={300}>
-              <ActionIcon>
-                <Rotate360 size={18} />
-              </ActionIcon>
-            </Tooltip>
-          )}
+          {rescheduleButton && <RescheduleButton task={task} />}
           {menuComponent}
         </Group>
       </Group>

@@ -72,3 +72,57 @@ export async function markTaskStatus(
     throw new Error(error.message);
   }
 }
+
+export async function deleteTask(id: string) {
+  try {
+    const data = await fetch(`/api/tasks/delete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    });
+    // Parse with superjson
+    const json = await data.json();
+    if (json.error) {
+      console.error(json.error);
+      throw new Error(json.error.message);
+    }
+    // Fix dates
+    return json.success;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+
+export async function rescheduleTask(
+  task: TaskWithClass,
+  newDate: Date
+): Promise<TaskWithClass> {
+  try {
+    const data = await fetch(`/api/tasks/reschedule`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        task,
+        date: newDate,
+      }),
+    });
+
+    const json = await data.json();
+    if (json.error) {
+      console.error(json.error);
+      throw new Error(json.error.message);
+    }
+    // Fix dates
+    json.task.dueDate = new Date(json.task.dueDate);
+    json.task.workDate = new Date(json.task.workDate);
+    return json.task;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
