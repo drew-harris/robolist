@@ -1,8 +1,8 @@
 import {
+  ActionIcon,
   Badge,
   Group,
   Menu,
-  MenuItem,
   Paper,
   Space,
   Sx,
@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import { useContext } from "react";
-import { Trash } from "tabler-icons-react";
+import { Dots, Trash } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
@@ -85,12 +85,19 @@ const Task = ({
   };
 
   const menuComponent = menuOptions ? (
-    <Menu size="sm">
-      {menuOptions.delete && (
-        <MenuItem color="red" onClick={promptDelete} icon={<Trash />}>
-          Delete
-        </MenuItem>
-      )}
+    <Menu position="bottom-end" withinPortal={true}>
+      <Menu.Target>
+        <ActionIcon size="sm">
+          <Dots></Dots>
+        </ActionIcon>
+      </Menu.Target>
+      <Menu.Dropdown>
+        {menuOptions.delete && (
+          <Menu.Item color="red" onClick={promptDelete} icon={<Trash />}>
+            Delete
+          </Menu.Item>
+        )}
+      </Menu.Dropdown>
     </Menu>
   ) : null;
 

@@ -110,18 +110,17 @@ export default function CalendarHeatmapDatePicker({
     const hours = getHoursForDay(date);
     const isToday = dateIsToday(date);
     return (
-      <Tooltip
-        sx={(theme) => ({
-          position: "relative",
-          width: "100%",
-          height: "100%",
-          textDecoration: isToday ? "underline" : "none",
-        })}
-        label={hours + " min."}
-        disabled={!hours}
-        openDelay={500}
-      >
-        <Text>{date.getDate()}</Text>
+      <Tooltip label={hours + " min."} disabled={!hours} openDelay={500}>
+        <Box
+          sx={(theme) => ({
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            textDecoration: isToday ? "underline" : "none",
+          })}
+        >
+          {date.getDate()}
+        </Box>
       </Tooltip>
     );
   };
@@ -131,11 +130,6 @@ export default function CalendarHeatmapDatePicker({
       dayStyle={getDateStyle}
       value={selectedDate}
       renderDay={getRenderDate}
-      styles={{
-        cell: {
-          overflow: "hidden",
-        },
-      }}
       firstDayOfWeek={settings.firstDayOfWeek}
       onChange={(date) => onSelectDate(date)}
       {...props}

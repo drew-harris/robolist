@@ -25,13 +25,14 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "@mantine/core": "^4.2.12",
-    "@mantine/dates": "^4.2.12",
-    "@mantine/form": "^4.2.12",
-    "@mantine/hooks": "^4.2.12",
-    "@mantine/modals": "^4.2.12",
-    "@mantine/next": "^4.2.12",
-    "@mantine/notifications": "^4.2.12",
+    "@mantine/core": "^5.0.2",
+    "@mantine/dates": "^5.0.2",
+    "@mantine/form": "^5.0.2",
+    "@mantine/hooks": "^5.0.2",
+    "@mantine/modals": "^5.0.2",
+    "@mantine/next": "^5.0.2",
+    "@mantine/notifications": "^5.0.2",
+    "@mantine/spotlight": "^5.0.2",
     "babel-plugin-superjson-next": "^0.4.3",
     "dayjs": "^1.11.3",
     "superjson": "^1.9.1"
