@@ -8,6 +8,9 @@ describe("changes settings", () => {
     cy.get(":nth-child(2) > .mantine-ThemeIcon-root").click();
     cy.contains("Settings");
     // Turn on checkbox
+    cy.get(
+      ".mantine-Tabs-tabsListWrapper > .mantine-Group-root > :nth-child(2)"
+    ).click();
     cy.get('[type="checkbox"]').eq(0).uncheck();
     cy.get('[type="checkbox"]').eq(0).should("not.be.checked");
     cy.get('[type="checkbox"]').eq(0).check();
@@ -26,6 +29,9 @@ describe("changes settings", () => {
     cy.get(":nth-child(2) > .mantine-ThemeIcon-root").click();
     cy.contains("Settings");
     // Turn on checkbox
+    cy.get(
+      ".mantine-Tabs-tabsListWrapper > .mantine-Group-root > :nth-child(2)"
+    ).click();
     cy.get('[type="checkbox"]').eq(0).uncheck();
     cy.get('[type="checkbox"]').eq(0).should("not.be.checked");
     cy.contains("Use Time Estimation");

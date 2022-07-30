@@ -3,6 +3,9 @@ import {
   Select,
   Space,
   Stack,
+  Sx,
+  Tab,
+  Tabs,
   Title,
   useMantineTheme,
 } from "@mantine/core";
@@ -28,70 +31,84 @@ export default function SettingsPage() {
     setSettings(form.values);
   }, [form]);
 
+  const stackSx: Sx = (theme) => ({
+    marginTop: theme.spacing.md,
+    marginInline: theme.spacing.md,
+    gap: theme.spacing.lg,
+    maxWidth: 250,
+  });
+
   return (
     <>
       <Title order={2}>Settings</Title>
       <Space h={theme.spacing.md} />
       <form>
-        <Stack
-          sx={(theme) => ({
-            maxWidth: 230,
-          })}
-        >
-          <Select
-            label="Date Picker Format"
-            data={[
-              {
-                value: "modal",
-                label: "Pop-up",
-              },
-              {
-                value: "popover",
-                label: "Dropdown",
-              },
-            ]}
-            {...form.getInputProps("datePickerFormat")}
-          ></Select>
-          <Select
-            label="First Day of Week"
-            data={[
-              {
-                value: "sunday",
-                label: "Sunday",
-              },
-              {
-                value: "monday",
-                label: "Monday",
-              },
-            ]}
-            {...form.getInputProps("firstDayOfWeek")}
-          ></Select>
-
-          <Checkbox
-            label="Use Time Estimation"
-            {...form.getInputProps("useTimeEstimate")}
-            checked={form.values.useTimeEstimate}
-          />
-          <Checkbox
-            label="Confetti Effect"
-            {...form.getInputProps("confettiEffect")}
-            checked={form.values.confettiEffect}
-          />
-          <Checkbox
-            label="Use focus timer"
-            {...form.getInputProps("useFocusMode")}
-            checked={form.values.useFocusMode}
-          />
-          <ThemeColorSelector
-            value={form.values.themeColor}
-            onChange={(color) => {
-              logEvent("change_theme_color", {
-                value: color,
-              });
-              form.setFieldValue("themeColor", color);
-            }}
-          />
-        </Stack>
+        <Tabs variant="pills" defaultValue="Appearance">
+          <Tab label="Appearance">
+            <Stack sx={stackSx}>
+              <Checkbox
+                label="Confetti Effect"
+                {...form.getInputProps("confettiEffect")}
+                checked={form.values.confettiEffect}
+              />
+              <ThemeColorSelector
+                value={form.values.themeColor}
+                onChange={(color) => {
+                  logEvent("change_theme_color", {
+                    value: color,
+                  });
+                  form.setFieldValue("themeColor", color);
+                }}
+              />
+            </Stack>
+          </Tab>
+          <Tab label="Behavior">
+            <Stack sx={stackSx}>
+              <Checkbox
+                label="Use Time Estimation"
+                {...form.getInputProps("useTimeEstimate")}
+                checked={form.values.useTimeEstimate}
+              />
+              <Checkbox
+                label="Use focus timer"
+                {...form.getInputProps("useFocusMode")}
+                checked={form.values.useFocusMode}
+              />
+            </Stack>
+          </Tab>
+          <Tab label="Dates">
+            <Stack sx={stackSx}>
+              <Select
+                label="Date Picker Format"
+                data={[
+                  {
+                    value: "modal",
+                    label: "Pop-up",
+                  },
+                  {
+                    value: "popover",
+                    label: "Dropdown",
+                  },
+                ]}
+                {...form.getInputProps("datePickerFormat")}
+              ></Select>
+              <Select
+                label="First Day of Week"
+                data={[
+                  {
+                    value: "sunday",
+                    label: "Sunday",
+                  },
+                  {
+                    value: "monday",
+                    label: "Monday",
+                  },
+                ]}
+                {...form.getInputProps("firstDayOfWeek")}
+              ></Select>
+            </Stack>
+          </Tab>
+        </Tabs>
       </form>
     </>
   );
