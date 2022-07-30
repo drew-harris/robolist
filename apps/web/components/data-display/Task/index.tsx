@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import { useContext } from "react";
+import { FaLessThanEqual } from "react-icons/fa";
 import { Dots, Trash } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
@@ -50,7 +51,7 @@ const Task = ({
 }: TaskProps) => {
   const { settings } = useContext(SettingsContext);
   const modals = useModals();
-  const { deleteMutation } = useTaskMutation();
+  const { deleteMutation, checkMutation } = useTaskMutation();
 
   const checkboxElement = settings.useFocusMode ? (
     <TaskPlayButton task={task} />
@@ -92,6 +93,18 @@ const Task = ({
         </ActionIcon>
       </Menu.Target>
       <Menu.Dropdown>
+        {settings.useFocusMode && task.complete && checkbox && (
+          <Menu.Item
+            onClick={() => {
+              checkMutation.mutate({
+                id: task.id,
+                complete: false,
+              });
+            }}
+          >
+            Undo Complete
+          </Menu.Item>
+        )}
         {menuOptions.delete && (
           <Menu.Item color="red" onClick={promptDelete} icon={<Trash />}>
             Delete
