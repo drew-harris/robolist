@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Anchor,
   AppShell,
   Group,
@@ -111,11 +112,11 @@ export default function LayoutShell({ children }: LayoutShellProps) {
           </>
         ) : (
           <>
-            <UnstyledButton onClick={openSpotlight}>
+            <ActionIcon onClick={() => openSpotlight()}>
               <ThemeIcon variant="filled">
                 <Command width={20} height={20} />
               </ThemeIcon>
-            </UnstyledButton>
+            </ActionIcon>
             <UnstyledButton onClick={() => router.replace("/settings")}>
               <ThemeIcon variant="light">
                 <Settings width={20} height={20} />

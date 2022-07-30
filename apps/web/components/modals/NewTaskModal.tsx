@@ -37,12 +37,12 @@ export default function NewTaskModal() {
       workTime: 20,
     },
     validate: {
-      workDate: (value, form) => {
+      workDate: (value: Date | null | undefined, form: APINewTaskRequest) => {
         if (value && form.dueDate && value > form.dueDate) {
           return "Work date must be before due date";
         }
       },
-      dueDate: (value, form) => {
+      dueDate: (value: Date | null | undefined, form: APINewTaskRequest) => {
         if (
           value &&
           form.workDate &&
