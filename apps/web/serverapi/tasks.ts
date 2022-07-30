@@ -92,3 +92,27 @@ export async function getTaskById(
     throw new Error("Error getting classes");
   }
 }
+
+export async function getTaskByDate(date: Date, userId: string) {
+  const sixHoursBefore = new Date(date.getTime() - 6 * 60 * 60 * 1000);
+  const sixHoursAfter = new Date(date.getTime() + 6 * 60 * 60 * 1000);
+  try {
+    const prisma = getPrismaPool();
+    const task = await prisma.task.findMany({
+      where: {
+        userId: userId,
+        workDate: {
+          lte: sixHoursAfter,
+          gte: sixHoursBefore,
+        },
+      },
+      include: {
+        class: true,
+      },
+    });
+    return task;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error getting classes");
+  }
+}

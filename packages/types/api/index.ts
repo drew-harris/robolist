@@ -79,3 +79,8 @@ export interface APIRescheduleResponse {
   error?: APIError;
   task?: TaskWithClass;
 }
+
+export interface APIGetTasksResponse {
+  error?: APIError;
+  tasks?: TaskWithClass[];
+}

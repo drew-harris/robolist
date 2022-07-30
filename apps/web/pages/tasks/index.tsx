@@ -23,7 +23,7 @@ export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
 
   return (
     <>
-      <Title mb="md" order={3}>
+      <Title mb="md" order={2}>
         All Tasks
       </Title>
       {error?.message}

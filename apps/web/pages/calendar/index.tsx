@@ -1,8 +1,9 @@
-import { Container } from "@mantine/core";
+import { Box, Container, ScrollArea, Stack, Title } from "@mantine/core";
 import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
 import { useContext, useState } from "react";
 import { DateAggregation } from "types";
+import DateTaskContainer from "../../components/containers/DateTaskContainer";
 import CalendarHeatmapDatePicker from "../../components/input/CalendarHeatmapDatePicker";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import { getDates } from "../../serverapi/dates";
@@ -18,10 +19,18 @@ export default function CalendarPage({
   const { settings } = useContext(SettingsContext);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   return (
-    <>
+    <Box
+      sx={(theme) => ({
+        display: "flex",
+        flexDirection: "column",
+        gap: theme.spacing.lg,
+      })}
+    >
+      <Title order={2}>Calendar</Title>
       <Container
         sx={(theme) => ({
           maxWidth: theme.breakpoints.sm,
+          gap: theme.spacing.lg,
         })}
       >
         <CalendarHeatmapDatePicker
@@ -32,9 +41,9 @@ export default function CalendarPage({
           selectedDate={selectedDate}
           onSelectDate={setSelectedDate}
         />
-        {selectedDate ? selectedDate.toLocaleDateString() : null}
       </Container>
-    </>
+      {selectedDate && <DateTaskContainer date={selectedDate} />}
+    </Box>
   );
 }
 

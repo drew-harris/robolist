@@ -145,6 +145,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
   return (
     <AppShell
+      fixed={true}
       padding="md"
       navbar={hideSidebar ? undefined : navbarContent}
       header={<Header height={60}>{headerContent}</Header>}
@@ -154,7 +155,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
             theme.colorScheme === "dark"
               ? theme.colors.dark[8]
               : theme.colors.gray[0],
-          minHeight: "calc(100vh - 60px)",
+          minHeight: "100vh",
         },
       })}
     >

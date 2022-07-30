@@ -28,7 +28,7 @@ const ClassesPage = ({ classes: initialClasses }: ClassPageProps) => {
 
   return (
     <>
-      <Title order={3} mb="md">
+      <Title order={2} mb="md">
         Classes
       </Title>
       {error ? (

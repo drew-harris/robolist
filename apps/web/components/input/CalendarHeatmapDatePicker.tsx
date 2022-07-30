@@ -1,11 +1,11 @@
-import { useMantineTheme } from "@mantine/core";
+import { Box, Tooltip, useMantineTheme, Text, Center } from "@mantine/core";
 import { Calendar, CalendarProps, DayModifiers } from "@mantine/dates";
 import { useQuery } from "@tanstack/react-query";
-import { useContext, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { DateAggregation } from "types";
 import { getDateAggregation } from "../../clientapi/dates";
 import { SettingsContext } from "../../contexts/SettingsContext";
-import { getHeatmapColor } from "../../utils";
+import { dateIsToday, getHeatmapColor } from "../../utils";
 
 interface CalendarHeatmapDatePickerProps extends CalendarProps {
   initialAggregation?: DateAggregation[];
@@ -20,7 +20,7 @@ export default function CalendarHeatmapDatePicker({
   ...props
 }: CalendarHeatmapDatePickerProps) {
   const { data: agg } = useQuery<DateAggregation[], Error>(
-    ["tasks"],
+    ["tasks", { type: "dates" }],
     getDateAggregation,
     {
       initialData: initialAggregation,
@@ -34,7 +34,6 @@ export default function CalendarHeatmapDatePicker({
 
   // Update the maximum for gradient calculation
   useEffect(() => {
-    console.log(agg);
     if (!agg) {
       return;
     }
@@ -46,7 +45,6 @@ export default function CalendarHeatmapDatePicker({
         }
       }
     }
-    console.log(`Max: ${max}`);
     setMaxCount(max);
   }, [agg]);
 
@@ -64,7 +62,7 @@ export default function CalendarHeatmapDatePicker({
     modifiers: DayModifiers
   ): React.CSSProperties => {
     let style: React.CSSProperties = {
-      backgroundColor: "transparent",
+      backgroundColor: undefined,
     };
     if (!agg) {
       return style;
@@ -77,6 +75,17 @@ export default function CalendarHeatmapDatePicker({
       style = {
         ...style,
         backgroundColor: theme.fn.rgba(getHeatmapColor(count / maxCount), 0.2),
+      };
+    } else {
+      style = {
+        ...style,
+        backgroundColor: undefined,
+      };
+    }
+    if (dateIsToday(date)) {
+      style = {
+        ...style,
+        textDecoration: "underline",
       };
     }
 
@@ -92,10 +101,45 @@ export default function CalendarHeatmapDatePicker({
     return style;
   };
 
+  const getHoursForDay = (date: Date): number | null => {
+    if (!agg) {
+      return null;
+    }
+    for (let i = 0; i < agg.length; i++) {
+      if (agg[i].workDate.getTime() === date.getTime()) {
+        return agg[i]._sum.workTime || 0;
+      }
+    }
+    return null;
+  };
+  const getRenderDate = (date: Date): ReactNode => {
+    const hours = getHoursForDay(date);
+    return (
+      <Tooltip
+        sx={(theme) => ({
+          position: "relative",
+          width: "100%",
+          height: "100%",
+        })}
+        label={hours + " mins"}
+        disabled={!hours}
+        openDelay={500}
+      >
+        <Text>{date.getDate()}</Text>
+      </Tooltip>
+    );
+  };
+
   return (
     <Calendar
       dayStyle={getDateStyle}
       value={selectedDate}
+      renderDay={getRenderDate}
+      styles={{
+        cell: {
+          overflow: "hidden",
+        },
+      }}
       firstDayOfWeek={settings.firstDayOfWeek}
       onChange={(date) => onSelectDate(date)}
       {...props}

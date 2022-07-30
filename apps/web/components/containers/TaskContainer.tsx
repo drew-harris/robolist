@@ -9,6 +9,7 @@ type TaskContainerProps = TaskOptionProps & {
   tasks: TaskWithClass[] | undefined;
   skeletonLength?: number;
   loading?: boolean;
+  disableAnimation?: boolean;
 };
 
 const defaultTaskOptions: TaskOptionProps = {};
@@ -17,6 +18,7 @@ export default function TaskContainer({
   tasks,
   loading = false,
   skeletonLength = 8,
+  disableAnimation = false,
   ...props
 }: TaskContainerProps) {
   const [parent] = useAutoAnimate<HTMLDivElement>();
@@ -29,7 +31,7 @@ export default function TaskContainer({
 
   if (loading || !tasks) {
     return (
-      <Stack spacing="sm" ref={parent}>
+      <Stack spacing="sm" ref={disableAnimation ? null : parent}>
         {[...Array(skeletonLength)].map((e, i) => (
           <TaskSkeleton key={i} {...props} />
         ))}
@@ -38,7 +40,7 @@ export default function TaskContainer({
   }
 
   return (
-    <Stack spacing="sm" ref={parent}>
+    <Stack spacing="sm" ref={disableAnimation ? null : parent}>
       {taskElements}
     </Stack>
   );

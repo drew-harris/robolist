@@ -2,8 +2,10 @@ import { showNotification } from "@mantine/notifications";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { RescheduleInput, TaskWithClass } from "types";
+import { getDateAggregation } from "../clientapi/dates";
 import { deleteTask, rescheduleTask } from "../clientapi/tasks";
 import { FocusContext } from "../contexts/FocusContext";
+import { getHumanDateString } from "../utils";
 
 export default function useTaskMutation() {
   const queryClient = useQueryClient();
@@ -62,8 +64,20 @@ export default function useTaskMutation() {
           color: "red",
         });
       },
+      onSuccess: async (data, task, context) => {
+        showNotification({
+          message: "Task rescheduled for " + getHumanDateString(data.workDate),
+          color: "green",
+        });
+        if (focus.focusState.task && focus.focusState.task.id === data.id) {
+          focus.fn.cancel();
+        }
+      },
       onSettled: async () => {
         await queryClient.invalidateQueries(["tasks"]);
+        await queryClient.prefetchQuery(["tasks", { type: "dates" }], () => {
+          return getDateAggregation();
+        });
       },
     }
   );

@@ -5,6 +5,7 @@ import {
   Menu,
   MenuItem,
   Paper,
+  Space,
   Sx,
   Text,
   Tooltip,
@@ -16,6 +17,7 @@ import { Calendar, Rotate360, Trash } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
+import { getHumanDateString } from "../../../utils";
 import RescheduleButton from "./RescheduleButton";
 import TaskCheckbox from "./TaskCheckbox";
 import TaskPlayButton from "./TaskPlayButton";
@@ -26,6 +28,7 @@ type TaskProps = TaskOptionProps & {
 
 export interface TaskOptionProps {
   checkbox?: boolean;
+  workdayLabel?: boolean;
   rescheduleButton?: boolean;
   hideClassLabel?: boolean;
   disableCheck?: boolean;
@@ -45,6 +48,7 @@ const Task = ({
   menu: menuOptions = {
     delete: false,
   },
+  workdayLabel = false,
   ...props
 }: TaskProps) => {
   const { settings } = useContext(SettingsContext);
@@ -114,7 +118,7 @@ const Task = ({
       <Group position="apart">
         <Group>
           {checkbox && checkboxElement}
-          <Text>{task.title}</Text>
+          <Text weight="bolder">{task.title}</Text>
           {task.class && !hideClassLabel && (
             <>
               <Badge size="sm" color={task.class.color}>
@@ -122,8 +126,15 @@ const Task = ({
               </Badge>
             </>
           )}
+          {workdayLabel && (
+            <>
+              <Space w="sm" />
+              <Text>{getHumanDateString(task.workDate)}</Text>
+            </>
+          )}
         </Group>
         <Group>
+          <Text size="sm">{task.workTime + "min."}</Text>
           {rescheduleButton && <RescheduleButton task={task} />}
           {menuComponent}
         </Group>
