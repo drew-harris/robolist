@@ -1,5 +1,5 @@
 import { useMantineColorScheme } from "@mantine/core";
-import { useModals } from "@mantine/modals";
+import { openModal } from "@mantine/modals";
 import { SpotlightAction, SpotlightProvider } from "@mantine/spotlight";
 import { useRouter } from "next/router";
 import {
@@ -20,7 +20,6 @@ interface SpotlightMenuProps {
 }
 
 export default function SpotlightMenu({ children }: SpotlightMenuProps) {
-  const modals = useModals();
   const router = useRouter();
   const { toggleColorScheme } = useMantineColorScheme();
 
@@ -31,10 +30,9 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
       id: "test-modal",
       keywords: ["new", "task", "create", "todo"],
       onTrigger: () => {
-        modals.openModal({
+        openModal({
           children: <NewTaskModal />,
           title: "New Task",
-          id: "new-task",
           size: "lg",
         });
       },
@@ -45,11 +43,10 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
       id: "new-class",
       keywords: ["new", "task", "create", "todo"],
       onTrigger: () => {
-        modals.openModal({
+        openModal({
           children: <NewClassModal />,
           title: "New Class",
           size: "auto",
-          id: "new-class",
         });
       },
     },

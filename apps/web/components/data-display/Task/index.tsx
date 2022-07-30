@@ -1,8 +1,8 @@
 import {
+  ActionIcon,
   Badge,
   Group,
   Menu,
-  MenuItem,
   Paper,
   Space,
   Sx,
@@ -10,7 +10,8 @@ import {
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import { useContext } from "react";
-import { Trash } from "tabler-icons-react";
+import { FaLessThanEqual } from "react-icons/fa";
+import { Dots, Trash } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
@@ -50,7 +51,7 @@ const Task = ({
 }: TaskProps) => {
   const { settings } = useContext(SettingsContext);
   const modals = useModals();
-  const { deleteMutation } = useTaskMutation();
+  const { deleteMutation, checkMutation } = useTaskMutation();
 
   const checkboxElement = settings.useFocusMode ? (
     <TaskPlayButton task={task} />
@@ -85,12 +86,31 @@ const Task = ({
   };
 
   const menuComponent = menuOptions ? (
-    <Menu size="sm">
-      {menuOptions.delete && (
-        <MenuItem color="red" onClick={promptDelete} icon={<Trash />}>
-          Delete
-        </MenuItem>
-      )}
+    <Menu position="bottom-end" withinPortal={true}>
+      <Menu.Target>
+        <ActionIcon size="sm">
+          <Dots></Dots>
+        </ActionIcon>
+      </Menu.Target>
+      <Menu.Dropdown>
+        {settings.useFocusMode && task.complete && checkbox && (
+          <Menu.Item
+            onClick={() => {
+              checkMutation.mutate({
+                id: task.id,
+                complete: false,
+              });
+            }}
+          >
+            Undo Complete
+          </Menu.Item>
+        )}
+        {menuOptions.delete && (
+          <Menu.Item color="red" onClick={promptDelete} icon={<Trash />}>
+            Delete
+          </Menu.Item>
+        )}
+      </Menu.Dropdown>
     </Menu>
   ) : null;
 

@@ -6,15 +6,13 @@ describe("changes settings", () => {
   it("show estimated work time", () => {
     cy.visit("/");
     cy.get(":nth-child(2) > .mantine-ThemeIcon-root").click();
+
     cy.contains("Settings");
     // Turn on checkbox
-    cy.get(
-      ".mantine-Tabs-tabsListWrapper > .mantine-Group-root > :nth-child(2)"
-    ).click();
-    cy.get('[type="checkbox"]').eq(0).uncheck();
-    cy.get('[type="checkbox"]').eq(0).should("not.be.checked");
-    cy.get('[type="checkbox"]').eq(0).check();
-    cy.get('[type="checkbox"]').eq(0).should("be.checked");
+    cy.get('[type="checkbox"]').eq(1).uncheck();
+    cy.get('[type="checkbox"]').eq(1).should("not.be.checked");
+    cy.get('[type="checkbox"]').eq(1).check();
+    cy.get('[type="checkbox"]').eq(1).should("be.checked");
     cy.contains("Use Time Estimation");
 
     cy.get(":nth-child(1) > .mantine-ThemeIcon-root").click();
@@ -29,11 +27,8 @@ describe("changes settings", () => {
     cy.get(":nth-child(2) > .mantine-ThemeIcon-root").click();
     cy.contains("Settings");
     // Turn on checkbox
-    cy.get(
-      ".mantine-Tabs-tabsListWrapper > .mantine-Group-root > :nth-child(2)"
-    ).click();
-    cy.get('[type="checkbox"]').eq(0).uncheck();
-    cy.get('[type="checkbox"]').eq(0).should("not.be.checked");
+    cy.get('[type="checkbox"]').eq(1).uncheck();
+    cy.get('[type="checkbox"]').eq(1).should("not.be.checked");
     cy.contains("Use Time Estimation");
 
     cy.get(":nth-child(1) > .mantine-ThemeIcon-root").click();

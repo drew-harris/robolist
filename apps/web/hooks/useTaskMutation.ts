@@ -1,9 +1,9 @@
 import { showNotification } from "@mantine/notifications";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
-import { RescheduleInput, TaskWithClass } from "types";
+import { APICompleteRequest, RescheduleInput, TaskWithClass } from "types";
 import { getDateAggregation } from "../clientapi/dates";
-import { deleteTask, rescheduleTask } from "../clientapi/tasks";
+import { deleteTask, markTaskStatus, rescheduleTask } from "../clientapi/tasks";
 import { FocusContext } from "../contexts/FocusContext";
 import { getHumanDateString } from "../utils";
 
@@ -82,5 +82,59 @@ export default function useTaskMutation() {
     }
   );
 
-  return { deleteMutation, rescheduleMutation };
+  const checkMutation = useMutation(
+    (state: APICompleteRequest) => {
+      return markTaskStatus(state.id, state.complete);
+    },
+    {
+      onMutate: async (state) => {
+        await queryClient.cancelQueries(["tasks"]);
+
+        await queryClient.setQueriesData(
+          ["tasks"],
+          (oldData: TaskWithClass[] | undefined) => {
+            if (!oldData) {
+              return [];
+            }
+
+            return oldData.map((t) => {
+              if (t.id === state.id) {
+                return { ...t, complete: state.complete };
+              }
+              return t;
+            });
+          }
+        );
+      },
+
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(["tasks"]);
+      },
+
+      onError: async (err, state) => {
+        await queryClient.invalidateQueries(["tasks"]);
+        await queryClient.setQueriesData(
+          ["tasks"],
+          (oldData: TaskWithClass[] | undefined) => {
+            if (!oldData) {
+              return [];
+            }
+
+            return oldData.map((t) => {
+              if (t.id === state.id) {
+                return { ...t, complete: !state.complete };
+              }
+              return t;
+            });
+          }
+        );
+        showNotification({
+          message: "Error marking task as complete",
+          color: "red",
+        });
+      },
+    }
+  );
+
+  return { deleteMutation, rescheduleMutation, checkMutation };
 }

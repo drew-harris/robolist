@@ -1,6 +1,5 @@
 import { Select } from "@mantine/core";
-import { formList } from "@mantine/form";
-import { UseFormReturnType } from "@mantine/form/lib/use-form";
+import { UseFormReturnType } from "@mantine/form";
 import { Class } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { APINewTaskRequest } from "types";
