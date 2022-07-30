@@ -82,13 +82,6 @@ export default function CalendarHeatmapDatePicker({
         backgroundColor: undefined,
       };
     }
-    if (dateIsToday(date)) {
-      style = {
-        ...style,
-        textDecoration: "underline",
-      };
-    }
-
     if (modifiers.selected) {
       style = {
         ...style,
@@ -112,16 +105,19 @@ export default function CalendarHeatmapDatePicker({
     }
     return null;
   };
+
   const getRenderDate = (date: Date): ReactNode => {
     const hours = getHoursForDay(date);
+    const isToday = dateIsToday(date);
     return (
       <Tooltip
         sx={(theme) => ({
           position: "relative",
           width: "100%",
           height: "100%",
+          textDecoration: isToday ? "underline" : "none",
         })}
-        label={hours + " mins"}
+        label={hours + " min."}
         disabled={!hours}
         openDelay={500}
       >

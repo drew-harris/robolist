@@ -40,11 +40,15 @@ export function getHeatmapColor(index: number) {
 
 export function dateIsToday(date: Date): boolean {
   const today = new Date();
-  return (
-    date.getDate() === today.getDate() &&
-    date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear()
-  );
+  try {
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  } catch (error) {
+    return false;
+  }
 }
 
 export function getHumanDateString(date: Date): string {

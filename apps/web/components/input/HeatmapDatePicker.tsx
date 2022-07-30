@@ -1,9 +1,11 @@
-import { Tooltip, useMantineTheme } from "@mantine/core";
+import { Tooltip, useMantineTheme, Text } from "@mantine/core";
 import { DatePicker, DayModifiers } from "@mantine/dates";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { DateAggregation } from "types";
 import { getDateAggregation } from "../../clientapi/dates";
-import { getHeatmapColor } from "../../utils";
+import { SettingsContext } from "../../contexts/SettingsContext";
+import { dateIsToday, getHeatmapColor } from "../../utils";
 
 const label = (
   <Tooltip label="Shows which days are busiest. More Red = More Busy">
@@ -12,34 +14,31 @@ const label = (
 );
 
 export default function HeatmapDatePicker(props: any) {
-  const [dateAgg, setDateAgg] = useState<DateAggregation[] | null>(null);
-  const [maxCount, setMaxCount] = useState(0);
-  const theme = useMantineTheme();
+  const { data: agg } = useQuery<DateAggregation[], Error>(
+    ["tasks", { type: "dates" }],
+    getDateAggregation
+  );
 
-  const fetchDates = async () => {
-    try {
-      const dates = await getDateAggregation();
-      console.log(dates);
-      setDateAgg(dates);
-      let max = 0;
-      for (const date of dates) {
-        console.log(`Curr: ${date._sum.workTime} Max: ${max}`);
-        if (date._sum.workTime) {
-          if (date._sum.workTime > max) {
-            max = date._sum.workTime || 0;
-          }
+  const theme = useMantineTheme();
+  const { settings } = useContext(SettingsContext);
+
+  const [maxCount, setMaxCount] = useState(0);
+
+  // Update the maximum for gradient calculation
+  useEffect(() => {
+    if (!agg) {
+      return;
+    }
+    let max = 0;
+    for (const date of agg) {
+      if (date._sum.workTime) {
+        if (date._sum.workTime > max) {
+          max = date._sum.workTime || 0;
         }
       }
-      setMaxCount(max);
-    } catch (error: any) {
-      console.error(error.message);
-      setDateAgg(null);
     }
-  };
-
-  useEffect(() => {
-    fetchDates();
-  }, []);
+    setMaxCount(max);
+  }, [agg]);
 
   const getCountOfDate = (date: Date, dates: DateAggregation[]): number => {
     for (let i = 0; i < dates.length; i++) {
@@ -54,23 +53,82 @@ export default function HeatmapDatePicker(props: any) {
     date: Date,
     modifiers: DayModifiers
   ): React.CSSProperties | null => {
-    if (!dateAgg) {
-      return null;
+    let style: React.CSSProperties = {
+      backgroundColor: undefined,
+    };
+    if (!agg) {
+      return style;
     }
     if (modifiers.disabled) {
-      return null;
+      return style;
     }
-    const count = getCountOfDate(date, dateAgg);
+    const count = getCountOfDate(date, agg);
     if (count) {
-      return {
+      style = {
+        ...style,
         backgroundColor: theme.fn.rgba(getHeatmapColor(count / maxCount), 0.2),
+      };
+    } else {
+      style = {
+        ...style,
+        backgroundColor: undefined,
+      };
+    }
+    if (modifiers.selected) {
+      style = {
+        ...style,
+        borderWidth: 1,
+        borderStyle: "solid",
+        borderColor: theme.colors[theme.primaryColor][5],
       };
     }
 
+    return style;
+  };
+
+  const getHoursForDay = (date: Date): number | null => {
+    if (!agg) {
+      return null;
+    }
+    for (let i = 0; i < agg.length; i++) {
+      if (agg[i].workDate.getTime() === date.getTime()) {
+        return agg[i]._sum.workTime || 0;
+      }
+    }
     return null;
   };
 
+  const getRenderDate = (date: Date): ReactNode => {
+    const hours = getHoursForDay(date);
+    const isToday = dateIsToday(date);
+    return (
+      <Tooltip
+        sx={(theme) => ({
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          textDecoration: isToday ? "underline" : "none",
+        })}
+        label={hours + " min."}
+        disabled={!hours}
+        openDelay={500}
+      >
+        <Text>{date.getDate()}</Text>
+      </Tooltip>
+    );
+  };
+
   return (
-    <DatePicker label={label} dayStyle={getDateStyle} {...props}></DatePicker>
+    <DatePicker
+      label={label}
+      renderDay={getRenderDate}
+      styles={{
+        cell: {
+          overflow: "hidden",
+        },
+      }}
+      dayStyle={getDateStyle}
+      {...props}
+    ></DatePicker>
   );
 }

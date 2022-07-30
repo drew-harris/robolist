@@ -1,8 +1,9 @@
 import { ActionIcon, Modal, Tooltip } from "@mantine/core";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Rotate360 } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import useTaskMutation from "../../../hooks/useTaskMutation";
+import { dateIsToday } from "../../../utils";
 import CalendarHeatmapDatePicker from "../../input/CalendarHeatmapDatePicker";
 
 interface RescheduleButtonProps {
@@ -23,18 +24,47 @@ export default function RescheduleButton(props: RescheduleButtonProps) {
     setOpened(false);
   };
 
-  const thisMorning = new Date();
-  thisMorning.setHours(0, 0, 0, 0);
-  const dueDate = task.dueDate || thisMorning;
-  const dayBeforeDueDate = new Date(dueDate.getTime() - 24 * 60 * 60 * 999);
-  dayBeforeDueDate.setHours(dayBeforeDueDate.getHours() + 1);
+  const times = useMemo(() => {
+    let thisMorning = new Date();
+    thisMorning.setHours(0, 0, 0, 0);
+    let dueDate = task.dueDate;
+    let dayBeforeDueDate = new Date(dueDate.getTime() - 24 * 60 * 60 * 999);
+    dayBeforeDueDate.setHours(dayBeforeDueDate.getHours() + 1);
+    return {
+      thisMorning,
+      dayBeforeDueDate,
+      dueDate,
+    };
+  }, [task]);
+  // TODO: Memoize
+
+  if (times.dayBeforeDueDate.getTime() < times.thisMorning.getTime()) {
+    times.dayBeforeDueDate = times.thisMorning;
+  }
+
+  const onButtonClick = () => {
+    if (task.dueDate < times.thisMorning) {
+      rescheduleMutation.mutate({ date: times.thisMorning, task: task });
+    } else {
+      setOpened(true);
+    }
+  };
+
+  if (
+    (dateIsToday(task.workDate) &&
+      !task.complete &&
+      task.dueDate < times.thisMorning) ||
+    task.complete
+  ) {
+    return null;
+  }
 
   return (
     <>
       <Tooltip label="Reschedule" openDelay={300}>
         <ActionIcon
           loading={rescheduleMutation.isLoading}
-          onClick={() => setOpened(true)}
+          onClick={onButtonClick}
         >
           <Rotate360 size={18} />
         </ActionIcon>
@@ -47,8 +77,8 @@ export default function RescheduleButton(props: RescheduleButtonProps) {
       >
         <CalendarHeatmapDatePicker
           selectedDate={selectedDate}
-          minDate={thisMorning}
-          maxDate={dayBeforeDueDate}
+          minDate={times.thisMorning}
+          maxDate={times.dayBeforeDueDate}
           onSelectDate={handleSelect}
           fullWidth
           allowLevelChange={false}

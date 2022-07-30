@@ -1,5 +1,4 @@
 import {
-  ActionIcon,
   Badge,
   Group,
   Menu,
@@ -8,12 +7,10 @@ import {
   Space,
   Sx,
   Text,
-  Tooltip,
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
-import { ModalsContext } from "@mantine/modals/lib/context";
 import { useContext } from "react";
-import { Calendar, Rotate360, Trash } from "tabler-icons-react";
+import { Trash } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
@@ -98,27 +95,29 @@ const Task = ({
   ) : null;
 
   const paperSx: Sx = (theme) => {
-    let backgroundColor: string | undefined;
+    let border: string | undefined;
 
     if (isOverdue) {
-      backgroundColor = theme.fn.rgba(theme.colors.red[5], 0.4);
+      border = `1px solid ${theme.colors.red[5]}`;
     } else if (isLateWork) {
-      backgroundColor = theme.fn.rgba(theme.colors.orange[4], 0.2);
+      border = `1px solid ${theme.colors.orange[5]}`;
     }
 
     return {
       opacity: task.complete ? 0.4 : 1,
       transition: "opacity .20s linear",
-      backgroundColor,
+      border,
     };
   };
 
   return (
-    <Paper withBorder p="md" shadow="xs" sx={paperSx}>
+    <Paper withBorder p="sm" shadow="xs" sx={paperSx}>
       <Group position="apart">
         <Group>
           {checkbox && checkboxElement}
-          <Text weight="bolder">{task.title}</Text>
+          <Text weight="bolder" size="sm">
+            {task.title}
+          </Text>
           {task.class && !hideClassLabel && (
             <>
               <Badge size="sm" color={task.class.color}>
