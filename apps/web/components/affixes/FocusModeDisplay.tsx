@@ -9,6 +9,7 @@ import {
   Transition,
   useMantineTheme,
 } from "@mantine/core";
+import { useHotkeys } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -30,8 +31,15 @@ export default function FocusModeDisplay() {
   const { settings } = useContext(SettingsContext);
   const modals = useModals();
   const theme = useMantineTheme();
-
   const queryClient = useQueryClient();
+  useHotkeys([
+    [
+      "space",
+      () => {
+        toggleWorking();
+      },
+    ],
+  ]);
 
   const completeMutation = useMutation(
     (state: APICompleteRequest) => {
@@ -214,13 +222,15 @@ export default function FocusModeDisplay() {
                     <TbCheck size={iconSize} />
                   </ActionIcon>
                 </Tooltip>
-                <ActionIcon onClick={toggleWorking}>
-                  {focusState.working ? (
-                    <TiMediaPause size={iconSize} />
-                  ) : (
-                    <BsPlayFill size={iconSize} />
-                  )}
-                </ActionIcon>
+                <Tooltip label="(Space)" openDelay={500}>
+                  <ActionIcon onClick={toggleWorking}>
+                    {focusState.working ? (
+                      <TiMediaPause size={iconSize} />
+                    ) : (
+                      <BsPlayFill size={iconSize} />
+                    )}
+                  </ActionIcon>
+                </Tooltip>
 
                 <Box
                   sx={(theme) => ({
@@ -228,7 +238,7 @@ export default function FocusModeDisplay() {
                     textAlign: "center",
                   })}
                 >
-                  <Text color={theme.primaryColor} weight="bold">
+                  <Text color={theme.primaryColor} size="lg" weight="bold">
                     {secondToTimeDisplay(focusState.secondsElapsed)}
                   </Text>
                 </Box>

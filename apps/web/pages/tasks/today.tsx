@@ -29,13 +29,16 @@ export default function TodayTasksPage({
 
   return (
     <>
-      <Title order={3} mb="md">
+      <Title order={2} mb="md">
         Today
       </Title>
       {error?.message}
       <TaskContainer
         loading={status == "loading"}
         skeletonLength={3}
+        checkbox
+        rescheduleButton
+        menu={{ delete: true }}
         tasks={tasks}
       />
     </>

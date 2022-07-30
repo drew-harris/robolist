@@ -67,7 +67,7 @@ export default function NewTaskModal() {
         setMaxDate(new Date(form.values.dueDate.getTime()));
       } else {
         setMaxDate(
-          new Date(form.values.dueDate.getTime() - 24 * 60 * 60 * 1000)
+          new Date(form.values.dueDate.getTime() - 24 * 60 * 60 * 999)
         );
       }
     }

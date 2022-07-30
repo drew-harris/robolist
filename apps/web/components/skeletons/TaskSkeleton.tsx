@@ -13,13 +13,7 @@ import React from "react";
 import { TaskWithClass } from "types";
 import { TaskOptionProps } from "../data-display/Task";
 
-const TaskSkeleton = ({
-  disableCheck = false,
-  hideCheckbox = false,
-  disableEdit = false,
-  disableQuickSettings = false,
-  ...props
-}: TaskOptionProps) => {
+const TaskSkeleton = ({ checkbox = false, ...props }: TaskOptionProps) => {
   const [fakeTitle] = React.useState(
     "a".repeat(Math.floor(Math.random() * 10) + 6)
   );
@@ -28,7 +22,7 @@ const TaskSkeleton = ({
   return (
     <Paper p="md" shadow="xs">
       <Group>
-        {!hideCheckbox && <Skeleton width={20} height={20} />}
+        {checkbox && <Skeleton width={20} height={20} />}
         <Box>
           <Skeleton visible={true}>{fakeTitle}</Skeleton>
         </Box>

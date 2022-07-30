@@ -5,7 +5,7 @@ import { GetServerSidePropsResult, NextPageContext } from "next";
 import { TaskWithClass } from "types";
 import { getTasks } from "../../clientapi/tasks";
 import TaskContainer from "../../components/containers/TaskContainer";
-import { getTasksFromId } from "../../serverapi/tasks";
+import { getTasksFromUserId } from "../../serverapi/tasks";
 import { getUserFromJWT } from "../../utils";
 
 interface TasksPageProps {
@@ -23,15 +23,15 @@ export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
 
   return (
     <>
-      <Title mb="md" order={3}>
+      <Title mb="md" order={2}>
         All Tasks
       </Title>
       {error?.message}
       <TaskContainer
+        menu={{ delete: true }}
+        rescheduleButton
         loading={status === "loading"}
-        options={{ hideCheckbox: true }}
         tasks={tasks}
-        skeletonLength={2}
       />
     </>
   );
@@ -51,7 +51,7 @@ export async function getServerSideProps(
     };
   }
 
-  const tasks = await getTasksFromId(user.id);
+  const tasks = await getTasksFromUserId(user.id);
   return {
     props: {
       tasks,

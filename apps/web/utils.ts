@@ -37,3 +37,39 @@ export function getHeatmapColor(index: number) {
   const colorhsv = gradient.rgbAt(index);
   return "#" + colorhsv.toHex();
 }
+
+export function dateIsToday(date: Date): boolean {
+  const today = new Date();
+  return (
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
+}
+
+export function getHumanDateString(date: Date): string {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (dateIsToday(date)) {
+    return "Today";
+  }
+  if (date.getDate() === today.getDate() - 1) {
+    return "Yesterday";
+  }
+
+  // Tomorrow
+  if (date.getDate() === today.getDate() + 1) {
+    return "Tomorrow";
+  }
+
+  // If date in next 5 days, show day of week
+  if (date.getTime() < today.getTime() + 5 * 24 * 60 * 60 * 1000) {
+    return date.toLocaleDateString("en-US", {
+      weekday: "long",
+    });
+  }
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+}

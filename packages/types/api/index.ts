@@ -64,3 +64,23 @@ export interface APICompleteResponse {
   error?: APIError;
   task?: TaskWithClass;
 }
+
+export interface APISingleTaskResponse {
+  error?: APIError;
+  task?: TaskWithClass | null;
+}
+
+export interface APIRescheduleRequest {
+  id: string;
+  date: string | Date | Prisma.DateTimeFieldUpdateOperationsInput | undefined;
+}
+
+export interface APIRescheduleResponse {
+  error?: APIError;
+  task?: TaskWithClass;
+}
+
+export interface APIGetTasksResponse {
+  error?: APIError;
+  tasks?: TaskWithClass[];
+}
