@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import * as bcrypt from "bcrypt";
 import { setCookie } from "cookies-next";
 import * as JWT from "jsonwebtoken";
@@ -79,13 +78,13 @@ async function handler(
 		}
 
 		// Date 1 week from now
-		const date = new Date();
-		date.setDate(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
+		// Expires in 5 weeks
 		setCookie("jwt", jwt, {
-			expires: date,
+			// expires: date,
 			req,
 			res,
+			maxAge: 1000 * 60 * 60 * 24 * 7 * 5,
 		});
 
 		log.info("User logged in!", { email: user.email });
