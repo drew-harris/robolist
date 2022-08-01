@@ -9,52 +9,52 @@ import { getTasksFromUserId } from "../../serverapi/tasks";
 import { getUserFromJWT } from "../../utils";
 
 interface TasksPageProps {
-  tasks: TaskWithClass[];
+	tasks: TaskWithClass[];
 }
 
 export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
-  const {
-    data: tasks,
-    error,
-    status,
-  } = useQuery<TaskWithClass[], Error>(["tasks", { type: "all" }], getTasks, {
-    initialData: initialTasks,
-  });
+	const {
+		data: tasks,
+		error,
+		status,
+	} = useQuery<TaskWithClass[], Error>(["tasks", { type: "all" }], getTasks, {
+		initialData: initialTasks,
+	});
 
-  return (
-    <>
-      <Title mb="md" order={2}>
-        All Tasks
-      </Title>
-      {error?.message}
-      <TaskContainer
-        menu={{ delete: true }}
-        rescheduleButton
-        loading={status === "loading"}
-        tasks={tasks}
-      />
-    </>
-  );
+	return (
+		<>
+			<Title mb="md" order={2}>
+				All Tasks
+			</Title>
+			{error?.message}
+			<TaskContainer
+				menu={{ delete: true }}
+				rescheduleButton
+				loading={status === "loading"}
+				tasks={tasks}
+			/>
+		</>
+	);
 }
 
 export async function getServerSideProps(
-  context: NextPageContext
+	context: NextPageContext
 ): Promise<GetServerSidePropsResult<TasksPageProps>> {
-  const jwt = getCookie("jwt", context);
-  const user = getUserFromJWT(jwt?.toString());
-  if (!user) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
+	const jwt = getCookie("jwt", context);
+	const user = getUserFromJWT(jwt?.toString());
+	if (!user) {
+		return {
+			redirect: {
+				destination: "/",
+				permanent: false,
+			},
+		};
+	}
 
-  const tasks = await getTasksFromUserId(user.id);
-  return {
-    props: {
-      tasks,
-    },
-  };
+	const tasks = await getTasksFromUserId(user.id);
+	return {
+		props: {
+			tasks,
+		},
+	};
 }

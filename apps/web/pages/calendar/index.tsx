@@ -10,62 +10,62 @@ import { getDates } from "../../serverapi/dates";
 import { getUserFromJWT } from "../../utils";
 
 interface CalendarPageProps {
-  aggregation: DateAggregation[];
+	aggregation: DateAggregation[];
 }
 
 export default function CalendarPage({
-  aggregation: initialAggregation,
+	aggregation: initialAggregation,
 }: CalendarPageProps) {
-  const { settings } = useContext(SettingsContext);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  return (
-    <Box
-      sx={(theme) => ({
-        display: "flex",
-        flexDirection: "column",
-        gap: theme.spacing.lg,
-      })}
-    >
-      <Title order={2}>Calendar</Title>
-      <Container
-        sx={(theme) => ({
-          maxWidth: theme.breakpoints.sm,
-          gap: theme.spacing.lg,
-        })}
-      >
-        <CalendarHeatmapDatePicker
-          hideOutsideDates
-          initialAggregation={initialAggregation}
-          firstDayOfWeek={settings.firstDayOfWeek}
-          fullWidth
-          selectedDate={selectedDate}
-          onSelectDate={setSelectedDate}
-        />
-      </Container>
-      {selectedDate && <DateTaskContainer date={selectedDate} />}
-    </Box>
-  );
+	const { settings } = useContext(SettingsContext);
+	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+	return (
+		<Box
+			sx={(theme) => ({
+				display: "flex",
+				flexDirection: "column",
+				gap: theme.spacing.lg,
+			})}
+		>
+			<Title order={2}>Calendar</Title>
+			<Container
+				sx={(theme) => ({
+					maxWidth: theme.breakpoints.sm,
+					gap: theme.spacing.lg,
+				})}
+			>
+				<CalendarHeatmapDatePicker
+					hideOutsideDates
+					initialAggregation={initialAggregation}
+					firstDayOfWeek={settings.firstDayOfWeek}
+					fullWidth
+					selectedDate={selectedDate}
+					onSelectDate={setSelectedDate}
+				/>
+			</Container>
+			{selectedDate && <DateTaskContainer date={selectedDate} />}
+		</Box>
+	);
 }
 
 export async function getServerSideProps(
-  context: NextPageContext
+	context: NextPageContext
 ): Promise<GetServerSidePropsResult<CalendarPageProps>> {
-  const jwt = getCookie("jwt", context);
-  const user = getUserFromJWT(jwt?.toString());
-  if (!user) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
+	const jwt = getCookie("jwt", context);
+	const user = getUserFromJWT(jwt?.toString());
+	if (!user) {
+		return {
+			redirect: {
+				destination: "/",
+				permanent: false,
+			},
+		};
+	}
 
-  const dates = await getDates(user);
+	const dates = await getDates(user);
 
-  return {
-    props: {
-      aggregation: dates,
-    },
-  };
+	return {
+		props: {
+			aggregation: dates,
+		},
+	};
 }
