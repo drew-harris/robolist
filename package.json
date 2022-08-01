@@ -13,7 +13,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "studio": "cd packages/prisma-schema && npx prisma studio",
     "ci": "cd apps/web && npm run ci",
-    "database-reset": "cd apps/reset && npm run reset"
+    "database-reset": "cd apps/reset && npm run reset",
+    "pretty": "prettier --write '**/*.{js,jsx,ts,tsx}'"
   },
   "devDependencies": {
     "eslint-config-custom": "*",

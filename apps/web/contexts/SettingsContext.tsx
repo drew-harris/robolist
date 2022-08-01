@@ -4,52 +4,52 @@ import { createContext, Dispatch, SetStateAction, useEffect } from "react";
 import type { Settings } from "types";
 
 const defaultSettings: Settings = {
-  datePickerFormat: "modal",
-  firstDayOfWeek: "sunday",
-  useTimeEstimate: true,
-  confettiEffect: true,
-  useFocusMode: false,
-  themeColor: "blue",
+	datePickerFormat: "modal",
+	firstDayOfWeek: "sunday",
+	useTimeEstimate: true,
+	confettiEffect: true,
+	useFocusMode: false,
+	themeColor: "blue",
 };
 
 export const SettingsContext = createContext<{
-  settings: Settings;
-  setSettings: Dispatch<SetStateAction<Settings>>;
+	settings: Settings;
+	setSettings: Dispatch<SetStateAction<Settings>>;
 }>({
-  settings: defaultSettings,
-  setSettings: () => {},
+	settings: defaultSettings,
+	setSettings: () => {},
 });
 
 interface SettingsContextProviderProps {
-  onColorChange: (color: MantineColor) => void;
-  children: React.ReactNode;
+	onColorChange: (color: MantineColor) => void;
+	children: React.ReactNode;
 }
 export default function SettingsContextProvider({
-  children,
-  onColorChange,
+	children,
+	onColorChange,
 }: SettingsContextProviderProps) {
-  const [settings, setSettings] = useLocalStorage<Settings>({
-    key: "settings",
-    serialize: (settings) => JSON.stringify(settings),
-    deserialize: (str) => {
-      try {
-        return JSON.parse(str);
-      } catch (e) {
-        return defaultSettings;
-      }
-    },
-    defaultValue: defaultSettings,
-  });
+	const [settings, setSettings] = useLocalStorage<Settings>({
+		key: "settings",
+		serialize: (settings) => JSON.stringify(settings),
+		deserialize: (str) => {
+			try {
+				return JSON.parse(str);
+			} catch (e) {
+				return defaultSettings;
+			}
+		},
+		defaultValue: defaultSettings,
+	});
 
-  useEffect(() => {
-    if (settings.themeColor) {
-      onColorChange(settings.themeColor);
-    }
-  }, [settings.themeColor]);
+	useEffect(() => {
+		if (settings.themeColor) {
+			onColorChange(settings.themeColor);
+		}
+	}, [settings.themeColor]);
 
-  return (
-    <SettingsContext.Provider value={{ settings, setSettings }}>
-      {children}
-    </SettingsContext.Provider>
-  );
+	return (
+		<SettingsContext.Provider value={{ settings, setSettings }}>
+			{children}
+		</SettingsContext.Provider>
+	);
 }

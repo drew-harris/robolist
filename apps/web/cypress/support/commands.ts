@@ -31,30 +31,30 @@ import cypress from "cypress";
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 //
 declare global {
-  namespace Cypress {
-    interface Chainable {
-      login(username: string, password: string): Chainable<void>;
-      drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>;
-      dismiss(
-        subject: string,
-        options?: Partial<TypeOptions>
-      ): Chainable<Element>;
-    }
-  }
+	namespace Cypress {
+		interface Chainable {
+			login(username: string, password: string): Chainable<void>;
+			drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>;
+			dismiss(
+				subject: string,
+				options?: Partial<TypeOptions>
+			): Chainable<Element>;
+		}
+	}
 }
 
 Cypress.Commands.add("login", (email, password) => {
-  cy.session([email, password], () => {
-    cy.request({
-      method: "POST",
-      url: "/api/login",
-      body: { email, password },
-    }).then(({ body }) => {
-      // Set cookie
-      cy.log(body.jwt);
-      cy.setCookie("jwt", body.jwt);
-    });
-  });
+	cy.session([email, password], () => {
+		cy.request({
+			method: "POST",
+			url: "/api/login",
+			body: { email, password },
+		}).then(({ body }) => {
+			// Set cookie
+			cy.log(body.jwt);
+			cy.setCookie("jwt", body.jwt);
+		});
+	});
 });
 
 export {};

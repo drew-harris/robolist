@@ -13,7 +13,8 @@
     "ci:dev": "start-server-and-test dev 'http://localhost:3000' cypress:run",
     "ci": "npm run build && start-server-and-test start  http://127.0.0.1:3000 'cypress:run'",
     "ci-open": "npm run build && start-server-and-test start  http://127.0.0.1:3000 'cypress'",
-    "list-files": "ls -l -a"
+    "list-files": "ls -l -a",
+    "pretty": "prettier --write '**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.1",

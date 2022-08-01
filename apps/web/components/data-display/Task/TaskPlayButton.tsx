@@ -9,59 +9,59 @@ import { FocusContext } from "../../../contexts/FocusContext";
 import { logEvent } from "../../../lib/ga";
 
 interface TaskPlayButtonProps {
-  task: TaskWithClass;
+	task: TaskWithClass;
 }
 
 const iconSize = 18;
 
 export default function TaskPlayButton({ task }: TaskPlayButtonProps) {
-  const { focusState, fn: focusFn } = useContext(FocusContext);
+	const { focusState, fn: focusFn } = useContext(FocusContext);
 
-  const modals = useModals();
+	const modals = useModals();
 
-  const startTask = () => {
-    if (focusState.task) {
-      modals.openConfirmModal({
-        title: "Change Tasks?",
-        onConfirm: () => {
-          focusFn.startTask(task);
-        },
-        children: (
-          <>
-            <Text size="sm">
-              Are you sure you want to switch tasks and <u>lose progress?</u>
-            </Text>
-          </>
-        ),
-        labels: {
-          confirm: "Change Task",
-          cancel: "Keep Working",
-        },
-        confirmProps: {
-          color: "red",
-        },
-      });
-    } else {
-      focusFn.startTask(task);
-      logEvent("start_task");
-    }
-  };
+	const startTask = () => {
+		if (focusState.task) {
+			modals.openConfirmModal({
+				title: "Change Tasks?",
+				onConfirm: () => {
+					focusFn.startTask(task);
+				},
+				children: (
+					<>
+						<Text size="sm">
+							Are you sure you want to switch tasks and <u>lose progress?</u>
+						</Text>
+					</>
+				),
+				labels: {
+					confirm: "Change Task",
+					cancel: "Keep Working",
+				},
+				confirmProps: {
+					color: "red",
+				},
+			});
+		} else {
+			focusFn.startTask(task);
+			logEvent("start_task");
+		}
+	};
 
-  if (task.complete) {
-    return <BsCheck size={iconSize} />;
-  }
+	if (task.complete) {
+		return <BsCheck size={iconSize} />;
+	}
 
-  return (
-    <>
-      {focusState.task?.id === task.id ? (
-        <Loader variant="dots" size={iconSize} />
-      ) : (
-        <Tooltip label="Start working" openDelay={200}>
-          <ActionIcon onClick={startTask} size={iconSize}>
-            <FaStopwatch size={iconSize} />
-          </ActionIcon>
-        </Tooltip>
-      )}
-    </>
-  );
+	return (
+		<>
+			{focusState.task?.id === task.id ? (
+				<Loader variant="dots" size={iconSize} />
+			) : (
+				<Tooltip label="Start working" openDelay={200}>
+					<ActionIcon onClick={startTask} size={iconSize}>
+						<FaStopwatch size={iconSize} />
+					</ActionIcon>
+				</Tooltip>
+			)}
+		</>
+	);
 }

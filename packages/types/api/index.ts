@@ -4,83 +4,83 @@ import { ClassNames } from "@emotion/react";
 import { DateAggregation, TaskWithClass } from "..";
 
 export interface APIRegisterResponse {
-  error?: APIError;
-  jwt?: string;
+	error?: APIError;
+	jwt?: string;
 }
 
 export interface APILoginRequest {
-  email: string;
-  password: string;
+	email: string;
+	password: string;
 }
 
 export interface APIError {
-  message: string;
-  error?: string;
+	message: string;
+	error?: string;
 }
 
 export type APIClassCreate = Pick<Class, "color" | "name">;
 
 export interface APICreateClassResponse {
-  error?: APIError;
-  class?: Class;
+	error?: APIError;
+	class?: Class;
 }
 
 export interface APIGetClassesResponse {
-  error?: APIError;
-  classes?: Class[];
+	error?: APIError;
+	classes?: Class[];
 }
 
 export interface APICreateTaskResponse {
-  error?: APIError;
-  task?: Task;
+	error?: APIError;
+	task?: Task;
 }
 
 export interface APIGetTasksResponse {
-  tasks?: TaskWithClass[];
-  error?: APIError;
+	tasks?: TaskWithClass[];
+	error?: APIError;
 }
 
 export interface APINewTaskRequest {
-  dueDate: Date | null;
-  workDate: Date | null;
-  title: string;
-  classId: string | null;
-  description?: string | null;
-  workTime?: number | null;
+	dueDate: Date | null;
+	workDate: Date | null;
+	title: string;
+	classId: string | null;
+	description?: string | null;
+	workTime?: number | null;
 }
 
 export interface APIDateAggregationResponse {
-  error?: APIError;
-  dates?: DateAggregation[];
+	error?: APIError;
+	dates?: DateAggregation[];
 }
 
 export interface APICompleteRequest {
-  id: string;
-  complete: boolean;
-  minutes?: number;
+	id: string;
+	complete: boolean;
+	minutes?: number;
 }
 
 export interface APICompleteResponse {
-  error?: APIError;
-  task?: TaskWithClass;
+	error?: APIError;
+	task?: TaskWithClass;
 }
 
 export interface APISingleTaskResponse {
-  error?: APIError;
-  task?: TaskWithClass | null;
+	error?: APIError;
+	task?: TaskWithClass | null;
 }
 
 export interface APIRescheduleRequest {
-  id: string;
-  date: string | Date | Prisma.DateTimeFieldUpdateOperationsInput | undefined;
+	id: string;
+	date: string | Date | Prisma.DateTimeFieldUpdateOperationsInput | undefined;
 }
 
 export interface APIRescheduleResponse {
-  error?: APIError;
-  task?: TaskWithClass;
+	error?: APIError;
+	task?: TaskWithClass;
 }
 
 export interface APIGetTasksResponse {
-  error?: APIError;
-  tasks?: TaskWithClass[];
+	error?: APIError;
+	tasks?: TaskWithClass[];
 }
