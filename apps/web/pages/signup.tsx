@@ -62,7 +62,6 @@ export default function SignUp() {
 				category: "user",
 				value: values.email,
 			});
-			setCookie("jwt", data.jwt);
 			router.replace("/tasks");
 		} else {
 			const data: APIRegisterResponse = await response.json();

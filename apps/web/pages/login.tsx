@@ -44,7 +44,6 @@ const Login = () => {
 
 		if (response.ok) {
 			const data = await response.json();
-			setCookie("jwt", data.jwt);
 			logEvent("login", {
 				category: "user",
 			});
