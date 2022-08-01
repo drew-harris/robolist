@@ -6,6 +6,7 @@ import {
 } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 import { NotificationsProvider } from "@mantine/notifications";
+import { NavigationProgress } from "@mantine/nprogress";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { getCookie, setCookie } from "cookies-next";
@@ -47,6 +48,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 
   const [themeDefaultColor, setThemeDefaultColor] = useState("blue");
 
+  // Google analytics
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
       /* invoke analytics function only for production */
@@ -108,6 +110,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
                 <ModalsProvider>
                   <NotificationsProvider>
                     <SpotlightMenu>
+                      <NavigationProgress />
                       <LayoutShell>
                         <Component {...pageProps} />
                       </LayoutShell>

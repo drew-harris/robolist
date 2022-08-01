@@ -1,4 +1,5 @@
 import { useLocalStorage } from "@mantine/hooks";
+import { resetNavigationProgress } from "@mantine/nprogress";
 import { createContext, useEffect } from "react";
 import { FocusModeState, TaskWithClass } from "types";
 
@@ -68,6 +69,7 @@ export default function FocusContextProvider({ children }: any) {
         ...focusState,
         working: true,
       });
+      resetNavigationProgress();
     },
 
     cancel: () => {
@@ -77,6 +79,7 @@ export default function FocusContextProvider({ children }: any) {
         secondsElapsed: 0,
         task: null,
       });
+      resetNavigationProgress();
     },
 
     pause: () => {
@@ -100,6 +103,7 @@ export default function FocusContextProvider({ children }: any) {
         secondsElapsed: 0,
         working: true,
       });
+      resetNavigationProgress();
     },
   };
 

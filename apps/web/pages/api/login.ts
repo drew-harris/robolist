@@ -80,7 +80,7 @@ async function handler(
 
     // Date 1 week from now
     const date = new Date();
-    date.setDate(date.getDate() + 20);
+    date.setDate(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
     setCookie("jwt", jwt, {
       expires: date,

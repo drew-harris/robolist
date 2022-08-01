@@ -11,17 +11,15 @@ import {
 } from "@mantine/core";
 import { useHotkeys } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
-import { showNotification } from "@mantine/notifications";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { NavigationProgress, setNavigationProgress } from "@mantine/nprogress";
 import Head from "next/head";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { BsPlayFill } from "react-icons/bs";
 import { TbCheck, TbX } from "react-icons/tb";
 import { TiMediaPause } from "react-icons/ti";
-import { APICompleteRequest, TaskWithClass } from "types";
-import { markTaskStatus } from "../../clientapi/tasks";
 import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
+import useTaskMutation from "../../hooks/useTaskMutation";
 import { logEvent } from "../../lib/ga";
 
 const iconSize = 25;
@@ -31,7 +29,7 @@ export default function FocusModeDisplay() {
   const { settings } = useContext(SettingsContext);
   const modals = useModals();
   const theme = useMantineTheme();
-  const queryClient = useQueryClient();
+
   useHotkeys([
     [
       "space",
@@ -41,64 +39,15 @@ export default function FocusModeDisplay() {
     ],
   ]);
 
-  const completeMutation = useMutation(
-    (state: APICompleteRequest) => {
-      return markTaskStatus(state.id, state.complete, state.minutes);
-    },
-    {
-      onMutate: async (state) => {
-        await queryClient.cancelQueries(["tasks"]);
+  const { checkMutation } = useTaskMutation();
 
-        await queryClient.setQueriesData(
-          ["tasks"],
-          (oldData: TaskWithClass[] | undefined) => {
-            if (!oldData) {
-              return [];
-            }
-
-            return oldData.map((t) => {
-              if (t.id === state.id) {
-                return {
-                  ...t,
-                  complete: state.complete,
-                  workTime: state.minutes || t.workTime,
-                };
-              }
-              return t;
-            });
-          }
-        );
-      },
-
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(["tasks"]);
-        focusFn.cancel();
-      },
-
-      onError: async (err, state) => {
-        await queryClient.invalidateQueries(["tasks"]);
-        await queryClient.setQueriesData(
-          ["tasks"],
-          (oldData: TaskWithClass[] | undefined) => {
-            if (!oldData) {
-              return [];
-            }
-
-            return oldData.map((t) => {
-              if (t.id === state.id) {
-                return { ...t, complete: !state.complete };
-              }
-              return t;
-            });
-          }
-        );
-        showNotification({
-          message: "Error marking task as complete",
-          color: "red",
-        });
-      },
+  useEffect(() => {
+    if (focusState.task?.workTime) {
+      const percent =
+        (focusState.secondsElapsed / (focusState.task.workTime * 60)) * 100;
+      setNavigationProgress(percent);
     }
-  );
+  }, [focusState]);
 
   const secondToTimeDisplay = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -132,6 +81,9 @@ export default function FocusModeDisplay() {
   };
 
   const completeTask = () => {
+    if (!focusState.task || !focusState.task.workTime) {
+      return;
+    }
     modals.openConfirmModal({
       title: "Complete Task",
       children: (
@@ -150,11 +102,12 @@ export default function FocusModeDisplay() {
         if (!focusState.task) {
           return;
         }
-        completeMutation.mutate({
+        checkMutation.mutate({
           complete: true,
           id: focusState.task.id,
           minutes: Math.floor(focusState.secondsElapsed / 60),
         });
+
         logEvent("complete_task", {
           label: "focus_mode",
         });
@@ -186,6 +139,8 @@ export default function FocusModeDisplay() {
         </Head>
       )}
 
+      <NavigationProgress />
+
       <Affix zIndex={3} position={{ bottom: 20, right: 20 }}>
         <Transition
           transition="slide-up"
@@ -214,7 +169,7 @@ export default function FocusModeDisplay() {
                 </Tooltip>
                 <Tooltip openDelay={300} label="Mark as Done">
                   <ActionIcon
-                    loading={completeMutation.isLoading}
+                    loading={checkMutation.isLoading}
                     color="green"
                     size={iconSize}
                     onClick={completeTask}
