@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Rotate360 } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import useTaskMutation from "../../../hooks/useTaskMutation";
+import { logEvent } from "../../../lib/ga";
 import { dateIsToday } from "../../../utils";
 import CalendarHeatmapDatePicker from "../../input/CalendarHeatmapDatePicker";
 
@@ -20,6 +21,7 @@ export default function RescheduleButton(props: RescheduleButtonProps) {
     setSelectedDate(date);
     if (date) {
       rescheduleMutation.mutate({ date: date, task: task });
+      logEvent("reschedule");
     }
     setOpened(false);
   };
@@ -43,8 +45,9 @@ export default function RescheduleButton(props: RescheduleButtonProps) {
   }
 
   const onButtonClick = () => {
-    if (task.dueDate < times.thisMorning) {
+    if (task.dueDate <= times.thisMorning) {
       rescheduleMutation.mutate({ date: times.thisMorning, task: task });
+      logEvent("reschedule");
     } else {
       setOpened(true);
     }
@@ -53,7 +56,7 @@ export default function RescheduleButton(props: RescheduleButtonProps) {
   if (
     (dateIsToday(task.workDate) &&
       !task.complete &&
-      task.dueDate < times.thisMorning) ||
+      task.dueDate <= times.thisMorning) ||
     task.complete
   ) {
     return null;

@@ -84,7 +84,11 @@ export default function useTaskMutation() {
 
   const checkMutation = useMutation(
     (state: APICompleteRequest) => {
-      return markTaskStatus(state.id, state.complete);
+      if (state.minutes) {
+        return markTaskStatus(state.id, state.complete, state.minutes);
+      } else {
+        return markTaskStatus(state.id, state.complete);
+      }
     },
     {
       onMutate: async (state) => {

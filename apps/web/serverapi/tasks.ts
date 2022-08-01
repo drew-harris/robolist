@@ -42,11 +42,27 @@ export async function getTodayTasksFromId(
     const prisma = getPrismaPool();
     const tasks = await prisma.task.findMany({
       where: {
-        userId: userId,
-        workDate: {
-          lte: today,
-          gte: twentyFourHoursAgo,
-        },
+        OR: [
+          {
+            userId: userId,
+            workDate: {
+              lte: today,
+              gte: twentyFourHoursAgo,
+            },
+          },
+          {
+            workDate: {
+              lte: today,
+            },
+            complete: false,
+          },
+          {
+            dueDate: {
+              lte: today,
+            },
+            complete: false,
+          },
+        ],
       },
       orderBy: [
         {
