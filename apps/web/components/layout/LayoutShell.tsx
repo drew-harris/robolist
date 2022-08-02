@@ -2,19 +2,23 @@ import {
 	ActionIcon,
 	Anchor,
 	AppShell,
+	Burger,
 	Group,
 	Header,
 	MantineTheme,
+	MediaQuery,
 	Navbar,
 	Space,
 	Text,
 	ThemeIcon,
 	UnstyledButton,
+	useMantineTheme,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { openSpotlight } from "@mantine/spotlight";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
-import { ReactElement, useContext } from "react";
+import { ReactElement, useContext, useState } from "react";
 import {
 	Calendar,
 	Clock,
@@ -43,44 +47,13 @@ interface SidebarGroupProps {
 	links: SidebarLink[];
 }
 
-function SidebarGroup({ links }: SidebarGroupProps) {
-	const elements = links.map((link) => (
-		<Link href={link.href} key={link.href}>
-			<UnstyledButton
-				sx={(theme) => ({
-					display: "block",
-					width: "100%",
-					padding: theme.spacing.xs,
-					borderRadius: theme.radius.sm,
-					color:
-						theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
-					"&:hover": {
-						backgroundColor:
-							theme.colorScheme === "dark"
-								? theme.colors.dark[6]
-								: theme.colors.gray[0],
-					},
-				})}
-			>
-				<Group>
-					{link.icon}
-					<Text size="sm">{link.label}</Text>
-				</Group>
-			</UnstyledButton>
-		</Link>
-	));
-
-	return <Navbar.Section>{elements}</Navbar.Section>;
-}
-
 export default function LayoutShell({ children }: LayoutShellProps) {
 	const router: NextRouter = useRouter();
-	const showUserLinks =
-		router.pathname === "/" ||
-		router.pathname === "/login" ||
-		router.pathname === "/signup";
+	const [opened, setOpened] = useState(false);
+	const isMobile = useMediaQuery("(max-width: 900px)", false);
 
 	const { settings } = useContext(SettingsContext);
+	const theme = useMantineTheme();
 
 	const tasksGroup: SidebarLink[] = [
 		{ href: "/tasks/today", label: "Today", icon: <Clock /> },
@@ -91,6 +64,42 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		{ href: "/classes/", label: "Classes", icon: <School /> },
 	];
 
+	const showUserLinks =
+		router.pathname === "/" ||
+		router.pathname === "/login" ||
+		router.pathname === "/signup";
+
+	function SidebarGroup({ links }: SidebarGroupProps) {
+		const elements = links.map((link) => (
+			<Link href={link.href} key={link.href}>
+				<UnstyledButton
+					onClick={() => setOpened(false)}
+					sx={(theme) => ({
+						display: "block",
+						width: "100%",
+						padding: theme.spacing.xs,
+						borderRadius: theme.radius.sm,
+						color:
+							theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
+						"&:hover": {
+							backgroundColor:
+								theme.colorScheme === "dark"
+									? theme.colors.dark[6]
+									: theme.colors.gray[0],
+						},
+					})}
+				>
+					<Group>
+						{link.icon}
+						<Text size="sm">{link.label}</Text>
+					</Group>
+				</UnstyledButton>
+			</Link>
+		));
+
+		return <Navbar.Section>{elements}</Navbar.Section>;
+	}
+
 	const headerContent = (
 		<Group
 			sx={(theme) => ({
@@ -99,6 +108,14 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			})}
 			position="apart"
 		>
+			<MediaQuery largerThan="sm" styles={{ display: "none" }}>
+				<Burger
+					opened={opened}
+					onClick={() => setOpened((o) => !o)}
+					size="sm"
+					color={theme.colors.gray[6]}
+				/>
+			</MediaQuery>
 			<Logo></Logo>
 			<Group spacing={22}>
 				{showUserLinks ? (
@@ -132,7 +149,13 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
 	const navbarContent = (
 		// 0 z index so confetti can be seen infront of the navbar
-		<Navbar style={{ zIndex: 0 }} width={{ base: 230 }} p="xs">
+		<Navbar
+			hiddenBreakpoint="xs"
+			hidden={!opened}
+			style={{ zIndex: isMobile ? 1 : 0 }}
+			width={{ lg: 230, xs: 300 }}
+			p="xs"
+		>
 			<SidebarGroup links={tasksGroup} />
 			<Space h="md" />
 			<SidebarGroup links={classesGroup} />
@@ -146,9 +169,9 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
 	return (
 		<AppShell
-			fixed={true}
 			padding="md"
 			navbar={hideSidebar ? undefined : navbarContent}
+			navbarOffsetBreakpoint="xs"
 			header={<Header height={60}>{headerContent}</Header>}
 			styles={(theme: MantineTheme) => ({
 				main: {

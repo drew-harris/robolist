@@ -1,5 +1,6 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { SimpleGrid, Text, Title } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { Class } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
@@ -14,6 +15,7 @@ interface ClassPageProps {
 }
 const ClassesPage = ({ classes: initialClasses }: ClassPageProps) => {
 	const [parent] = useAutoAnimate<HTMLDivElement>();
+	const isMobile = useMediaQuery("(max-width: 900px)", false);
 	const { data: classes, error } = useQuery<Class[], Error>(
 		["classes"],
 		getClasses,
@@ -36,7 +38,7 @@ const ClassesPage = ({ classes: initialClasses }: ClassPageProps) => {
 					{error.message}
 				</Text>
 			) : (
-				<SimpleGrid ref={parent} cols={4}>
+				<SimpleGrid ref={parent} cols={isMobile ? 1 : 4}>
 					{classElements}
 				</SimpleGrid>
 			)}
