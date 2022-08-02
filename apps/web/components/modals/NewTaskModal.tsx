@@ -3,7 +3,6 @@ import {
 	Button,
 	LoadingOverlay,
 	MediaQuery,
-	NumberInput,
 	Stack,
 	TextInput,
 } from "@mantine/core";
@@ -13,6 +12,7 @@ import { useModals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
+import { Clock } from "tabler-icons-react";
 import { APINewTaskRequest } from "types";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import { logEvent } from "../../lib/ga";
@@ -49,6 +49,17 @@ export default function NewTaskModal() {
 					value.getTime() < new Date(Date.now()).setHours(0, 0, 0, 0)
 				) {
 					return "Due date must be in the future";
+				}
+			},
+
+			workTime: (value: number | null | undefined, form: APINewTaskRequest) => {
+				// Must be a number
+				if (value == null) {
+					return "Work time is required";
+				}
+				// Must be greater than 0
+				if (value <= 0) {
+					return "Work time must be greater than 0";
 				}
 			},
 		},
@@ -121,11 +132,7 @@ export default function NewTaskModal() {
 		<form onSubmit={form.onSubmit(submit)}>
 			<Stack style={{ position: "relative" }} p="sm">
 				<LoadingOverlay radius="sm" visible={loading} />
-				<TextInput
-					data-autofocus
-					{...form.getInputProps("title")}
-					label="Title"
-				/>
+				<TextInput {...form.getInputProps("title")} label="Title" />
 				<MediaQuery smallerThan={"xs"} styles={{ flexDirection: "column" }}>
 					<Box
 						sx={(theme) => ({
@@ -136,13 +143,18 @@ export default function NewTaskModal() {
 					>
 						<ClassIdPicker form={form} />
 						{settings.useTimeEstimate && (
-							<NumberInput
+							<TextInput
 								style={{ flexGrow: 3 }}
-								{...form.getInputProps("workTime")}
+								value={form.values.workTime?.toString()}
 								label="Estimated Work Time (minutes)"
+								// type="number"
+								onChange={(e) => {
+									form.setFieldValue("workTime", parseInt(e.target.value));
+								}}
 								step={5}
-								stepHoldDelay={500}
-								stepHoldInterval={200}
+								min={0}
+								max={260}
+								icon={<Clock size={18} />}
 							/>
 						)}
 					</Box>

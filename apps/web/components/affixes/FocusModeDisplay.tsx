@@ -9,7 +9,7 @@ import {
 	Transition,
 	useMantineTheme,
 } from "@mantine/core";
-import { useHotkeys } from "@mantine/hooks";
+import { useHotkeys, useMediaQuery } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
 import { NavigationProgress, setNavigationProgress } from "@mantine/nprogress";
 import Head from "next/head";

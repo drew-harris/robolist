@@ -73,9 +73,16 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 		<>
 			<Head>
 				<title>Robolist</title>
+				<link rel="manifest" href="/manifest.json" />
+				<meta
+					name="theme-color"
+					content={theme.colors?.blue?.[5] || "#1a1b1e"}
+				/>
+				<link rel="apple-touch-icon" href="/logo-96x96.png" />
+				<meta name="apple-mobile-web-app-capable" content="yes"></meta>
 				<meta
 					name="viewport"
-					content="minimum-scale=1, initial-scale=1, width=device-width"
+					content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
 				/>
 				<link rel="shortcut icon" href="/favicon.svg" />
 			</Head>

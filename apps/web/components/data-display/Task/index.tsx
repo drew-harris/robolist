@@ -5,9 +5,11 @@ import {
 	Menu,
 	Paper,
 	Space,
+	Stack,
 	Sx,
 	Text,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
 import { useContext } from "react";
 import { FaLessThanEqual } from "react-icons/fa";
@@ -52,6 +54,7 @@ const Task = ({
 	const { settings } = useContext(SettingsContext);
 	const modals = useModals();
 	const { deleteMutation, checkMutation } = useTaskMutation();
+	const isMobile = useMediaQuery("(max-width: 900px)", false);
 
 	const checkboxElement = settings.useFocusMode ? (
 		<TaskPlayButton task={task} />
@@ -129,6 +132,35 @@ const Task = ({
 			border,
 		};
 	};
+
+	if (isMobile) {
+		return (
+			<Paper withBorder p="sm" shadow="xs" sx={paperSx}>
+				<Stack>
+					<Group position="apart">
+						<Text weight="bolder" size="sm">
+							{task.title}
+						</Text>
+						{task.class && !hideClassLabel && (
+							<>
+								<Badge size="sm" color={task.class.color}>
+									{task.class?.name}
+								</Badge>
+							</>
+						)}
+					</Group>
+					<Group position="apart">
+						<Group>
+							{checkbox && checkboxElement}
+							{rescheduleButton && <RescheduleButton task={task} />}
+							{menuComponent}
+						</Group>
+						<Text size="sm">{task.workTime + "min."}</Text>
+					</Group>
+				</Stack>
+			</Paper>
+		);
+	}
 
 	return (
 		<Paper withBorder p="sm" shadow="xs" sx={paperSx}>
