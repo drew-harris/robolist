@@ -15,6 +15,8 @@ coverage
 .next/
 out/
 build
+ 
+*.p8
 
 # misc
 .DS_Store
@@ -37,3 +39,21 @@ yarn-error.log*
 .turbo
 
 .vercel
+
+node_modules/
+*.expo/
+dist/
+npm-debug.*
+*.jks
+/apps/robolist-app/.expo
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+*/devices.json
+
+# macOS
+.DS_Store
