@@ -1,10 +1,11 @@
-import { Title } from "@mantine/core";
+import { Center, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
 import { TaskWithClass } from "types";
 import { getTodayTasks } from "../../clientapi/tasks";
 import TaskContainer from "../../components/containers/TaskContainer";
+import CenterInfo from "../../components/small/CenterInfo";
 import { getTodayTasksFromId } from "../../serverapi/tasks";
 import { getUserFromJWT } from "../../utils";
 
@@ -32,7 +33,13 @@ export default function TodayTasksPage({
 			<Title order={2} mb="md">
 				Today
 			</Title>
-			{error?.message}
+			{error && <CenterInfo color="red" text={error.message} />}
+			{status != "loading" && tasks.length == 0 && (
+				<>
+					<CenterInfo text="No tasks today" />
+					<CenterInfo text="Enjoy your break!" />
+				</>
+			)}
 			<TaskContainer
 				loading={status == "loading"}
 				skeletonLength={3}

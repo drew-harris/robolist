@@ -7,6 +7,7 @@ import { TaskWithClass } from "types";
 import { getTasks } from "../../clientapi/tasks";
 import TaskAgendaContainer from "../../components/containers/TaskAgendaContainer";
 import TaskContainer from "../../components/containers/TaskContainer";
+import CenterInfo from "../../components/small/CenterInfo";
 import { getTasksFromUserId } from "../../serverapi/tasks";
 import { getUserFromJWT, reduceDates } from "../../utils";
 
@@ -28,7 +29,10 @@ export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
 			<Title mb="md" order={2}>
 				All Tasks
 			</Title>
-			{error?.message}
+			{error && <CenterInfo color="red" text={error.message} />}
+			{status != "loading" && tasks.length == 0 && (
+				<CenterInfo text="No tasks yet" />
+			)}
 			<TaskAgendaContainer
 				menu={{ delete: true, edit: true }}
 				rescheduleButton

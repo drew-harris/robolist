@@ -7,6 +7,7 @@ import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
 import { getClasses } from "../../clientapi/classes";
 import ClassSquare from "../../components/data-display/ClassSquare";
+import CenterInfo from "../../components/small/CenterInfo";
 import { getClassesFromId } from "../../serverapi/classes";
 import { getUserFromJWT } from "../../utils";
 
@@ -33,15 +34,11 @@ const ClassesPage = ({ classes: initialClasses }: ClassPageProps) => {
 			<Title order={2} mb="md">
 				Classes
 			</Title>
-			{error ? (
-				<Text color="red" size="lg" ml="lg">
-					{error.message}
-				</Text>
-			) : (
-				<SimpleGrid ref={parent} cols={isMobile ? 1 : 4}>
-					{classElements}
-				</SimpleGrid>
-			)}
+			{error && <CenterInfo color="red" text={error.message} />}
+			{classes && classes.length == 0 && <CenterInfo text="No classes yet" />}
+			<SimpleGrid ref={parent} cols={isMobile ? 1 : 4}>
+				{classElements}
+			</SimpleGrid>
 		</>
 	);
 };
