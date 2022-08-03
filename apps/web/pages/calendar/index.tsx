@@ -42,7 +42,13 @@ export default function CalendarPage({
 					onSelectDate={setSelectedDate}
 				/>
 			</Container>
-			{selectedDate && <DateTaskContainer date={selectedDate} />}
+			{selectedDate && (
+				<DateTaskContainer
+					rescheduleButton
+					menu={{ delete: true, edit: true }}
+					date={selectedDate}
+				/>
+			)}
 		</Box>
 	);
 }

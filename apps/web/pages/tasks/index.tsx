@@ -30,7 +30,7 @@ export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
 			</Title>
 			{error?.message}
 			<TaskAgendaContainer
-				menu={{ delete: true }}
+				menu={{ delete: true, edit: true }}
 				rescheduleButton
 				loading={status === "loading"}
 				tasks={tasks}

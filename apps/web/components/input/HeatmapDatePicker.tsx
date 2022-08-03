@@ -16,7 +16,7 @@ const label = (
 
 export default function HeatmapDatePicker(props: any) {
 	const { data: agg } = useQuery<DateAggregation[], Error>(
-		["tasks", { type: "dates" }],
+		["dates"],
 		getDateAggregation
 	);
 	const { settings } = useContext(SettingsContext);

@@ -1,19 +1,22 @@
-import { Select } from "@mantine/core";
+import { Loader, Select } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import { Class } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { APINewTaskRequest } from "types";
+import { School } from "tabler-icons-react";
+import { APINewTaskRequest, TaskWithClass } from "types";
 import { getClasses } from "../../clientapi/classes";
 
 interface IdPickerProps {
-	form: UseFormReturnType<APINewTaskRequest>;
+	form: UseFormReturnType<any>;
 }
 
 export default function ClassIdPicker(props: IdPickerProps) {
 	const [classes, setClasses] = useState<Class[]>([]);
+	const [loading, setLoading] = useState(true);
 	const fetchClasses = async () => {
 		const classes = await getClasses();
 		setClasses(classes);
+		setLoading(false);
 	};
 
 	useEffect(() => {
@@ -31,7 +34,7 @@ export default function ClassIdPicker(props: IdPickerProps) {
 		<Select
 			{...props.form.getInputProps("classId")}
 			label="Class"
-			style={{ flexGrow: 3 }}
+			icon={loading ? <Loader size={18} /> : <School size={18} />}
 			data={classLabels}
 			disabled={classes.length === 0}
 			placeholder="No Class Selected"

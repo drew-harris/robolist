@@ -9,48 +9,32 @@ import {
 import { DatePicker, DatePickerProps } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useModals } from "@mantine/modals";
-import { showNotification } from "@mantine/notifications";
-import { useQueryClient } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
 import { Clock } from "tabler-icons-react";
-import { APINewTaskRequest } from "types";
+import { TaskWithClass } from "types";
 import { SettingsContext } from "../../contexts/SettingsContext";
-import { logEvent } from "../../lib/ga";
+import useTaskMutation from "../../hooks/useTaskMutation";
 import ClassIdPicker from "../input/ClassIdPicker";
 import HeatmapDatePicker from "../input/HeatmapDatePicker";
 
-export default function NewTaskModal() {
+interface EditTaskModalProps {
+	task: TaskWithClass;
+}
+
+export default function EditTaskModal({
+	task: initialTask,
+}: EditTaskModalProps) {
 	const [loading, setLoading] = useState(false);
 	const [maxDate, setMaxDate] = useState<Date | null>(null);
 
 	const { settings } = useContext(SettingsContext);
 
 	const modals = useModals();
-	const queryClient = useQueryClient();
-	const form = useForm<APINewTaskRequest>({
+	const { editMutation } = useTaskMutation();
+	const form = useForm<Partial<TaskWithClass>>({
 		initialValues: {
-			classId: null,
-			dueDate: null,
-			workDate: null,
-			title: "",
-			description: null,
-			workTime: 20,
-		},
-		validate: {
-			workDate: (value: Date | null | undefined, form: APINewTaskRequest) => {
-				if (value && form.dueDate && value > form.dueDate) {
-					return "Work date must be before due date";
-				}
-			},
-			dueDate: (value: Date | null | undefined, form: APINewTaskRequest) => {
-				if (
-					value &&
-					form.workDate &&
-					value.getTime() < new Date(Date.now()).setHours(0, 0, 0, 0)
-				) {
-					return "Due date must be in the future";
-				}
-			},
+			...initialTask,
+			classId: initialTask?.class?.id || null,
 		},
 	});
 
@@ -73,40 +57,10 @@ export default function NewTaskModal() {
 		}
 	}, [form.values]);
 
-	const submit = async (values: APINewTaskRequest) => {
+	const submit = async (values: Partial<TaskWithClass>) => {
 		setLoading(true);
-		console.log(JSON.stringify(values));
-		const response = await fetch("/api/tasks", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(values),
-		});
-		if (response.ok) {
-			console.log("success");
-		}
-		const json = await response.json();
-		if (json.error) {
-			console.error(json.error);
-			showNotification({
-				message: json.error.message,
-				color: "red",
-			});
-			setLoading(false);
-		} else {
-			showNotification({
-				message: "Task created",
-				color: "green",
-			});
-			queryClient.invalidateQueries(["tasks"]);
-			logEvent("create_task", {
-				value: values.title,
-				category: "tasks",
-			});
-			console.log(json.task);
-			modals.closeModal("new-class");
-		}
+		editMutation.mutate(values);
+		modals.closeAll();
 	};
 
 	const datePickerProps: DatePickerProps = {
@@ -149,9 +103,7 @@ export default function NewTaskModal() {
 								label="Estimated Work Time (minutes)"
 								inputMode="numeric"
 								type="number"
-								step={5}
 								min={0}
-								max={260}
 								icon={<Clock size={18} />}
 							/>
 						)}

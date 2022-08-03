@@ -8,7 +8,9 @@ export async function getTasksFromUserId(
 		const prisma = getPrismaPool();
 		const tasks = await prisma.task.findMany({
 			where: {
-				userId: userId,
+				user: {
+					id: userId,
+				},
 			},
 			orderBy: [
 				{
@@ -44,7 +46,6 @@ export async function getTodayTasksFromId(
 			where: {
 				OR: [
 					{
-						userId: userId,
 						workDate: {
 							lte: today,
 							gte: twentyFourHoursAgo,
@@ -61,6 +62,11 @@ export async function getTodayTasksFromId(
 							lte: today,
 						},
 						complete: false,
+					},
+				],
+				AND: [
+					{
+						userId: userId,
 					},
 				],
 			},

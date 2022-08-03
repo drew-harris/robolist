@@ -9,11 +9,11 @@ import {
 	Transition,
 	useMantineTheme,
 } from "@mantine/core";
-import { useHotkeys, useMediaQuery } from "@mantine/hooks";
+import { useHotkeys } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
-import { NavigationProgress, setNavigationProgress } from "@mantine/nprogress";
+import { NavigationProgress } from "@mantine/nprogress";
 import Head from "next/head";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BsPlayFill } from "react-icons/bs";
 import { TbCheck, TbX } from "react-icons/tb";
 import { TiMediaPause } from "react-icons/ti";
@@ -27,6 +27,7 @@ const iconSize = 25;
 export default function FocusModeDisplay() {
 	const { focusState, fn: focusFn } = useContext(FocusContext);
 	const { settings } = useContext(SettingsContext);
+	const [percent, setPercent] = useState(0);
 	const modals = useModals();
 	const theme = useMantineTheme();
 
@@ -41,13 +42,13 @@ export default function FocusModeDisplay() {
 
 	const { checkMutation } = useTaskMutation();
 
-	// useEffect(() => {
-	// 	if (focusState.task?.workTime) {
-	// 		const percent =
-	// 			(focusState.secondsElapsed / (focusState.task.workTime * 60)) * 100;
-	// 		setNavigationProgress(percent);
-	// 	}
-	// }, [focusState]);
+	useEffect(() => {
+		if (focusState.task?.workTime) {
+			const percent =
+				(focusState.secondsElapsed / (focusState.task.workTime * 60)) * 100;
+			setPercent(percent);
+		}
+	}, [focusState]);
 
 	const secondToTimeDisplay = (seconds: number) => {
 		const minutes = Math.floor(seconds / 60);
