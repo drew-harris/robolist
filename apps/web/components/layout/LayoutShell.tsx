@@ -152,7 +152,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		<Navbar
 			hiddenBreakpoint="xs"
 			hidden={!opened}
-			style={{ zIndex: isMobile ? 1 : 0 }}
+			style={{ zIndex: isMobile ? 100 : 0 }}
 			width={{ lg: 230, xs: 300 }}
 			p="xs"
 		>

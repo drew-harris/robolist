@@ -1,13 +1,11 @@
 import { Box, Checkbox } from "@mantine/core";
-import { showNotification } from "@mantine/notifications";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { APICompleteRequest, TaskWithClass } from "types";
-import { markTaskStatus } from "../../../clientapi/tasks";
-import Confetti, { ConfettiConfig } from "react-dom-confetti";
+import { useQueryClient } from "@tanstack/react-query";
 import { useContext, useState } from "react";
+import Confetti, { ConfettiConfig } from "react-dom-confetti";
+import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
-import { logEvent } from "../../../lib/ga";
 import useTaskMutation from "../../../hooks/useTaskMutation";
+import { logEvent } from "../../../lib/ga";
 
 interface TaskCheckboxProps {
 	task: TaskWithClass;
