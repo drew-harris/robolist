@@ -72,7 +72,6 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
 	function SidebarGroup({ links }: SidebarGroupProps) {
 		const elements = links.map((link) => {
-			console.log(router.pathname);
 			return (
 				<Link href={link.href}>
 					<NavLink
@@ -167,7 +166,6 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 						theme.colorScheme === "dark"
 							? theme.colors.dark[8]
 							: theme.colors.gray[0],
-					minHeight: "100vh",
 				},
 			})}
 		>

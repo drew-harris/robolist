@@ -2,11 +2,13 @@ import { Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
+import { useEffect } from "react";
 import { TaskWithClass } from "types";
 import { getTasks } from "../../clientapi/tasks";
+import TaskAgendaContainer from "../../components/containers/TaskAgendaContainer";
 import TaskContainer from "../../components/containers/TaskContainer";
 import { getTasksFromUserId } from "../../serverapi/tasks";
-import { getUserFromJWT } from "../../utils";
+import { getUserFromJWT, reduceDates } from "../../utils";
 
 interface TasksPageProps {
 	tasks: TaskWithClass[];
@@ -27,7 +29,7 @@ export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
 				All Tasks
 			</Title>
 			{error?.message}
-			<TaskContainer
+			<TaskAgendaContainer
 				menu={{ delete: true }}
 				rescheduleButton
 				loading={status === "loading"}

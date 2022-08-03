@@ -1,4 +1,4 @@
-import { APIError, UserWithoutPassword } from "types";
+import { APIError, TaskWithClass, UserWithoutPassword } from "types";
 import * as jwt from "jsonwebtoken";
 import tinygradient from "tinygradient";
 
@@ -77,3 +77,30 @@ export function getHumanDateString(date: Date): string {
 		day: "numeric",
 	});
 }
+
+// Splits array of objects into array of arrays of objects by date property
+export const reduceDates = (arr: TaskWithClass[]) => {
+	const dates: TaskWithClass[][] = [];
+	// Iterate through array of objects
+	for (let i = 0; i < arr.length; i++) {
+		// Check if date is in one of the groups
+		const index = dates.findIndex((group) => {
+			if (group.length === 0) {
+				return false;
+			}
+			return group[0].workDate.getTime() === arr[i].workDate.getTime();
+		});
+
+		// If date is not in any group, create new group
+		if (index === -1) {
+			dates.push([arr[i]]);
+		}
+
+		// If date is in group, add object to group
+		else {
+			dates[index].push(arr[i]);
+		}
+	}
+
+	return dates;
+};
