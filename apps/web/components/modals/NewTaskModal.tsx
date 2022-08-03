@@ -51,17 +51,6 @@ export default function NewTaskModal() {
 					return "Due date must be in the future";
 				}
 			},
-
-			workTime: (value: number | null | undefined, form: APINewTaskRequest) => {
-				// Must be a number
-				if (value == null) {
-					return "Work time is required";
-				}
-				// Must be greater than 0
-				if (value <= 0) {
-					return "Work time must be greater than 0";
-				}
-			},
 		},
 	});
 
@@ -145,16 +134,22 @@ export default function NewTaskModal() {
 						{settings.useTimeEstimate && (
 							<TextInput
 								style={{ flexGrow: 3 }}
-								value={form.values.workTime?.toString()}
-								label="Estimated Work Time (minutes)"
-								// type="number"
+								value={form.values.workTime?.toString() || ""}
 								onChange={(e) => {
-									form.setFieldValue("workTime", parseInt(e.target.value));
+									const num = parseInt(e.target.value);
+									if (num === NaN) {
+										form.setFieldValue("workTime", 0);
+									} else {
+										form.setFieldValue("workTime", num);
+									}
 								}}
+								label="Estimated Work Time (minutes)"
+								inputMode="numeric"
+								type="number"
 								step={5}
 								min={0}
 								max={260}
-								icon={<Clock size={18} />}
+								icon={<Clock />}
 							/>
 						)}
 					</Box>

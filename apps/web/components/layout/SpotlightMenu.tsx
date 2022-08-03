@@ -63,7 +63,7 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
 			icon: <List />,
 			id: "all-tasks",
 			onTrigger: () => {
-				router.replace("/tasks/");
+				router.replace("/tasks");
 			},
 		},
 		{
@@ -71,7 +71,7 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
 			icon: <Settings />,
 			id: "settings",
 			onTrigger: () => {
-				router.replace("/settings/");
+				router.replace("/settings");
 			},
 		},
 		{
