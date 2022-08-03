@@ -13,11 +13,12 @@ import { useMediaQuery } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
 import { useContext } from "react";
 import { FaLessThanEqual } from "react-icons/fa";
-import { Dots, Trash } from "tabler-icons-react";
+import { Dots, Pencil, Trash } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
 import { getHumanDateString } from "../../../utils";
+import EditTaskModal from "../../modals/EditTaskModal";
 import RescheduleButton from "./RescheduleButton";
 import TaskCheckbox from "./TaskCheckbox";
 import TaskPlayButton from "./TaskPlayButton";
@@ -37,6 +38,7 @@ export interface TaskOptionProps {
 
 export interface TaskMenuOptions {
 	delete?: boolean;
+	edit?: boolean;
 }
 
 const Task = ({
@@ -47,6 +49,7 @@ const Task = ({
 	hideClassLabel = false,
 	menu: menuOptions = {
 		delete: false,
+		edit: false,
 	},
 	workdayLabel = false,
 	...props
@@ -88,6 +91,14 @@ const Task = ({
 		});
 	};
 
+	const promptEdit = () => {
+		modals.openModal({
+			children: <EditTaskModal task={task} />,
+			title: "Edit Task",
+			size: "lg",
+		});
+	};
+
 	const menuComponent = menuOptions ? (
 		<Menu position="bottom-end" withinPortal={true}>
 			<Menu.Target>
@@ -106,6 +117,11 @@ const Task = ({
 						}}
 					>
 						Undo Complete
+					</Menu.Item>
+				)}
+				{menuOptions.edit && (
+					<Menu.Item onClick={promptEdit} icon={<Pencil />}>
+						Edit
 					</Menu.Item>
 				)}
 				{menuOptions.delete && (

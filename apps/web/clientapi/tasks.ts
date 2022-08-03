@@ -146,3 +146,32 @@ export async function getTasksByDate(date: Date) {
 		throw new Error(error.message);
 	}
 }
+
+export async function updateTask(
+	task: Partial<TaskWithClass>
+): Promise<TaskWithClass> {
+	try {
+		if (!task.id) {
+			throw new Error("Task id is required");
+		}
+		const data = await fetch(`/api/tasks/edit`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(task),
+		});
+
+		const json = await data.json();
+		if (json.error) {
+			console.error(json.error);
+			throw new Error(json.error.message);
+		}
+		// Fix dates
+		json.task.dueDate = new Date(json.task.dueDate);
+		json.task.workDate = new Date(json.task.workDate);
+		return json.task;
+	} catch (error: any) {
+		throw new Error(error.message);
+	}
+}

@@ -9,7 +9,7 @@ const ClassSquare = (props: ClassSquareProps) => {
 	const squareSx: Sx = (theme: MantineTheme) => ({
 		backgroundColor:
 			theme.colorScheme == "dark"
-				? theme.fn.darken(theme.colors[props.class.color][9], 0.2)
+				? theme.fn.darken(theme.colors[props.class.color][8], 0.4)
 				: theme.colors[props.class.color][4],
 		padding: theme.spacing.lg,
 		borderRadius: theme.radius.sm,

@@ -1,4 +1,4 @@
-import { Box, Container, Title } from "@mantine/core";
+import { Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
@@ -37,8 +37,7 @@ export default function TodayTasksPage({
 				loading={status == "loading"}
 				skeletonLength={3}
 				checkbox
-				rescheduleButton
-				menu={{ delete: true }}
+				menu={{ delete: true, edit: true }}
 				tasks={tasks}
 			/>
 		</>

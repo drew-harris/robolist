@@ -125,11 +125,6 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 								<Command width={20} height={20} />
 							</ThemeIcon>
 						</ActionIcon>
-						{/* <UnstyledButton onClick={() => router.replace("/settings")}>
-							<ThemeIcon variant="light">
-								<Settings width={20} height={20} />
-							</ThemeIcon>
-						</UnstyledButton> */}
 					</>
 				)}
 
@@ -144,7 +139,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			hiddenBreakpoint="xs"
 			hidden={!opened}
 			style={{ zIndex: isMobile ? 100 : 0 }}
-			width={{ lg: 230, xs: 300 }}
+			width={{ lg: 250, xs: 200 }}
 		>
 			<SidebarGroup links={tasksGroup} />
 			<SidebarGroup links={classesGroup} />

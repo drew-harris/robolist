@@ -2,12 +2,16 @@ import { Center, Loader } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { TaskWithClass } from "types";
 import { getTasksByDate } from "../../clientapi/tasks";
+import { TaskOptionProps } from "../data-display/Task";
 import TaskContainer from "./TaskContainer";
 
-interface DateTaskContainerProps {
+interface DateTaskContainerProps extends TaskOptionProps {
 	date: Date;
 }
-export default function DateTaskContainer({ date }: DateTaskContainerProps) {
+export default function DateTaskContainer({
+	date,
+	...props
+}: DateTaskContainerProps) {
 	const {
 		data: tasks,
 		error,
@@ -36,8 +40,8 @@ export default function DateTaskContainer({ date }: DateTaskContainerProps) {
 		<>
 			{tasks && (
 				<TaskContainer
-					rescheduleButton
 					menu={{ delete: true }}
+					{...props}
 					disableAnimation
 					tasks={tasks}
 				/>

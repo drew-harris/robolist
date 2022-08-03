@@ -3,7 +3,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { APICompleteRequest, RescheduleInput, TaskWithClass } from "types";
 import { getDateAggregation } from "../clientapi/dates";
-import { deleteTask, markTaskStatus, rescheduleTask } from "../clientapi/tasks";
+import {
+	deleteTask,
+	markTaskStatus,
+	rescheduleTask,
+	updateTask,
+} from "../clientapi/tasks";
 import { FocusContext } from "../contexts/FocusContext";
 import { getHumanDateString } from "../utils";
 
@@ -57,7 +62,6 @@ export default function useTaskMutation() {
 			return rescheduleTask(input.task, input.date);
 		},
 		{
-			onMutate: async () => {},
 			onError: async () => {
 				showNotification({
 					message: "Error rescheduling task",
@@ -75,7 +79,8 @@ export default function useTaskMutation() {
 			},
 			onSettled: async () => {
 				await queryClient.invalidateQueries(["tasks"]);
-				await queryClient.prefetchQuery(["tasks", { type: "dates" }], () => {
+				await queryClient.invalidateQueries(["dates"]);
+				await queryClient.prefetchQuery(["dates"], () => {
 					return getDateAggregation();
 				});
 			},
@@ -140,5 +145,77 @@ export default function useTaskMutation() {
 		}
 	);
 
-	return { deleteMutation, rescheduleMutation, checkMutation };
+	const editMutation = useMutation(
+		(task: Partial<TaskWithClass>) => {
+			return updateTask(task);
+		},
+		{
+			onMutate: async (partial) => {
+				await queryClient.cancelQueries(["tasks"]);
+				await queryClient.cancelQueries(["dates"]);
+				await queryClient.setQueriesData(
+					["tasks"],
+					(oldData: TaskWithClass[] | undefined) => {
+						if (!oldData) {
+							return [];
+						}
+
+						return oldData.map((t) => {
+							if (t.id === partial.id) {
+								return {
+									...t,
+									...partial,
+								};
+							}
+							return t;
+						});
+					}
+				);
+			},
+
+			onSuccess: async (data, task, context) => {
+				await queryClient.setQueriesData(
+					["tasks"],
+					(oldData: TaskWithClass[] | undefined) => {
+						if (!oldData) {
+							return [];
+						}
+
+						return oldData.map((t) => {
+							if (t.id === data.id) {
+								return {
+									...t,
+									...data,
+								};
+							}
+							return t;
+						});
+					}
+				);
+				if (focus.focusState.task && focus.focusState.task.id === task.id) {
+					focus.setFocusState({
+						...focus.focusState,
+						task: data,
+					});
+				}
+			},
+
+			onError: async (err: Error, task, context) => {
+				showNotification({
+					message: err.message,
+					color: "red",
+				});
+			},
+
+			onSettled: async () => {
+				await queryClient.invalidateQueries(["tasks"]);
+				await queryClient.invalidateQueries(["dates"]);
+				await queryClient.prefetchQuery(["dates"], () => {
+					return getDateAggregation();
+				});
+			},
+		}
+	);
+
+	return { deleteMutation, rescheduleMutation, checkMutation, editMutation };
 }
