@@ -41,13 +41,13 @@ export default function FocusModeDisplay() {
 
 	const { checkMutation } = useTaskMutation();
 
-	useEffect(() => {
-		if (focusState.task?.workTime) {
-			const percent =
-				(focusState.secondsElapsed / (focusState.task.workTime * 60)) * 100;
-			setNavigationProgress(percent);
-		}
-	}, [focusState]);
+	// useEffect(() => {
+	// 	if (focusState.task?.workTime) {
+	// 		const percent =
+	// 			(focusState.secondsElapsed / (focusState.task.workTime * 60)) * 100;
+	// 		setNavigationProgress(percent);
+	// 	}
+	// }, [focusState]);
 
 	const secondToTimeDisplay = (seconds: number) => {
 		const minutes = Math.floor(seconds / 60);

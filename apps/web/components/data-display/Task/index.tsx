@@ -128,14 +128,14 @@ const Task = ({
 
 		return {
 			opacity: task.complete ? 0.4 : 1,
-			transition: "opacity .20s linear",
+			transition: "opacity .20s linear, height 1.20s linear",
 			border,
 		};
 	};
 
 	if (isMobile) {
 		return (
-			<Paper withBorder p="sm" shadow="xs" sx={paperSx}>
+			<Paper withBorder p="md" shadow="xs" sx={paperSx}>
 				<Stack>
 					<Group position="apart">
 						<Text weight="bolder" size="sm">
@@ -155,7 +155,9 @@ const Task = ({
 							{rescheduleButton && <RescheduleButton task={task} />}
 							{menuComponent}
 						</Group>
-						<Text size="sm">{task.workTime + "min."}</Text>
+						{settings.useTimeEstimate && (
+							<Text size="sm">{task.workTime + "min."}</Text>
+						)}
 					</Group>
 				</Stack>
 			</Paper>
@@ -163,7 +165,7 @@ const Task = ({
 	}
 
 	return (
-		<Paper withBorder p="sm" shadow="xs" sx={paperSx}>
+		<Paper withBorder p="md" shadow="xs" sx={paperSx}>
 			<Group position="apart">
 				<Group>
 					{checkbox && checkboxElement}
@@ -185,7 +187,9 @@ const Task = ({
 					)}
 				</Group>
 				<Group>
-					<Text size="sm">{task.workTime + "min."}</Text>
+					{settings.useTimeEstimate && (
+						<Text size="sm">{task.workTime + "min."}</Text>
+					)}
 					{rescheduleButton && <RescheduleButton task={task} />}
 					{menuComponent}
 				</Group>

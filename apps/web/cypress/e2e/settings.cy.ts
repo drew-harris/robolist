@@ -4,8 +4,7 @@ describe("changes settings", () => {
 		cy.login(user.email, user.password);
 	});
 	it("show estimated work time", () => {
-		cy.visit("/");
-		cy.get(":nth-child(2) > .mantine-ThemeIcon-root").click();
+		cy.visit("/settings");
 
 		cy.contains("Settings");
 		// Turn on checkbox
@@ -23,8 +22,7 @@ describe("changes settings", () => {
 		cy.contains("Estimated Work Time");
 	});
 	it("hide estimated work time", () => {
-		cy.visit("/");
-		cy.get(":nth-child(2) > .mantine-ThemeIcon-root").click();
+		cy.visit("/settings");
 		cy.contains("Settings");
 		// Turn on checkbox
 		cy.get('[type="checkbox"]').eq(1).uncheck();

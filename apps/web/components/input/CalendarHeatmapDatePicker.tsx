@@ -110,9 +110,13 @@ export default function CalendarHeatmapDatePicker({
 		const hours = getHoursForDay(date);
 		const isToday = dateIsToday(date);
 		return (
-			<Tooltip label={hours + " min."} disabled={!hours} openDelay={500}>
+			<Tooltip
+				label={hours + " min."}
+				disabled={!hours || !settings.useTimeEstimate}
+				openDelay={500}
+			>
 				<Box
-					sx={(theme) => ({
+					sx={() => ({
 						position: "relative",
 						width: "100%",
 						height: "100%",

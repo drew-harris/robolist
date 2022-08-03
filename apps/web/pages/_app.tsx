@@ -16,6 +16,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import { RouterTransition } from "../components/affixes/RouterNavigation";
 import LayoutShell from "../components/layout/LayoutShell";
 import SpotlightMenu from "../components/layout/SpotlightMenu";
 import FocusContextProvider from "../contexts/FocusContext";
@@ -117,7 +118,8 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 								<ModalsProvider>
 									<NotificationsProvider>
 										<SpotlightMenu>
-											<NavigationProgress />
+											<NavigationProgress size={2} stepInterval={10} />
+											<RouterTransition />
 											<LayoutShell>
 												<Component {...pageProps} />
 											</LayoutShell>

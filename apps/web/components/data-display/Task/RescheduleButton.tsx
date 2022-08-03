@@ -38,7 +38,6 @@ export default function RescheduleButton(props: RescheduleButtonProps) {
 			dueDate,
 		};
 	}, [task]);
-	// TODO: Memoize
 
 	if (times.dayBeforeDueDate.getTime() < times.thisMorning.getTime()) {
 		times.dayBeforeDueDate = times.thisMorning;
@@ -68,6 +67,7 @@ export default function RescheduleButton(props: RescheduleButtonProps) {
 				<ActionIcon
 					loading={rescheduleMutation.isLoading}
 					onClick={onButtonClick}
+					size="sm"
 				>
 					<Rotate360 size={18} />
 				</ActionIcon>
