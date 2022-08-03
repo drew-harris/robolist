@@ -2,6 +2,7 @@ import { Tooltip, useMantineTheme, Text, Box } from "@mantine/core";
 import { DatePicker, DayModifiers } from "@mantine/dates";
 import { useQuery } from "@tanstack/react-query";
 import { ReactNode, useContext, useEffect, useState } from "react";
+import { Settings } from "tabler-icons-react";
 import { DateAggregation } from "types";
 import { getDateAggregation } from "../../clientapi/dates";
 import { SettingsContext } from "../../contexts/SettingsContext";
@@ -18,6 +19,7 @@ export default function HeatmapDatePicker(props: any) {
 		["tasks", { type: "dates" }],
 		getDateAggregation
 	);
+	const { settings } = useContext(SettingsContext);
 
 	const theme = useMantineTheme();
 
@@ -101,7 +103,11 @@ export default function HeatmapDatePicker(props: any) {
 		const hours = getHoursForDay(date);
 		const isToday = dateIsToday(date);
 		return (
-			<Tooltip label={hours + " min."} disabled={!hours} openDelay={500}>
+			<Tooltip
+				label={hours + " min."}
+				disabled={!hours || !settings.useTimeEstimate}
+				openDelay={500}
+			>
 				<Box
 					sx={{
 						position: "relative",

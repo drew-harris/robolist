@@ -155,7 +155,9 @@ const Task = ({
 							{rescheduleButton && <RescheduleButton task={task} />}
 							{menuComponent}
 						</Group>
-						<Text size="sm">{task.workTime + "min."}</Text>
+						{settings.useTimeEstimate && (
+							<Text size="sm">{task.workTime + "min."}</Text>
+						)}
 					</Group>
 				</Stack>
 			</Paper>
@@ -185,7 +187,9 @@ const Task = ({
 					)}
 				</Group>
 				<Group>
-					<Text size="sm">{task.workTime + "min."}</Text>
+					{settings.useTimeEstimate && (
+						<Text size="sm">{task.workTime + "min."}</Text>
+					)}
 					{rescheduleButton && <RescheduleButton task={task} />}
 					{menuComponent}
 				</Group>

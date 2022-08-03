@@ -3,8 +3,9 @@ import { TaskWithClass } from "types";
 import Task, { TaskOptionProps } from "../data-display/Task";
 import TaskSkeleton from "../skeletons/TaskSkeleton";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { getHumanDateString, reduceDates } from "../../utils";
+import { SettingsContext } from "../../contexts/SettingsContext";
 
 type TaskContainerProps = TaskOptionProps & {
 	tasks: TaskWithClass[] | undefined;
@@ -24,6 +25,7 @@ export default function TaskAgendaContainer({
 }: TaskContainerProps) {
 	const [parent] = useAutoAnimate<HTMLDivElement>();
 
+	const { settings } = useContext(SettingsContext);
 	const groups: TaskWithClass[][] = useMemo(() => {
 		if (!tasks) {
 			return [];
@@ -50,7 +52,9 @@ export default function TaskAgendaContainer({
 		elements.push(
 			<Group id={getHumanDateString(group[0].workDate)}>
 				<Title order={4}>{getHumanDateString(group[0].workDate)}</Title>
-				<Text color="dimmed">{getGroupTime(group)} min.</Text>
+				{settings.useTimeEstimate && (
+					<Text color="dimmed">{getGroupTime(group)} min.</Text>
+				)}
 			</Group>
 		);
 
