@@ -75,6 +75,9 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			return (
 				<Link href={link.href}>
 					<NavLink
+						onClick={() => {
+							setOpened(false);
+						}}
 						sx={(theme) => ({
 							borderRadius: theme.radius.sm,
 						})}
