@@ -35,10 +35,7 @@ export default function TodayTasksPage({
 			</Title>
 			{error && <CenterInfo color="red" text={error.message} />}
 			{status != "loading" && tasks.length == 0 && (
-				<>
-					<CenterInfo text="No tasks today" />
-					<CenterInfo text="Enjoy your break!" />
-				</>
+				<CenterInfo text="No tasks today" />
 			)}
 			<TaskContainer
 				loading={status == "loading"}
