@@ -128,14 +128,14 @@ const Task = ({
 
 		return {
 			opacity: task.complete ? 0.4 : 1,
-			transition: "opacity .20s linear",
+			transition: "opacity .20s linear, height 1.20s linear",
 			border,
 		};
 	};
 
 	if (isMobile) {
 		return (
-			<Paper withBorder p="sm" shadow="xs" sx={paperSx}>
+			<Paper withBorder p="md" shadow="xs" sx={paperSx}>
 				<Stack>
 					<Group position="apart">
 						<Text weight="bolder" size="sm">
@@ -163,7 +163,7 @@ const Task = ({
 	}
 
 	return (
-		<Paper withBorder p="sm" shadow="xs" sx={paperSx}>
+		<Paper withBorder p="md" shadow="xs" sx={paperSx}>
 			<Group position="apart">
 				<Group>
 					{checkbox && checkboxElement}

@@ -1,4 +1,4 @@
-import { Tooltip, useMantineTheme, Text } from "@mantine/core";
+import { Tooltip, useMantineTheme, Text, Box } from "@mantine/core";
 import { DatePicker, DayModifiers } from "@mantine/dates";
 import { useQuery } from "@tanstack/react-query";
 import { ReactNode, useContext, useEffect, useState } from "react";
@@ -20,7 +20,6 @@ export default function HeatmapDatePicker(props: any) {
 	);
 
 	const theme = useMantineTheme();
-	const { settings } = useContext(SettingsContext);
 
 	const [maxCount, setMaxCount] = useState(0);
 
@@ -102,18 +101,16 @@ export default function HeatmapDatePicker(props: any) {
 		const hours = getHoursForDay(date);
 		const isToday = dateIsToday(date);
 		return (
-			<Tooltip
-				sx={(theme) => ({
-					position: "relative",
-					width: "100%",
-					height: "100%",
-					textDecoration: isToday ? "underline" : "none",
-				})}
-				label={hours + " min."}
-				disabled={!hours}
-				openDelay={500}
-			>
-				<Text>{date.getDate()}</Text>
+			<Tooltip label={hours + " min."} disabled={!hours} openDelay={500}>
+				<Box
+					sx={{
+						position: "relative",
+						width: "100%",
+						textDecoration: isToday ? "underline" : "none",
+					}}
+				>
+					<Text>{date.getDate()}</Text>
+				</Box>
 			</Tooltip>
 		);
 	};
@@ -122,11 +119,6 @@ export default function HeatmapDatePicker(props: any) {
 		<DatePicker
 			label={label}
 			renderDay={getRenderDate}
-			styles={{
-				cell: {
-					overflow: "hidden",
-				},
-			}}
 			dayStyle={getDateStyle}
 			{...props}
 		></DatePicker>

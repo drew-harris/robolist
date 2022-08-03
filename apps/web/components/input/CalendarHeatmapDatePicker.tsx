@@ -112,7 +112,7 @@ export default function CalendarHeatmapDatePicker({
 		return (
 			<Tooltip label={hours + " min."} disabled={!hours} openDelay={500}>
 				<Box
-					sx={(theme) => ({
+					sx={() => ({
 						position: "relative",
 						width: "100%",
 						height: "100%",

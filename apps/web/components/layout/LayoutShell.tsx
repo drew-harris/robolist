@@ -8,8 +8,7 @@ import {
 	MantineTheme,
 	MediaQuery,
 	Navbar,
-	Space,
-	Text,
+	NavLink,
 	ThemeIcon,
 	UnstyledButton,
 	useMantineTheme,
@@ -57,12 +56,14 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
 	const tasksGroup: SidebarLink[] = [
 		{ href: "/tasks/today", label: "Today", icon: <Clock /> },
-		{ href: "/tasks/", label: "All Tasks", icon: <List /> },
-		{ href: "/calendar/", label: "Calendar", icon: <Calendar /> },
+		{ href: "/tasks", label: "All Tasks", icon: <List /> },
+		{ href: "/calendar", label: "Calendar", icon: <Calendar /> },
 	];
 	const classesGroup: SidebarLink[] = [
-		{ href: "/classes/", label: "Classes", icon: <School /> },
+		{ href: "/classes", label: "Classes", icon: <School /> },
+		{ href: "/settings", label: "Settings", icon: <Settings /> },
 	];
+	const otherGroup: SidebarLink[] = [];
 
 	const showUserLinks =
 		router.pathname === "/" ||
@@ -70,34 +71,22 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		router.pathname === "/signup";
 
 	function SidebarGroup({ links }: SidebarGroupProps) {
-		const elements = links.map((link) => (
-			<Link href={link.href} key={link.href}>
-				<UnstyledButton
-					onClick={() => setOpened(false)}
-					sx={(theme) => ({
-						display: "block",
-						width: "100%",
-						padding: theme.spacing.xs,
-						borderRadius: theme.radius.sm,
-						color:
-							theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
-						"&:hover": {
-							backgroundColor:
-								theme.colorScheme === "dark"
-									? theme.colors.dark[6]
-									: theme.colors.gray[0],
-						},
-					})}
-				>
-					<Group>
-						{link.icon}
-						<Text size="sm">{link.label}</Text>
-					</Group>
-				</UnstyledButton>
-			</Link>
-		));
-
-		return <Navbar.Section>{elements}</Navbar.Section>;
+		const elements = links.map((link) => {
+			console.log(router.pathname);
+			return (
+				<Link href={link.href}>
+					<NavLink
+						sx={(theme) => ({
+							borderRadius: theme.radius.sm,
+						})}
+						icon={link.icon}
+						active={router.pathname === link.href}
+						label={link.label}
+					/>
+				</Link>
+			);
+		});
+		return <Navbar.Section p={theme.spacing.sm}>{elements}</Navbar.Section>;
 	}
 
 	const headerContent = (
@@ -134,11 +123,11 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 								<Command width={20} height={20} />
 							</ThemeIcon>
 						</ActionIcon>
-						<UnstyledButton onClick={() => router.replace("/settings")}>
+						{/* <UnstyledButton onClick={() => router.replace("/settings")}>
 							<ThemeIcon variant="light">
 								<Settings width={20} height={20} />
 							</ThemeIcon>
-						</UnstyledButton>
+						</UnstyledButton> */}
 					</>
 				)}
 
@@ -154,11 +143,10 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			hidden={!opened}
 			style={{ zIndex: isMobile ? 100 : 0 }}
 			width={{ lg: 230, xs: 300 }}
-			p="xs"
 		>
 			<SidebarGroup links={tasksGroup} />
-			<Space h="md" />
 			<SidebarGroup links={classesGroup} />
+			<SidebarGroup links={otherGroup} />
 		</Navbar>
 	);
 
