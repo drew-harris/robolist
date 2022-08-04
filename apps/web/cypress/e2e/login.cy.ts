@@ -1,5 +1,8 @@
 import user from "../fixtures/login-details.json";
 describe("Logs in", () => {
+	beforeEach(() => {
+		cy.setCookie("jwt", "asdifa");
+	});
 	it("passes", () => {
 		cy.visit("/");
 		cy.contains("robolist");

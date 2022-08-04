@@ -1,4 +1,5 @@
 import {
+	Button,
 	Checkbox,
 	Select,
 	Space,
@@ -9,8 +10,9 @@ import {
 	useMantineTheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { getCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
+import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { Settings } from "types";
 import ThemeColorSelector from "../components/input/ThemeColorSelector";
@@ -21,6 +23,7 @@ import { getUserFromJWT } from "../utils";
 export default function SettingsPage() {
 	const { settings, setSettings } = useContext(SettingsContext);
 	const theme = useMantineTheme();
+	const router = useRouter();
 
 	const form = useForm<Settings>({
 		initialValues: settings,
@@ -99,6 +102,15 @@ export default function SettingsPage() {
 						]}
 						{...form.getInputProps("firstDayOfWeek")}
 					></Select>
+
+					<Button
+						onClick={() => {
+							setCookie("jwt", null);
+							router.reload();
+						}}
+					>
+						Sign Out
+					</Button>
 				</Stack>
 			</form>
 		</>
