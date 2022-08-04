@@ -12,7 +12,6 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
 import { useContext } from "react";
-import { FaLessThanEqual } from "react-icons/fa";
 import { Dots, Pencil, Trash } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";

@@ -1,11 +1,4 @@
-import {
-	Box,
-	Button,
-	LoadingOverlay,
-	MediaQuery,
-	Stack,
-	TextInput,
-} from "@mantine/core";
+import { Box, Button, MediaQuery, Stack, TextInput } from "@mantine/core";
 import { DatePicker, DatePickerProps } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useModals } from "@mantine/modals";
@@ -24,7 +17,6 @@ interface EditTaskModalProps {
 export default function EditTaskModal({
 	task: initialTask,
 }: EditTaskModalProps) {
-	const [loading, setLoading] = useState(false);
 	const [maxDate, setMaxDate] = useState<Date | null>(null);
 
 	const { settings } = useContext(SettingsContext);
@@ -58,7 +50,6 @@ export default function EditTaskModal({
 	}, [form.values]);
 
 	const submit = async (values: Partial<TaskWithClass>) => {
-		setLoading(true);
 		editMutation.mutate(values);
 		modals.closeAll();
 	};
@@ -74,7 +65,6 @@ export default function EditTaskModal({
 	return (
 		<form onSubmit={form.onSubmit(submit)}>
 			<Stack style={{ position: "relative" }} p="sm">
-				<LoadingOverlay radius="sm" visible={loading} />
 				<TextInput {...form.getInputProps("title")} label="Title" />
 				<MediaQuery
 					smallerThan={"xs"}

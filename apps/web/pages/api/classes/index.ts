@@ -9,9 +9,9 @@ import {
 	colorChoices,
 	UserWithoutPassword,
 } from "types";
-import { getClassesFromId } from "../../serverapi/classes";
-import { getPrismaPool } from "../../serverapi/prismapool";
-import { getUserFromJWT, unauthorizedResponse } from "../../utils";
+import { getClassesFromId } from "../../../serverapi/classes";
+import { getPrismaPool } from "../../../serverapi/prismapool";
+import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
 
 async function createClass(
 	req: NextApiRequest,
