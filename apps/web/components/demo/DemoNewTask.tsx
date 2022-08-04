@@ -95,7 +95,7 @@ export default function DemoNewTask() {
 							gridTemplateColumns: "1fr 1fr",
 							gap: theme.spacing.md,
 						})}
-						mt="lg"
+						mt="sm"
 					>
 						<Select
 							label="Class"
@@ -130,7 +130,7 @@ export default function DemoNewTask() {
 							display: "flex",
 							gap: theme.spacing.md,
 						})}
-						mt="lg"
+						mt="sm"
 					>
 						<DatePicker
 							style={{ flexGrow: 1 }}
