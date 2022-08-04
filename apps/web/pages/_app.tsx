@@ -77,7 +77,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 				<link rel="manifest" href="/manifest.json" />
 				<meta
 					name="theme-color"
-					content={theme.colors?.blue?.[5] || "#1a1b1e"}
+					content={colorScheme == "dark" ? "#1a1b1e" : "white"}
 				/>
 				<link rel="apple-touch-icon" href="/logo-96x96.png" />
 				<meta name="apple-mobile-web-app-capable" content="yes"></meta>
@@ -118,8 +118,8 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 								<ModalsProvider>
 									<NotificationsProvider>
 										<SpotlightMenu>
-											<NavigationProgress size={2} stepInterval={10} />
-											<RouterTransition />
+											{/* <NavigationProgress size={2} stepInterval={10} /> */}
+											{/* <RouterTransition /> */}
 											<LayoutShell>
 												<Component {...pageProps} />
 											</LayoutShell>
@@ -136,5 +136,5 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 }
 
 App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-	colorScheme: getCookie("mantine-color-scheme", ctx) || "dark",
+	colorScheme: getCookie("mantine-color-scheme", ctx) || "light",
 });

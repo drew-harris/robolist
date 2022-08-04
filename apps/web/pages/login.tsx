@@ -33,7 +33,6 @@ const Login = () => {
 	async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		setLoading(true);
-		console.log(form.values);
 		const response = await fetch("/api/login", {
 			method: "POST",
 			headers: {

@@ -1,6 +1,7 @@
-import { APIError, TaskWithClass, UserWithoutPassword } from "types";
+import { APIError, TaskWithClass, TDemoTask, UserWithoutPassword } from "types";
 import * as jwt from "jsonwebtoken";
 import tinygradient from "tinygradient";
+import { isSameDate } from "@mantine/dates";
 
 export function getUserFromJWT(
 	token: string | undefined
@@ -34,7 +35,7 @@ export function getHeatmapColor(index: number) {
 		return "#ffffff";
 	}
 	const gradient = tinygradient("green", "red");
-	const colorhsv = gradient.rgbAt(index);
+	const colorhsv = gradient.hsvAt(index);
 	return "#" + colorhsv.toHex();
 }
 
@@ -79,8 +80,8 @@ export function getHumanDateString(date: Date): string {
 }
 
 // Splits array of objects into array of arrays of objects by date property
-export const reduceDates = (arr: TaskWithClass[]) => {
-	const dates: TaskWithClass[][] = [];
+export const reduceDates = (arr: TaskWithClass[] | TDemoTask[]) => {
+	const dates: any[][] = [];
 	// Iterate through array of objects
 	for (let i = 0; i < arr.length; i++) {
 		// Check if date is in one of the groups
@@ -88,7 +89,7 @@ export const reduceDates = (arr: TaskWithClass[]) => {
 			if (group.length === 0) {
 				return false;
 			}
-			return group[0].workDate.getTime() === arr[i].workDate.getTime();
+			return isSameDate(group[0].workDate, arr[i].workDate);
 		});
 
 		// If date is not in any group, create new group

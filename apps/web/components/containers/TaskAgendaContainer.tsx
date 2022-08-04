@@ -1,17 +1,19 @@
 import { Group, Space, Stack, Title, Text, Box } from "@mantine/core";
-import { TaskWithClass } from "types";
+import { TaskWithClass, TDemoTask } from "types";
 import Task, { TaskOptionProps } from "../data-display/Task";
 import TaskSkeleton from "../skeletons/TaskSkeleton";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import React, { useContext, useMemo } from "react";
 import { getHumanDateString, reduceDates } from "../../utils";
 import { SettingsContext } from "../../contexts/SettingsContext";
+import DemoTask from "../demo/DemoTask";
 
 type TaskContainerProps = TaskOptionProps & {
-	tasks: TaskWithClass[] | undefined;
+	tasks: TaskWithClass[] | undefined | TDemoTask[];
 	skeletonLength?: number;
 	loading?: boolean;
 	disableAnimation?: boolean;
+	demo?: boolean;
 };
 
 const defaultTaskOptions: TaskOptionProps = {};
@@ -21,6 +23,7 @@ export default function TaskAgendaContainer({
 	loading = false,
 	skeletonLength = 8,
 	disableAnimation = false,
+	demo = false,
 	...props
 }: TaskContainerProps) {
 	const [parent] = useAutoAnimate<HTMLDivElement>();
@@ -59,7 +62,11 @@ export default function TaskAgendaContainer({
 		);
 
 		group.forEach((task) => {
-			elements.push(<Task {...props} key={task.id} task={task} />);
+			if (demo) {
+				elements.push(<DemoTask {...props} key={task.id} task={task} />);
+			} else {
+				elements.push(<Task {...props} key={task.id} task={task} />);
+			}
 		});
 
 		elements.push(

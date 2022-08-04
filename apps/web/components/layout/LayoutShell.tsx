@@ -68,7 +68,8 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 	const showUserLinks =
 		router.pathname === "/" ||
 		router.pathname === "/login" ||
-		router.pathname === "/signup";
+		router.pathname === "/signup" ||
+		router.pathname === "/closed";
 
 	function SidebarGroup({ links }: SidebarGroupProps) {
 		const elements = links.map((link) => {
@@ -99,14 +100,16 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			})}
 			position="apart"
 		>
-			<MediaQuery largerThan="sm" styles={{ display: "none" }}>
-				<Burger
-					opened={opened}
-					onClick={() => setOpened((o) => !o)}
-					size="sm"
-					color={theme.colors.gray[6]}
-				/>
-			</MediaQuery>
+			{!showUserLinks ? (
+				<MediaQuery largerThan="sm" styles={{ display: "none" }}>
+					<Burger
+						opened={opened}
+						onClick={() => setOpened((o) => !o)}
+						size="sm"
+						color={theme.colors.gray[6]}
+					/>
+				</MediaQuery>
+			) : null}
 			<Logo></Logo>
 			<Group spacing={22}>
 				{showUserLinks ? (
@@ -147,15 +150,10 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		</Navbar>
 	);
 
-	const hideSidebar =
-		router.pathname === "/" ||
-		router.pathname === "/login" ||
-		router.pathname === "/signup";
-
 	return (
 		<AppShell
-			padding="md"
-			navbar={hideSidebar ? undefined : navbarContent}
+			padding={router.pathname === "/" ? 0 : "md"}
+			navbar={showUserLinks ? undefined : navbarContent}
 			navbarOffsetBreakpoint="xs"
 			header={<Header height={60}>{headerContent}</Header>}
 			styles={(theme: MantineTheme) => ({

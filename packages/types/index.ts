@@ -33,3 +33,8 @@ export interface RescheduleInput {
 	task: TaskWithClass;
 	date: Date;
 }
+
+export type TDemoTask = Pick<
+	TaskWithClass,
+	"id" | "title" | "workDate" | "workTime" | "class" | "complete"
+>;
