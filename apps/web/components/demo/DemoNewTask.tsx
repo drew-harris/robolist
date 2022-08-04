@@ -58,7 +58,6 @@ export default function DemoNewTask() {
 			// If due date is today, set it to tomorrow
 			const today = new Date(Date.now());
 			today.setHours(0, 0, 0, 0);
-
 			if (form.values.dueDate.getTime() === today.getTime()) {
 				setMaxDate(new Date(form.values.dueDate.getTime()));
 			} else {
