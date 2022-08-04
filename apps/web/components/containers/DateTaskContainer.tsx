@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { TaskWithClass } from "types";
 import { getTasksByDate } from "../../clientapi/tasks";
 import { TaskOptionProps } from "../data-display/Task";
+import CenterInfo from "../small/CenterInfo";
 import TaskContainer from "./TaskContainer";
 
 interface DateTaskContainerProps extends TaskOptionProps {
@@ -38,6 +39,7 @@ export default function DateTaskContainer({
 
 	return (
 		<>
+			{tasks?.length == 0 && <CenterInfo mt="xl" text="No tasks" />}
 			{tasks && (
 				<TaskContainer
 					menu={{ delete: true }}

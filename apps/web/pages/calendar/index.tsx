@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import { DateAggregation } from "types";
 import DateTaskContainer from "../../components/containers/DateTaskContainer";
 import CalendarHeatmapDatePicker from "../../components/input/CalendarHeatmapDatePicker";
+import CenterInfo from "../../components/small/CenterInfo";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import { getDates } from "../../serverapi/dates";
 import { getUserFromJWT } from "../../utils";
@@ -42,6 +43,9 @@ export default function CalendarPage({
 					onSelectDate={setSelectedDate}
 				/>
 			</Container>
+			{!selectedDate && (
+				<CenterInfo mt="xl" text="Select a date to see tasks" />
+			)}
 			{selectedDate && (
 				<DateTaskContainer
 					rescheduleButton
