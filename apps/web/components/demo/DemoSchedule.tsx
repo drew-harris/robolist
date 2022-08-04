@@ -44,7 +44,7 @@ const initialTasks: TDemoTask[] = [
 		workTime: 15,
 		class: {
 			color: "green",
-			name: "Volcanoes",
+			name: "Writing",
 			id: "239",
 			userId: "1",
 		},
@@ -57,7 +57,7 @@ const initialTasks: TDemoTask[] = [
 		workTime: 20,
 		class: {
 			color: "green",
-			name: "Volcanoes",
+			name: "Writing",
 			id: "239",
 			userId: "1",
 		},
