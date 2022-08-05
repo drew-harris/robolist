@@ -87,7 +87,12 @@ export default function Web() {
 						maxWidth: "600px",
 					}}
 				>
-					<Paper p={isMobile ? "xs" : "lg"} shadow="md">
+					<Paper
+						withBorder
+						p={isMobile ? "xs" : "lg"}
+						mt={isMobile ? undefined : "xl"}
+						shadow="md"
+					>
 						<DemoNewTask />
 					</Paper>
 				</Box>

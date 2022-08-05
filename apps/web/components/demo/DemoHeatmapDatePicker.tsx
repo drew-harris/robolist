@@ -168,7 +168,13 @@ export default function DemoHeatmapDatePicker({
 	};
 
 	return (
-		<Popover opened={popoverOpen} zIndex={1} position="bottom" withArrow>
+		<Popover
+			shadow="lg"
+			opened={popoverOpen}
+			zIndex={1}
+			position="bottom"
+			withArrow
+		>
 			<Popover.Target>
 				<DatePicker
 					onDropdownOpen={() => setPopoverOpen(false)}
@@ -179,7 +185,7 @@ export default function DemoHeatmapDatePicker({
 				></DatePicker>
 			</Popover.Target>
 			<Popover.Dropdown>
-				<Text size="xs">Try Me!</Text>
+				<Text color="blue">Click Me!</Text>
 			</Popover.Dropdown>
 		</Popover>
 	);
