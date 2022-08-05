@@ -1,6 +1,7 @@
 import {
 	ActionIcon,
 	Badge,
+	Box,
 	Group,
 	Menu,
 	Paper,
@@ -8,11 +9,12 @@ import {
 	Stack,
 	Sx,
 	Text,
+	Tooltip,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
 import { useContext } from "react";
-import { Dots, Pencil, Trash } from "tabler-icons-react";
+import { AlertTriangle, Dots, Pencil, Trash } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
@@ -148,6 +150,34 @@ const Task = ({
 		};
 	};
 
+	function TimeBadges() {
+		if (isOverdue) {
+			return (
+				<Tooltip color="red" label="It is past the due date">
+					<Badge
+						color="red"
+						leftSection={<AlertTriangle style={{ marginTop: 7 }} size={12} />}
+					>
+						OVERDUE
+					</Badge>
+				</Tooltip>
+			);
+		} else if (isLateWork) {
+			return (
+				<Tooltip label="You did not do the task when scheduled but it is not due yet">
+					<Badge
+						color="orange"
+						leftSection={<AlertTriangle style={{ marginTop: 7 }} size={12} />}
+					>
+						Late
+					</Badge>
+				</Tooltip>
+			);
+		} else {
+			return null;
+		}
+	}
+
 	if (isMobile) {
 		return (
 			<Paper withBorder p="md" shadow="xs" sx={paperSx}>
@@ -156,13 +186,16 @@ const Task = ({
 						<Text weight="bolder" size="sm">
 							{task.title}
 						</Text>
-						{task.class && !hideClassLabel && (
-							<>
-								<Badge size="sm" color={task.class.color}>
-									{task.class?.name}
-								</Badge>
-							</>
-						)}
+						<Group>
+							{task.class && !hideClassLabel && (
+								<>
+									<Badge size="sm" color={task.class.color}>
+										{task.class?.name}
+									</Badge>
+								</>
+							)}
+							<TimeBadges />
+						</Group>
 					</Group>
 					<Group position="apart">
 						<Group>
@@ -187,13 +220,16 @@ const Task = ({
 					<Text weight="bolder" size="sm">
 						{task.title}
 					</Text>
-					{task.class && !hideClassLabel && (
-						<>
-							<Badge size="sm" color={task.class.color}>
-								{task.class?.name}
-							</Badge>
-						</>
-					)}
+					<Group>
+						<TimeBadges />
+						{task.class && !hideClassLabel && (
+							<>
+								<Badge size="sm" color={task.class.color}>
+									{task.class?.name}
+								</Badge>
+							</>
+						)}
+					</Group>
 					{workdayLabel && (
 						<>
 							<Space w="sm" />
