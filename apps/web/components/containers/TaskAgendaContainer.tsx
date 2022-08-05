@@ -4,7 +4,7 @@ import Task, { TaskOptionProps } from "../data-display/Task";
 import TaskSkeleton from "../skeletons/TaskSkeleton";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import React, { useContext, useMemo } from "react";
-import { getHumanDateString, reduceDates } from "../../utils";
+import { getHumanDateString, reduceDates } from "../../utils/utils";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import DemoTask from "../demo/DemoTask";
 

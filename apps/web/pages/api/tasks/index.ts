@@ -9,7 +9,8 @@ import {
 } from "types";
 import { getPrismaPool } from "../../../serverapi/prismapool";
 import { getTasksFromUserId } from "../../../serverapi/tasks";
-import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
+import { getUserFromJWT } from "../../../utils/user";
+import { unauthorizedResponse } from "../../../utils/utils";
 
 async function createTask(
 	req: NextApiRequest,

@@ -10,7 +10,7 @@ import {
 	updateTask,
 } from "../clientapi/tasks";
 import { FocusContext } from "../contexts/FocusContext";
-import { getHumanDateString } from "../utils";
+import { getHumanDateString } from "../utils/utils";
 
 export default function useTaskMutation() {
 	const queryClient = useQueryClient();

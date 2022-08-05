@@ -6,6 +6,7 @@ import {
 	Stack,
 	TextInput,
 } from "@mantine/core";
+import { defaultShouldCreate } from "@mantine/core/lib/Select/Select";
 import { DatePicker, DatePickerProps } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useModals } from "@mantine/modals";
@@ -34,7 +35,7 @@ export default function NewTaskModal() {
 			workDate: null,
 			title: "",
 			description: null,
-			workTime: 20,
+			workTime: null,
 		},
 		validate: {
 			workDate: (value: Date | null | undefined, form: APINewTaskRequest) => {
@@ -49,6 +50,11 @@ export default function NewTaskModal() {
 					value.getTime() < new Date(Date.now()).setHours(0, 0, 0, 0)
 				) {
 					return "Due date must be in the future";
+				}
+			},
+			title: (value: string) => {
+				if (value.length < 1) {
+					return "Title Required";
 				}
 			},
 		},

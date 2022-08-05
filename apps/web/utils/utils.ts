@@ -1,7 +1,7 @@
+import { isSameDate } from "@mantine/dates";
+import tinygradient from "tinygradient";
 import { APIError, TaskWithClass, TDemoTask, UserWithoutPassword } from "types";
 import * as jwt from "jsonwebtoken";
-import tinygradient from "tinygradient";
-import { isSameDate } from "@mantine/dates";
 
 export function getUserFromJWT(
 	token: string | undefined

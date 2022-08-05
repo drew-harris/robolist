@@ -18,7 +18,7 @@ import { Settings } from "types";
 import ThemeColorSelector from "../components/input/ThemeColorSelector";
 import { SettingsContext } from "../contexts/SettingsContext";
 import { logEvent } from "../lib/ga";
-import { getUserFromJWT } from "../utils";
+import { getUserFromJWT } from "../utils/user";
 
 export default function SettingsPage() {
 	const { settings, setSettings } = useContext(SettingsContext);

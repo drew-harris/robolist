@@ -6,7 +6,7 @@ import { Settings } from "tabler-icons-react";
 import { DateAggregation } from "types";
 import { getDateAggregation } from "../../clientapi/dates";
 import { SettingsContext } from "../../contexts/SettingsContext";
-import { dateIsToday, getHeatmapColor } from "../../utils";
+import { dateIsToday, getHeatmapColor } from "../../utils/utils";
 
 const label = (
 	<Tooltip label="Shows which days are busiest. More Red = More Busy">

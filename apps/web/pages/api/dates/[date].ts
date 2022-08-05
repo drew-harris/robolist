@@ -7,7 +7,7 @@ import {
 	UserWithoutPassword,
 } from "types";
 import { getTaskByDate } from "../../../serverapi/tasks";
-import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
+import { getUserFromJWT, unauthorizedResponse } from "../../../utils/utils";
 
 async function taskByDate(
 	req: NextApiRequest,

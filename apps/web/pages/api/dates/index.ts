@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { log, withAxiom } from "next-axiom";
 import { APIDateAggregationResponse } from "types";
 import { getDates } from "../../../serverapi/dates";
-import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
+import { getUserFromJWT, unauthorizedResponse } from "../../../utils/utils";
 
 async function handler(
 	req: NextApiRequest,

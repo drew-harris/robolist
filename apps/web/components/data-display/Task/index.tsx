@@ -1,7 +1,6 @@
 import {
 	ActionIcon,
 	Badge,
-	Box,
 	Group,
 	Menu,
 	Paper,
@@ -18,7 +17,7 @@ import { AlertTriangle, Dots, Pencil, Trash } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
-import { getHumanDateString } from "../../../utils";
+import { getHumanDateString } from "../../../utils/utils";
 import EditTaskModal from "../../modals/EditTaskModal";
 import RescheduleButton from "./RescheduleButton";
 import TaskCheckbox from "./TaskCheckbox";
@@ -164,7 +163,7 @@ const Task = ({
 			);
 		} else if (isLateWork) {
 			return (
-				<Tooltip label="You did not do the task when scheduled but it is not due yet">
+				<Tooltip label="You did not do the task when scheduled, but it is not due yet">
 					<Badge
 						color="orange"
 						leftSection={<AlertTriangle style={{ marginTop: 7 }} size={12} />}

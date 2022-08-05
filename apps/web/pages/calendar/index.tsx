@@ -8,7 +8,7 @@ import CalendarHeatmapDatePicker from "../../components/input/CalendarHeatmapDat
 import CenterInfo from "../../components/small/CenterInfo";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import { getDates } from "../../serverapi/dates";
-import { getUserFromJWT } from "../../utils";
+import { getUserFromJWT } from "../../utils/user";
 
 interface CalendarPageProps {
 	aggregation: DateAggregation[];
