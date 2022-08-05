@@ -23,13 +23,13 @@ import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import useTaskMutation from "../../hooks/useTaskMutation";
 import { logEvent } from "../../lib/ga";
+import { secondToTimeDisplay } from "../../utils/utils";
 
 const iconSize = 25;
 
 export default function FocusModeDisplay() {
 	const { focusState, fn: focusFn } = useContext(FocusContext);
 	const { settings } = useContext(SettingsContext);
-	const [percent, setPercent] = useState(0);
 	const modals = useModals();
 	const theme = useMantineTheme();
 
@@ -43,20 +43,6 @@ export default function FocusModeDisplay() {
 	]);
 
 	const { checkMutation } = useTaskMutation();
-
-	useEffect(() => {
-		if (focusState.task?.workTime) {
-			const percent =
-				(focusState.secondsElapsed / (focusState.task.workTime * 60)) * 100;
-			setPercent(percent);
-		}
-	}, [focusState]);
-
-	const secondToTimeDisplay = (seconds: number) => {
-		const minutes = Math.floor(seconds / 60);
-		const secondsLeft = seconds - minutes * 60;
-		return `${minutes}:${secondsLeft < 10 ? "0" : ""}${secondsLeft}`;
-	};
 
 	const cancelTask = () => {
 		modals.openConfirmModal({

@@ -18,7 +18,7 @@ import { Settings } from "types";
 import ThemeColorSelector from "../components/input/ThemeColorSelector";
 import { SettingsContext } from "../contexts/SettingsContext";
 import { logEvent } from "../lib/ga";
-import { getUserFromJWT } from "../utils/user";
+import { getUserFromJWT } from "../utils/utils";
 
 export default function SettingsPage() {
 	const { settings, setSettings } = useContext(SettingsContext);
@@ -115,22 +115,4 @@ export default function SettingsPage() {
 			</form>
 		</>
 	);
-}
-
-export function getServerSideProps(
-	context: NextPageContext
-): GetServerSidePropsResult<{}> {
-	const jwt = getCookie("jwt", context);
-	const user = getUserFromJWT(jwt?.toString());
-	if (!user) {
-		return {
-			redirect: {
-				destination: "/",
-				permanent: false,
-			},
-		};
-	}
-	return {
-		props: {}, // will be passed to the page component as props
-	};
 }

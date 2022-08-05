@@ -7,7 +7,7 @@ import { getTasks } from "../../clientapi/tasks";
 import TaskAgendaContainer from "../../components/containers/TaskAgendaContainer";
 import CenterInfo from "../../components/small/CenterInfo";
 import { getTasksFromUserId } from "../../serverapi/tasks";
-import { getUserFromJWT } from "../../utils/user";
+import { getUserFromJWT } from "../../utils/utils";
 
 interface TasksPageProps {
 	tasks: TaskWithClass[];

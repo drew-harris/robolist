@@ -4,8 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { log, withAxiom } from "next-axiom";
 import { APIRescheduleRequest, APIRescheduleResponse } from "types";
 import { getPrismaPool } from "../../../serverapi/prismapool";
-import { getUserFromJWT } from "../../../utils/user";
-import { unauthorizedResponse } from "../../../utils/utils";
+import { getUserFromJWT, unauthorizedResponse } from "../../../utils/utils";
 
 async function handler(
 	req: NextApiRequest,

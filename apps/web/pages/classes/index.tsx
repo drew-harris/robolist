@@ -9,7 +9,7 @@ import { getClasses } from "../../clientapi/classes";
 import ClassSquare from "../../components/data-display/ClassSquare";
 import CenterInfo from "../../components/small/CenterInfo";
 import { getClassesFromId } from "../../serverapi/classes";
-import { getUserFromJWT } from "../../utils/user";
+import { getUserFromJWT } from "../../utils/utils";
 
 interface ClassPageProps {
 	classes: Class[];

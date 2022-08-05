@@ -11,7 +11,6 @@ import {
 	NavLink,
 	Space,
 	ThemeIcon,
-	UnstyledButton,
 	useMantineTheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -23,6 +22,7 @@ import {
 	Calendar,
 	Clock,
 	Command,
+	Hourglass,
 	List,
 	School,
 	Settings,
@@ -61,6 +61,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		{ href: "/tasks/today", label: "Today", icon: <Clock /> },
 		{ href: "/tasks", label: "All Tasks", icon: <List /> },
 		{ href: "/calendar", label: "Calendar", icon: <Calendar /> },
+		{ href: "/focus", label: "Focus", icon: <Hourglass /> },
 	];
 	const classesGroup: SidebarLink[] = [
 		{ href: "/classes", label: "Classes", icon: <School /> },
@@ -168,9 +169,13 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 				},
 			})}
 		>
-			{settings.useFocusMode && <FocusModeDisplay />}
+			{settings.useFocusMode && !router.pathname.includes("/focus") && (
+				<FocusModeDisplay />
+			)}
 			{children}
-			{focusState.task && <Space w="xl" h={110} />}
+			{focusState.task && !router.pathname.includes("focus") && (
+				<Space w="xl" h={110} />
+			)}
 		</AppShell>
 	);
 }
