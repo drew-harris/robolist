@@ -1,9 +1,9 @@
 import { Loader, Select } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import { Class } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { School } from "tabler-icons-react";
-import { APINewTaskRequest, TaskWithClass } from "types";
 import { getClasses } from "../../clientapi/classes";
 
 interface IdPickerProps {
@@ -11,32 +11,28 @@ interface IdPickerProps {
 }
 
 export default function ClassIdPicker(props: IdPickerProps) {
-	const [classes, setClasses] = useState<Class[]>([]);
-	const [loading, setLoading] = useState(true);
-	const fetchClasses = async () => {
-		const classes = await getClasses();
-		setClasses(classes);
-		setLoading(false);
-	};
+	const {
+		data: classes,
+		error,
+		status,
+	} = useQuery<Class[], Error>(["classes"], getClasses);
 
-	useEffect(() => {
-		fetchClasses();
-	}, []);
-
-	const classLabels = classes.map((c) => {
-		return {
-			label: c.name,
-			value: c.id,
-		};
-	});
+	const classLabels = classes
+		? classes.map((c) => {
+				return {
+					label: c.name,
+					value: c.id,
+				};
+		  })
+		: [];
 
 	return (
 		<Select
 			{...props.form.getInputProps("classId")}
 			label="Class"
-			icon={loading ? <Loader size={18} /> : <School size={18} />}
+			icon={status === "loading" ? <Loader size={18} /> : <School size={18} />}
 			data={classLabels}
-			disabled={classes.length === 0}
+			disabled={!classes || classes.length === 0}
 			placeholder="No Class Selected"
 			clearable={true}
 		></Select>

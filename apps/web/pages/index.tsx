@@ -6,7 +6,6 @@ import {
 	List,
 	Mark,
 	Paper,
-	Popover,
 	Space,
 	Stack,
 	Text,
