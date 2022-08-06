@@ -1,20 +1,10 @@
-import {
-	Box,
-	MediaQuery,
-	Popover,
-	Select,
-	Stack,
-	Text,
-	TextInput,
-} from "@mantine/core";
+import { Box, MediaQuery, Select, Stack, TextInput } from "@mantine/core";
 import { DatePicker, DatePickerProps } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { setCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 import { Clock, School } from "tabler-icons-react";
 import { APINewTaskRequest } from "types";
-import ClassIdPicker from "../input/ClassIdPicker";
-import HeatmapDatePicker from "../input/HeatmapDatePicker";
 import DemoHeatmapDatePicker from "./DemoHeatmapDatePicker";
 
 export default function DemoNewTask() {

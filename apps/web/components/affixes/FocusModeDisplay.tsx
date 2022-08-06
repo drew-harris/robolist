@@ -99,7 +99,7 @@ export default function FocusModeDisplay() {
 					id: focusState.task.id,
 					minutes: Math.floor(focusState.secondsElapsed / 60),
 				});
-
+				focusFn.cancel();
 				logEvent("complete_task", {
 					label: "focus_mode",
 				});

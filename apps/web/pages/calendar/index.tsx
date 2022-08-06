@@ -1,24 +1,16 @@
-import { Box, Container, ScrollArea, Stack, Title } from "@mantine/core";
-import { getCookie } from "cookies-next";
-import { GetServerSidePropsResult, NextPageContext } from "next";
+import { Box, Container, Title } from "@mantine/core";
 import { useContext, useState } from "react";
 import { DateAggregation } from "types";
 import DateTaskContainer from "../../components/containers/DateTaskContainer";
 import CalendarHeatmapDatePicker from "../../components/input/CalendarHeatmapDatePicker";
 import CenterInfo from "../../components/small/CenterInfo";
 import { SettingsContext } from "../../contexts/SettingsContext";
-import { getDates } from "../../serverapi/dates";
-import { getUserFromJWT } from "../../utils/utils";
+import useInitialPrefetch from "../../hooks/useInitialPrefetch";
 
-interface CalendarPageProps {
-	aggregation: DateAggregation[];
-}
-
-export default function CalendarPage({
-	aggregation: initialAggregation,
-}: CalendarPageProps) {
+export default function CalendarPage() {
 	const { settings } = useContext(SettingsContext);
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+	useInitialPrefetch();
 	return (
 		<Box
 			sx={(theme) => ({
@@ -36,7 +28,6 @@ export default function CalendarPage({
 			>
 				<CalendarHeatmapDatePicker
 					hideOutsideDates
-					initialAggregation={initialAggregation}
 					firstDayOfWeek={settings.firstDayOfWeek}
 					fullWidth
 					selectedDate={selectedDate}
@@ -55,27 +46,4 @@ export default function CalendarPage({
 			)}
 		</Box>
 	);
-}
-
-export async function getServerSideProps(
-	context: NextPageContext
-): Promise<GetServerSidePropsResult<CalendarPageProps>> {
-	const jwt = getCookie("jwt", context);
-	const user = getUserFromJWT(jwt?.toString());
-	if (!user) {
-		return {
-			redirect: {
-				destination: "/",
-				permanent: false,
-			},
-		};
-	}
-
-	const dates = await getDates(user);
-
-	return {
-		props: {
-			aggregation: dates,
-		},
-	};
 }
