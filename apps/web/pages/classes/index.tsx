@@ -1,5 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { SimpleGrid, Title } from "@mantine/core";
+import { Center, Loader, SimpleGrid, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Class } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
@@ -11,10 +11,11 @@ import useInitialPrefetch from "../../hooks/useInitialPrefetch";
 const ClassesPage = () => {
 	const [parent] = useAutoAnimate<HTMLDivElement>();
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
-	const { data: classes, error } = useQuery<Class[], Error>(
-		["classes"],
-		getClasses
-	);
+	const {
+		data: classes,
+		error,
+		status,
+	} = useQuery<Class[], Error>(["classes"], getClasses);
 
 	useInitialPrefetch();
 
@@ -30,6 +31,11 @@ const ClassesPage = () => {
 				Classes
 			</Title>
 			{error && <CenterInfo color="red" text={error.message} />}
+			{status === "loading" && (
+				<Center>
+					<Loader />
+				</Center>
+			)}
 			{classes && classes.length == 0 && <CenterInfo text="No classes yet" />}
 			<SimpleGrid ref={parent} cols={isMobile ? 1 : 4}>
 				{classElements}
