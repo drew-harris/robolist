@@ -2,14 +2,12 @@ import { Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import { GetServerSidePropsResult, NextPageContext } from "next";
-import { useEffect } from "react";
 import { TaskWithClass } from "types";
 import { getTasks } from "../../clientapi/tasks";
 import TaskAgendaContainer from "../../components/containers/TaskAgendaContainer";
-import TaskContainer from "../../components/containers/TaskContainer";
 import CenterInfo from "../../components/small/CenterInfo";
 import { getTasksFromUserId } from "../../serverapi/tasks";
-import { getUserFromJWT, reduceDates } from "../../utils";
+import { getUserFromJWT } from "../../utils/utils";
 
 interface TasksPageProps {
 	tasks: TaskWithClass[];
@@ -30,7 +28,7 @@ export default function TasksPage({ tasks: initialTasks }: TasksPageProps) {
 				All Tasks
 			</Title>
 			{error && <CenterInfo color="red" text={error.message} />}
-			{status != "loading" && tasks.length == 0 && (
+			{status != "loading" && tasks && tasks.length == 0 && (
 				<CenterInfo text="No tasks yet" />
 			)}
 			<TaskAgendaContainer

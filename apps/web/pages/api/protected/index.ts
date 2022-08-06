@@ -1,7 +1,7 @@
 import { getCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
 import { withAxiom } from "next-axiom";
-import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
+import { getUserFromJWT, unauthorizedResponse } from "../../../utils/utils";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req?.method != "GET") {

@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { log, withAxiom } from "next-axiom";
 import { UserWithoutPassword } from "types";
 import { getTodayTasksFromId } from "../../../serverapi/tasks";
-import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
+import { getUserFromJWT, unauthorizedResponse } from "../../../utils/utils";
 
 async function getTodayTasks(
 	req: NextApiRequest,

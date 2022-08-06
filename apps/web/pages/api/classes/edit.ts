@@ -2,7 +2,7 @@ import { getCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
 import { log, withAxiom } from "next-axiom";
 import { getPrismaPool } from "../../../serverapi/prismapool";
-import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
+import { getUserFromJWT, unauthorizedResponse } from "../../../utils/utils";
 import type { Class } from "@prisma/client";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {

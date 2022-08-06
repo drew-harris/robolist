@@ -5,7 +5,7 @@ import { log, withAxiom } from "next-axiom";
 import { APICompleteRequest, TaskWithClass } from "types";
 import { logEvent } from "../../../lib/ga";
 import { getPrismaPool } from "../../../serverapi/prismapool";
-import { getUserFromJWT, unauthorizedResponse } from "../../../utils";
+import { getUserFromJWT, unauthorizedResponse } from "../../../utils/utils";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req?.method != "POST") {

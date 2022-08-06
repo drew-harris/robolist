@@ -1,9 +1,9 @@
 import {
 	ActionIcon,
 	Affix,
-	Box,
 	Group,
 	Paper,
+	Stack,
 	Text,
 	Tooltip,
 	Transition,
@@ -13,23 +13,26 @@ import { useHotkeys } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
 import { NavigationProgress } from "@mantine/nprogress";
 import Head from "next/head";
-import { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useContext } from "react";
 import { BsPlayFill } from "react-icons/bs";
 import { TbCheck, TbX } from "react-icons/tb";
 import { TiMediaPause } from "react-icons/ti";
+import { ArrowsMaximize } from "tabler-icons-react";
 import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import useTaskMutation from "../../hooks/useTaskMutation";
 import { logEvent } from "../../lib/ga";
+import { secondToTimeDisplay } from "../../utils/utils";
 
 const iconSize = 25;
 
 export default function FocusModeDisplay() {
 	const { focusState, fn: focusFn } = useContext(FocusContext);
 	const { settings } = useContext(SettingsContext);
-	const [percent, setPercent] = useState(0);
 	const modals = useModals();
 	const theme = useMantineTheme();
+	const router = useRouter();
 
 	useHotkeys([
 		[
@@ -42,20 +45,7 @@ export default function FocusModeDisplay() {
 
 	const { checkMutation } = useTaskMutation();
 
-	useEffect(() => {
-		if (focusState.task?.workTime) {
-			const percent =
-				(focusState.secondsElapsed / (focusState.task.workTime * 60)) * 100;
-			setPercent(percent);
-		}
-	}, [focusState]);
-
-	const secondToTimeDisplay = (seconds: number) => {
-		const minutes = Math.floor(seconds / 60);
-		const secondsLeft = seconds - minutes * 60;
-		return `${minutes}:${secondsLeft < 10 ? "0" : ""}${secondsLeft}`;
-	};
-
+	// COPIED TO BigFocusTimer.tsx
 	const cancelTask = () => {
 		modals.openConfirmModal({
 			title: "Cancel Task",
@@ -81,6 +71,7 @@ export default function FocusModeDisplay() {
 		});
 	};
 
+	// COPIED TO BigFocusTimer.tsx
 	const completeTask = () => {
 		if (!focusState.task || !focusState.task.workTime) {
 			return;
@@ -116,6 +107,7 @@ export default function FocusModeDisplay() {
 		});
 	};
 
+	// COPIED TO BigFocusTimer.tsx
 	const toggleWorking = () => {
 		if (focusState.working) {
 			focusFn.pause();
@@ -130,7 +122,7 @@ export default function FocusModeDisplay() {
 
 	return (
 		<>
-			{focusState.working && (
+			{focusState.working && focusState.task && (
 				<Head>
 					<title>
 						{secondToTimeDisplay(focusState.secondsElapsed) +
@@ -162,49 +154,49 @@ export default function FocusModeDisplay() {
 							})}
 							shadow="md"
 						>
-							<Group>
-								<Tooltip openDelay={300} label="Stop Working">
-									<ActionIcon onClick={cancelTask} color="red" size={iconSize}>
-										<TbX size={iconSize} />
-									</ActionIcon>
-								</Tooltip>
-								<Tooltip openDelay={300} label="Mark as Done">
-									<ActionIcon
-										loading={checkMutation.isLoading}
-										color="green"
-										size={iconSize}
-										onClick={completeTask}
-									>
-										<TbCheck size={iconSize} />
-									</ActionIcon>
-								</Tooltip>
-								<Tooltip label="(Space)" openDelay={500}>
-									<ActionIcon onClick={toggleWorking}>
-										{focusState.working ? (
-											<TiMediaPause size={iconSize} />
-										) : (
-											<BsPlayFill size={iconSize} />
-										)}
-									</ActionIcon>
-								</Tooltip>
-
-								<Box
-									sx={(theme) => ({
-										width: 70,
-										textAlign: "center",
-									})}
-								>
+							<Stack>
+								<Group position="center">
 									<Text color={theme.primaryColor} size="lg" weight="bold">
 										{secondToTimeDisplay(focusState.secondsElapsed)}
 									</Text>
-								</Box>
 
-								{!!focusState.task && (
-									<Text size="sm" weight={600}>
-										{focusState.task.title}
-									</Text>
-								)}
-							</Group>
+									{!!focusState.task && (
+										<Text size="sm" weight={600}>
+											{focusState.task.title}
+										</Text>
+									)}
+								</Group>
+								<Group position="apart">
+									<Tooltip openDelay={300} label="Stop Working">
+										<ActionIcon onClick={cancelTask} size={iconSize}>
+											<TbX color={theme.colors.red[5]} size={iconSize} />
+										</ActionIcon>
+									</Tooltip>
+									<Tooltip openDelay={300} label="Mark as Done">
+										<ActionIcon
+											loading={checkMutation.isLoading}
+											size={iconSize}
+											onClick={completeTask}
+										>
+											<TbCheck color={theme.colors.green[5]} size={iconSize} />
+										</ActionIcon>
+									</Tooltip>
+									<Tooltip label="(Space)" openDelay={500}>
+										<ActionIcon onClick={toggleWorking}>
+											{focusState.working ? (
+												<TiMediaPause size={iconSize} />
+											) : (
+												<BsPlayFill size={iconSize} />
+											)}
+										</ActionIcon>
+									</Tooltip>
+									<Tooltip label="(Space)" openDelay={500}>
+										<ActionIcon onClick={() => router.replace("/focus")}>
+											<ArrowsMaximize size={iconSize - 6} />
+										</ActionIcon>
+									</Tooltip>
+								</Group>
+							</Stack>
 						</Paper>
 					)}
 				</Transition>

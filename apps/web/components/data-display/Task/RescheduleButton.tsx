@@ -4,7 +4,7 @@ import { Rotate360 } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import useTaskMutation from "../../../hooks/useTaskMutation";
 import { logEvent } from "../../../lib/ga";
-import { dateIsToday } from "../../../utils";
+import { dateIsToday } from "../../../utils/utils";
 import CalendarHeatmapDatePicker from "../../input/CalendarHeatmapDatePicker";
 
 interface RescheduleButtonProps {

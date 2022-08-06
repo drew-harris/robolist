@@ -7,7 +7,7 @@ import { getTodayTasks } from "../../clientapi/tasks";
 import TaskContainer from "../../components/containers/TaskContainer";
 import CenterInfo from "../../components/small/CenterInfo";
 import { getTodayTasksFromId } from "../../serverapi/tasks";
-import { getUserFromJWT } from "../../utils";
+import { getUserFromJWT } from "../../utils/utils";
 
 interface TodayTasksPageProps {
 	tasks: TaskWithClass[];

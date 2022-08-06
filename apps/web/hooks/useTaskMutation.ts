@@ -10,7 +10,7 @@ import {
 	updateTask,
 } from "../clientapi/tasks";
 import { FocusContext } from "../contexts/FocusContext";
-import { getHumanDateString } from "../utils";
+import { getHumanDateString } from "../utils/utils";
 
 export default function useTaskMutation() {
 	const queryClient = useQueryClient();
@@ -105,7 +105,6 @@ export default function useTaskMutation() {
 						if (!oldData) {
 							return [];
 						}
-
 						return oldData.map((t) => {
 							if (t.id === state.id) {
 								return { ...t, complete: state.complete };

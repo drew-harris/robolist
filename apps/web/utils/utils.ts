@@ -1,7 +1,7 @@
+import { isSameDate } from "@mantine/dates";
+import tinygradient from "tinygradient";
 import { APIError, TaskWithClass, TDemoTask, UserWithoutPassword } from "types";
 import * as jwt from "jsonwebtoken";
-import tinygradient from "tinygradient";
-import { isSameDate } from "@mantine/dates";
 
 export function getUserFromJWT(
 	token: string | undefined
@@ -104,4 +104,10 @@ export const reduceDates = (arr: TaskWithClass[] | TDemoTask[]) => {
 	}
 
 	return dates;
+};
+
+export const secondToTimeDisplay = (seconds: number) => {
+	const minutes = Math.floor(seconds / 60);
+	const secondsLeft = seconds - minutes * 60;
+	return `${minutes}:${secondsLeft < 10 ? "0" : ""}${secondsLeft}`;
 };

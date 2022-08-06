@@ -9,8 +9,8 @@ import {
 	MediaQuery,
 	Navbar,
 	NavLink,
+	Space,
 	ThemeIcon,
-	UnstyledButton,
 	useMantineTheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -22,10 +22,12 @@ import {
 	Calendar,
 	Clock,
 	Command,
+	Hourglass,
 	List,
 	School,
 	Settings,
 } from "tabler-icons-react";
+import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import FocusModeDisplay from "../affixes/FocusModeDisplay";
 import { ColorSchemeToggle } from "../ColorSchemeToggle";
@@ -50,6 +52,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 	const router: NextRouter = useRouter();
 	const [opened, setOpened] = useState(false);
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
+	const { focusState } = useContext(FocusContext);
 
 	const { settings } = useContext(SettingsContext);
 	const theme = useMantineTheme();
@@ -58,6 +61,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		{ href: "/tasks/today", label: "Today", icon: <Clock /> },
 		{ href: "/tasks", label: "All Tasks", icon: <List /> },
 		{ href: "/calendar", label: "Calendar", icon: <Calendar /> },
+		{ href: "/focus", label: "Focus", icon: <Hourglass /> },
 	];
 	const classesGroup: SidebarLink[] = [
 		{ href: "/classes", label: "Classes", icon: <School /> },
@@ -165,8 +169,13 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 				},
 			})}
 		>
-			{settings.useFocusMode && <FocusModeDisplay />}
+			{settings.useFocusMode && !router.pathname.includes("/focus") && (
+				<FocusModeDisplay />
+			)}
 			{children}
+			{focusState.task && !router.pathname.includes("focus") && (
+				<Space w="xl" h={110} />
+			)}
 		</AppShell>
 	);
 }
