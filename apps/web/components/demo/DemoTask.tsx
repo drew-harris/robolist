@@ -22,7 +22,7 @@ export interface TaskOptionProps {
 	rescheduleButton?: boolean;
 	hideClassLabel?: boolean;
 	disableCheck?: boolean;
-	menu?: TaskMenuOptions;
+	menu?: TaskMenuOptions | null;
 }
 
 export interface TaskMenuOptions {
@@ -36,10 +36,7 @@ const DemoTask = ({
 	checkbox = false,
 	rescheduleButton = false,
 	hideClassLabel = false,
-	menu: menuOptions = {
-		delete: false,
-		edit: false,
-	},
+	menu = undefined,
 	workdayLabel = false,
 	...props
 }: TaskProps) => {
