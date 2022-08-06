@@ -1,7 +1,6 @@
 import {
 	ActionIcon,
 	Affix,
-	Box,
 	Group,
 	Paper,
 	Stack,
@@ -14,7 +13,8 @@ import { useHotkeys } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
 import { NavigationProgress } from "@mantine/nprogress";
 import Head from "next/head";
-import { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useContext } from "react";
 import { BsPlayFill } from "react-icons/bs";
 import { TbCheck, TbX } from "react-icons/tb";
 import { TiMediaPause } from "react-icons/ti";
@@ -32,6 +32,7 @@ export default function FocusModeDisplay() {
 	const { settings } = useContext(SettingsContext);
 	const modals = useModals();
 	const theme = useMantineTheme();
+	const router = useRouter();
 
 	useHotkeys([
 		[
@@ -44,6 +45,7 @@ export default function FocusModeDisplay() {
 
 	const { checkMutation } = useTaskMutation();
 
+	// COPIED TO BigFocusTimer.tsx
 	const cancelTask = () => {
 		modals.openConfirmModal({
 			title: "Cancel Task",
@@ -69,6 +71,7 @@ export default function FocusModeDisplay() {
 		});
 	};
 
+	// COPIED TO BigFocusTimer.tsx
 	const completeTask = () => {
 		if (!focusState.task || !focusState.task.workTime) {
 			return;
@@ -104,6 +107,7 @@ export default function FocusModeDisplay() {
 		});
 	};
 
+	// COPIED TO BigFocusTimer.tsx
 	const toggleWorking = () => {
 		if (focusState.working) {
 			focusFn.pause();
@@ -187,7 +191,7 @@ export default function FocusModeDisplay() {
 										</ActionIcon>
 									</Tooltip>
 									<Tooltip label="(Space)" openDelay={500}>
-										<ActionIcon onClick={toggleWorking}>
+										<ActionIcon onClick={() => router.replace("/focus")}>
 											<ArrowsMaximize size={iconSize - 6} />
 										</ActionIcon>
 									</Tooltip>

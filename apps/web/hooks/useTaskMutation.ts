@@ -105,7 +105,6 @@ export default function useTaskMutation() {
 						if (!oldData) {
 							return [];
 						}
-
 						return oldData.map((t) => {
 							if (t.id === state.id) {
 								return { ...t, complete: state.complete };

@@ -1,7 +1,9 @@
 import {
 	ActionIcon,
-	Box,
+	Button,
+	Divider,
 	Group,
+	Popover,
 	RingProgress,
 	Stack,
 	Text,
@@ -10,23 +12,16 @@ import {
 } from "@mantine/core";
 import { useMediaQuery, useViewportSize } from "@mantine/hooks";
 import { useContext, useEffect, useState } from "react";
-import { BsPause, BsPlayFill } from "react-icons/bs";
-import {
-	FaCheck,
-	FaCross,
-	FaPause,
-	FaPlay,
-	FaTrain,
-	FaXbox,
-} from "react-icons/fa";
-import { TbCheck, TbX } from "react-icons/tb";
-import { TiMediaPause } from "react-icons/ti";
+import { BsCheckLg, BsPlayFill } from "react-icons/bs";
+import { GiPauseButton } from "react-icons/gi";
+import { IoClose, IoAdd } from "react-icons/io5";
+import { HiPlus } from "react-icons/hi";
 import { FocusContext } from "../../../contexts/FocusContext";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
 import { secondToTimeDisplay } from "../../../utils/utils";
-
-const iconSize = 40;
+import { useModals } from "@mantine/modals";
+import { logEvent } from "../../../lib/ga";
 
 export default function BigFocusTimer() {
 	const { focusState, fn: focusFn } = useContext(FocusContext);
@@ -35,6 +30,7 @@ export default function BigFocusTimer() {
 	const { height, width } = useViewportSize();
 	const theme = useMantineTheme();
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
+	const modals = useModals();
 
 	const { checkMutation } = useTaskMutation();
 
@@ -46,38 +42,142 @@ export default function BigFocusTimer() {
 		}
 	}, [focusState]);
 
+	// COPIED FROM FocusModeDisplay.tsx
+	const cancelTask = () => {
+		modals.openConfirmModal({
+			title: "Cancel Task",
+			children: (
+				<Text size="sm">
+					Are you sure you want to stop working on this task?
+				</Text>
+			),
+			labels: {
+				confirm: "Stop",
+				cancel: "Keep Working",
+			},
+			confirmProps: {
+				color: "red",
+			},
+			onConfirm: () => {
+				focusFn.cancel();
+				logEvent("cancel_focus_task", {
+					category: "focus",
+					label: "focus_mode",
+				});
+			},
+		});
+	};
+
+	// COPIED FROM FocusModeDisplay.tsx
+	const completeTask = () => {
+		if (!focusState.task || !focusState.task.workTime) {
+			return;
+		}
+		modals.openConfirmModal({
+			title: "Complete Task",
+			children: (
+				<Text size="sm">
+					Are you sure you want to mark this task as complete?
+				</Text>
+			),
+			labels: {
+				confirm: "Complete",
+				cancel: "Cancel",
+			},
+			confirmProps: {
+				color: "green",
+			},
+			onConfirm: () => {
+				if (!focusState.task) {
+					return;
+				}
+				checkMutation.mutate({
+					complete: true,
+					id: focusState.task.id,
+					minutes: Math.floor(focusState.secondsElapsed / 60),
+				});
+				focusFn.cancel();
+				logEvent("complete_task", {
+					label: "focus_mode",
+				});
+			},
+		});
+	};
+
+	// COPIED FROM FocusModeDisplay.tsx
+	const toggleWorking = () => {
+		if (focusState.working) {
+			focusFn.pause();
+		} else {
+			focusFn.play();
+		}
+	};
+
+	const iconSize = isMobile ? 35 : 40;
+
 	const inside = (
 		<Stack align="center" spacing={0}>
-			<Text align="center" size={isMobile ? "md" : 20} weight="bold">
+			<Text
+				align="center"
+				size={isMobile ? "xl" : 20}
+				sx={{
+					maxWidth: width - width / 4,
+					textOverflow: "ellipsis",
+					overflow: "hidden",
+				}}
+				px="lg"
+				weight="bold"
+			>
 				{focusState.task?.title}
 			</Text>
-			<Text size={isMobile ? "md" : 20} align="center" weight={600}>
+			<Text size={isMobile ? "xl" : 20} align="center" weight={600}>
 				{secondToTimeDisplay(focusState.secondsElapsed)}
 			</Text>
-			<Group mt="xl" position="apart">
+			<Text
+				size={isMobile ? "sm" : "xs"}
+				align="center"
+				color="dimmed"
+				weight={600}
+			>
+				{secondToTimeDisplay((focusState.task?.workTime || 0) * 60)}
+			</Text>
+			<Group mt="lg" position="apart">
 				<Tooltip openDelay={300} label="Stop Working">
 					<ActionIcon size={iconSize}>
-						<TbX color={theme.colors.red[5]} size={iconSize} />
+						<IoClose
+							onClick={cancelTask}
+							color={theme.colors.red[5]}
+							size={iconSize}
+						/>
 					</ActionIcon>
 				</Tooltip>
 				<Tooltip openDelay={300} label="Mark as Done">
 					<ActionIcon
 						loading={checkMutation.isLoading}
 						size={iconSize}
-						// onClick={completeTask}
+						onClick={completeTask}
 					>
-						<FaCheck color={theme.colors.green[5]} size={iconSize - 9} />
+						<BsCheckLg color={theme.colors.green[5]} size={iconSize - 16} />
 					</ActionIcon>
 				</Tooltip>
 				<Tooltip label="(Space)" openDelay={500}>
-					<ActionIcon size={iconSize}>
+					<ActionIcon size={iconSize} onClick={toggleWorking}>
 						{focusState.working ? (
-							<FaPause size={iconSize - 19} />
+							<GiPauseButton size={iconSize - 14} />
 						) : (
-							<FaPlay size={iconSize} />
+							<BsPlayFill size={iconSize - 8} />
 						)}
 					</ActionIcon>
 				</Tooltip>
+				<Popover>
+					<Popover.Target>
+						<Tooltip label="Add 5 Minutes" openDelay={500}>
+							<ActionIcon onClick={() => focusFn.addTime(5)} size={iconSize}>
+								<HiPlus size={iconSize - 6} onClick={focusFn.pause} />
+							</ActionIcon>
+						</Tooltip>
+					</Popover.Target>
+				</Popover>
 			</Group>
 		</Stack>
 	);

@@ -13,7 +13,13 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
 import { useContext } from "react";
-import { AlertTriangle, Dots, Pencil, Trash } from "tabler-icons-react";
+import {
+	AlertTriangle,
+	Dots,
+	Pencil,
+	Rotate2,
+	Trash,
+} from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
@@ -33,7 +39,10 @@ export interface TaskOptionProps {
 	rescheduleButton?: boolean;
 	hideClassLabel?: boolean;
 	disableCheck?: boolean;
-	menu?: TaskMenuOptions;
+	inline?: boolean;
+	sx?: Sx;
+	menu?: TaskMenuOptions | null;
+	onTaskClick?: (task: TaskWithClass) => void;
 }
 
 export interface TaskMenuOptions {
@@ -47,11 +56,9 @@ const Task = ({
 	checkbox = false,
 	rescheduleButton = false,
 	hideClassLabel = false,
-	menu: menuOptions = {
-		delete: false,
-		edit: false,
-	},
+	menu: menuOptions = null,
 	workdayLabel = false,
+	onTaskClick = undefined,
 	...props
 }: TaskProps) => {
 	const { settings } = useContext(SettingsContext);
@@ -69,6 +76,12 @@ const Task = ({
 	const isLateWork =
 		task.dueDate && !task.complete && task.workDate < oneDayAgo;
 	const isOverdue = task.dueDate && !task.complete && task.dueDate < new Date();
+
+	const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
+		if (onTaskClick) {
+			onTaskClick(task);
+		}
+	};
 
 	const promptDelete = () => {
 		modals.openConfirmModal({
@@ -115,6 +128,7 @@ const Task = ({
 								complete: false,
 							});
 						}}
+						icon={<Rotate2 />}
 					>
 						Undo Complete
 					</Menu.Item>
@@ -135,6 +149,7 @@ const Task = ({
 
 	const paperSx: Sx = (theme) => {
 		let border: string | undefined;
+		let cursor: string | undefined;
 
 		if (isOverdue) {
 			border = `1px solid ${theme.colors.red[5]}`;
@@ -142,10 +157,16 @@ const Task = ({
 			border = `1px solid ${theme.colors.orange[5]}`;
 		}
 
+		if (onTaskClick) {
+			cursor = "pointer";
+		}
+
 		return {
 			opacity: task.complete ? 0.4 : 1,
 			transition: "opacity .20s linear, height 1.20s linear",
 			border,
+			cursor,
+			...props.sx,
 		};
 	};
 
@@ -177,9 +198,9 @@ const Task = ({
 		}
 	}
 
-	if (isMobile) {
+	if (isMobile && !props.inline) {
 		return (
-			<Paper withBorder p="md" shadow="xs" sx={paperSx}>
+			<Paper onClick={onClick} withBorder p="md" shadow="xs" sx={paperSx}>
 				<Stack>
 					<Group position="apart">
 						<Text weight="bolder" size="sm">
@@ -212,8 +233,8 @@ const Task = ({
 	}
 
 	return (
-		<Paper withBorder p="md" shadow="xs" sx={paperSx}>
-			<Group position="apart">
+		<Paper onClick={onClick} withBorder p="md" shadow="xs" sx={paperSx}>
+			<Group sx={{ width: "100%" }} position="apart">
 				<Group>
 					{checkbox && checkboxElement}
 					<Text weight="bolder" size="sm">

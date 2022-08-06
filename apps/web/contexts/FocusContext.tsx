@@ -2,6 +2,7 @@ import { useLocalStorage } from "@mantine/hooks";
 import { resetNavigationProgress } from "@mantine/nprogress";
 import { createContext, useEffect } from "react";
 import { FocusModeState, TaskWithClass } from "types";
+import useTaskMutation from "../hooks/useTaskMutation";
 
 const defaultContextState: FocusModeState = {
 	task: null,
@@ -18,6 +19,7 @@ export const FocusContext = createContext<{
 		pause: () => void;
 		play: () => void;
 		startTask: (task: TaskWithClass) => void;
+		addTime: (min: number) => void;
 	};
 }>({
 	focusState: defaultContextState,
@@ -28,10 +30,12 @@ export const FocusContext = createContext<{
 		pause: () => {},
 		play: () => {},
 		startTask: () => {},
+		addTime: (min: number) => {},
 	},
 });
 
 export default function FocusContextProvider({ children }: any) {
+	const { editMutation } = useTaskMutation();
 	const [focusState, setFocusState] = useLocalStorage<FocusModeState>({
 		key: "focusState",
 		serialize: (state) => JSON.stringify(state),
@@ -93,6 +97,19 @@ export default function FocusContextProvider({ children }: any) {
 			setFocusState({
 				...focusState,
 				working: true,
+			});
+		},
+
+		addTime: (min: number) => {
+			if (!focusState.task) {
+				return;
+			}
+			setFocusState({
+				...focusState,
+				task: {
+					...focusState.task,
+					workTime: focusState?.task?.workTime + min,
+				},
 			});
 		},
 
