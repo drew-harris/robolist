@@ -1,27 +1,23 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { SimpleGrid, Text, Title } from "@mantine/core";
+import { Center, Loader, SimpleGrid, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Class } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { getCookie } from "cookies-next";
-import { GetServerSidePropsResult, NextPageContext } from "next";
 import { getClasses } from "../../clientapi/classes";
 import ClassSquare from "../../components/data-display/ClassSquare";
 import CenterInfo from "../../components/small/CenterInfo";
-import { getClassesFromId } from "../../serverapi/classes";
-import { getUserFromJWT } from "../../utils/utils";
+import useInitialPrefetch from "../../hooks/useInitialPrefetch";
 
-interface ClassPageProps {
-	classes: Class[];
-}
-const ClassesPage = ({ classes: initialClasses }: ClassPageProps) => {
+const ClassesPage = () => {
 	const [parent] = useAutoAnimate<HTMLDivElement>();
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
-	const { data: classes, error } = useQuery<Class[], Error>(
-		["classes"],
-		getClasses,
-		{ initialData: initialClasses }
-	);
+	const {
+		data: classes,
+		error,
+		status,
+	} = useQuery<Class[], Error>(["classes"], getClasses);
+
+	useInitialPrefetch();
 
 	const classElements = classes
 		? classes.map((class_) => {
@@ -35,6 +31,11 @@ const ClassesPage = ({ classes: initialClasses }: ClassPageProps) => {
 				Classes
 			</Title>
 			{error && <CenterInfo color="red" text={error.message} />}
+			{status === "loading" && (
+				<Center>
+					<Loader />
+				</Center>
+			)}
 			{classes && classes.length == 0 && <CenterInfo text="No classes yet" />}
 			<SimpleGrid ref={parent} cols={isMobile ? 1 : 4}>
 				{classElements}
@@ -44,26 +45,3 @@ const ClassesPage = ({ classes: initialClasses }: ClassPageProps) => {
 };
 
 export default ClassesPage;
-
-export async function getServerSideProps(
-	context: NextPageContext
-): Promise<GetServerSidePropsResult<ClassPageProps>> {
-	const jwt = getCookie("jwt", context);
-	const user = getUserFromJWT(jwt?.toString());
-	if (!user) {
-		return {
-			redirect: {
-				destination: "/",
-				permanent: false,
-			},
-		};
-	}
-
-	const classes = await getClassesFromId(user.id);
-
-	return {
-		props: {
-			classes,
-		},
-	};
-}

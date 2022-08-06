@@ -1,8 +1,6 @@
 import { Center } from "@mantine/core";
-import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 import { TaskWithClass } from "types";
-import { getTodayTasks } from "../clientapi/tasks";
 import BigFocusTimer from "../components/data-display/focus/BigFocusTimer";
 import TodayTaskPicker from "../components/input/TodayTaskPicker";
 import { FocusContext } from "../contexts/FocusContext";

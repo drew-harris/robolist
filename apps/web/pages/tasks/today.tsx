@@ -1,32 +1,24 @@
-import { Center, Title } from "@mantine/core";
+import { Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { getCookie } from "cookies-next";
-import { GetServerSidePropsResult, NextPageContext } from "next";
 import { TaskWithClass } from "types";
 import { getTodayTasks } from "../../clientapi/tasks";
 import TaskContainer from "../../components/containers/TaskContainer";
 import CenterInfo from "../../components/small/CenterInfo";
-import { getTodayTasksFromId } from "../../serverapi/tasks";
-import { getUserFromJWT } from "../../utils/utils";
+import useInitialPrefetch from "../../hooks/useInitialPrefetch";
 
-interface TodayTasksPageProps {
-	tasks: TaskWithClass[];
-}
+interface TodayTasksPageProps {}
 
-export default function TodayTasksPage({
-	tasks: initialTasks,
-}: TodayTasksPageProps) {
+export default function TodayTasksPage({}: TodayTasksPageProps) {
 	const {
 		status,
 		data: tasks,
 		error,
 	} = useQuery<TaskWithClass[], Error>(
 		["tasks", { type: "today" }],
-		getTodayTasks,
-		{
-			initialData: initialTasks,
-		}
+		getTodayTasks
 	);
+
+	useInitialPrefetch();
 
 	return (
 		<>
@@ -34,12 +26,12 @@ export default function TodayTasksPage({
 				Today
 			</Title>
 			{error && <CenterInfo color="red" text={error.message} />}
-			{status != "loading" && tasks.length == 0 && (
+			{status != "loading" && tasks && tasks.length == 0 && (
 				<CenterInfo text="No tasks today" />
 			)}
 			<TaskContainer
 				loading={status == "loading"}
-				skeletonLength={3}
+				skeletonLength={2}
 				checkbox
 				menu={{ delete: true, edit: true }}
 				tasks={tasks}
@@ -48,22 +40,22 @@ export default function TodayTasksPage({
 	);
 }
 
-export async function getServerSideProps(
-	context: NextPageContext
-): Promise<GetServerSidePropsResult<TodayTasksPageProps>> {
-	const jwt = getCookie("jwt", context);
-	const user = getUserFromJWT(jwt?.toString());
-	if (!user) {
-		return {
-			redirect: {
-				destination: "/",
-				permanent: false,
-			},
-		};
-	}
+// export async function getServerSideProps(
+// 	context: NextPageContext
+// ): Promise<GetServerSidePropsResult<TodayTasksPageProps>> {
+// 	const jwt = getCookie("jwt", context);
+// 	const user = getUserFromJWT(jwt?.toString());
+// 	if (!user) {
+// 		return {
+// 			redirect: {
+// 				destination: "/",
+// 				permanent: false,
+// 			},
+// 		};
+// 	}
 
-	const tasks = await getTodayTasksFromId(user.id);
-	return {
-		props: { tasks }, // will be passed to the page component as props
-	};
-}
+// 	const tasks = await getTodayTasksFromId(user.id);
+// 	return {
+// 		props: { tasks }, // will be passed to the page component as props
+// 	};
+// }

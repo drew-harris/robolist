@@ -14,17 +14,13 @@ interface CalendarHeatmapDatePickerProps extends CalendarProps {
 }
 
 export default function CalendarHeatmapDatePicker({
-	initialAggregation,
 	onSelectDate,
 	selectedDate,
 	...props
 }: CalendarHeatmapDatePickerProps) {
 	const { data: agg } = useQuery<DateAggregation[], Error>(
-		["tasks", { type: "dates" }],
-		getDateAggregation,
-		{
-			initialData: initialAggregation,
-		}
+		["dates"],
+		getDateAggregation
 	);
 
 	const theme = useMantineTheme();

@@ -16,8 +16,6 @@ type TaskContainerProps = TaskOptionProps & {
 	demo?: boolean;
 };
 
-const defaultTaskOptions: TaskOptionProps = {};
-
 export default function TaskAgendaContainer({
 	tasks,
 	loading = false,
@@ -42,7 +40,7 @@ export default function TaskAgendaContainer({
 
 	if (loading || !tasks) {
 		return (
-			<Stack spacing="sm" ref={disableAnimation ? null : parent}>
+			<Stack spacing="sm">
 				{[...Array(skeletonLength)].map((e, i) => (
 					<TaskSkeleton key={i} {...props} />
 				))}
