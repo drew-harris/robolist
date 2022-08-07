@@ -15,6 +15,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import FocusTabTitle from "../components/data-display/focus/FocusTabTitle";
 import LayoutShell from "../components/layout/LayoutShell";
 import SpotlightMenu from "../components/layout/SpotlightMenu";
 import FocusContextProvider from "../contexts/FocusContext";
@@ -119,6 +120,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 											{/* <NavigationProgress size={2} stepInterval={10} /> */}
 											{/* <RouterTransition /> */}
 											<LayoutShell>
+												<FocusTabTitle />
 												<Component {...pageProps} />
 											</LayoutShell>
 										</SpotlightMenu>

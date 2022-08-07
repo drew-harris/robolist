@@ -7,7 +7,7 @@ import {
 	Tooltip,
 	useMantineTheme
 } from "@mantine/core";
-import { useMediaQuery, useViewportSize } from "@mantine/hooks";
+import { useHotkeys, useMediaQuery, useViewportSize } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
 import { useContext, useEffect, useState } from "react";
 import { BsCheckLg, BsPlayFill } from "react-icons/bs";
@@ -38,6 +38,15 @@ export default function BigFocusTimer() {
 			setPercent(percent);
 		}
 	}, [focusState]);
+
+	useHotkeys([
+		[
+			"space",
+			() => {
+				toggleWorking();
+			},
+		],
+	]);
 
 	// COPIED FROM FocusModeDisplay.tsx
 	const cancelTask = () => {
