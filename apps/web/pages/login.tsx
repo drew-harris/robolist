@@ -41,15 +41,13 @@ const Login = () => {
 			body: JSON.stringify(form.values),
 		});
 
+		const data: APIRegisterResponse = await response.json();
 		if (response.ok) {
-			const data = await response.json();
 			logEvent("login", {
 				category: "user",
 			});
 			router.replace("/tasks");
-			console.log(data);
 		} else {
-			const data: APIRegisterResponse = await response.json();
 			setError(data.error?.message || "Unknown error");
 			setLoading(false);
 		}

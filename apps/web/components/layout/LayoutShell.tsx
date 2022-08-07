@@ -11,7 +11,7 @@ import {
 	NavLink,
 	Space,
 	ThemeIcon,
-	useMantineTheme,
+	useMantineTheme
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { openSpotlight } from "@mantine/spotlight";
@@ -25,7 +25,7 @@ import {
 	Hourglass,
 	List,
 	School,
-	Settings,
+	Settings
 } from "tabler-icons-react";
 import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
@@ -67,7 +67,6 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		{ href: "/classes", label: "Classes", icon: <School /> },
 		{ href: "/settings", label: "Settings", icon: <Settings /> },
 	];
-	const otherGroup: SidebarLink[] = [];
 
 	const showUserLinks =
 		router.pathname === "/" ||
@@ -75,6 +74,8 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		router.pathname === "/signup" ||
 		router.pathname === "/closed";
 
+
+	// Conponent
 	function SidebarGroup({ links }: SidebarGroupProps) {
 		const elements = links.map((link) => {
 			return (
@@ -96,7 +97,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		return <Navbar.Section p={theme.spacing.sm}>{elements}</Navbar.Section>;
 	}
 
-	const headerContent = (
+	const topBarContent = (
 		<Group
 			sx={(theme) => ({
 				paddingInline: theme.spacing.lg,
@@ -150,7 +151,6 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		>
 			<SidebarGroup links={tasksGroup} />
 			<SidebarGroup links={classesGroup} />
-			<SidebarGroup links={otherGroup} />
 		</Navbar>
 	);
 
@@ -159,7 +159,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			padding={router.pathname === "/" ? 0 : "md"}
 			navbar={showUserLinks ? undefined : navbarContent}
 			navbarOffsetBreakpoint="xs"
-			header={<Header height={60}>{headerContent}</Header>}
+			header={<Header height={60}>{topBarContent}</Header>}
 			styles={(theme: MantineTheme) => ({
 				main: {
 					backgroundColor:
@@ -172,7 +172,9 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			{settings.useFocusMode && !router.pathname.includes("/focus") && (
 				<FocusModeDisplay />
 			)}
+
 			{children}
+
 			{focusState.task && !router.pathname.includes("focus") && (
 				<Space w="xl" h={110} />
 			)}

@@ -1,20 +1,25 @@
 import { Class } from "@prisma/client";
+import { APIGetClassesResponse, APISuccessOrError } from "types";
 
 export async function getClasses(): Promise<Class[]> {
 	try {
 		const data = await fetch("/api/classes");
-		const json = await data.json();
+		const json: APIGetClassesResponse = await data.json();
 		if (json.error) {
 			console.error(json.error);
 			throw new Error(json.error.message);
 		}
-		return json.classes;
+		if (!!json.classes) {
+			return json.classes;
+		} else {
+			throw new Error("No classes found");
+		}
 	} catch (error: any) {
 		throw new Error(error.message);
 	}
 }
 
-export async function deleteClass(id: string) {
+export async function deleteClass(id: string): Promise<boolean> {
 	try {
 		const data = await fetch(`/api/classes/delete`, {
 			method: "POST",
@@ -23,12 +28,16 @@ export async function deleteClass(id: string) {
 			},
 			body: JSON.stringify({ id }),
 		});
-		const json = await data.json();
+		const json: APISuccessOrError = await data.json();
 		if (json.error) {
 			console.error(json.error);
 			throw new Error(json.error.message);
 		}
-		return json.success;
+		if (json.success) {
+			return json.success;
+		} else {
+			throw new Error("Could not get classes");
+		}
 	} catch (error: any) {
 		console.error(error.message);
 		throw new Error(error.message);

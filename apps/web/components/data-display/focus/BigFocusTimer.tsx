@@ -19,7 +19,7 @@ import { HiPlus } from "react-icons/hi";
 import { FocusContext } from "../../../contexts/FocusContext";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
-import { secondToTimeDisplay } from "../../../utils/utils";
+import { secondToTimeDisplay } from "../../../utils/client";
 import { useModals } from "@mantine/modals";
 import { logEvent } from "../../../lib/ga";
 

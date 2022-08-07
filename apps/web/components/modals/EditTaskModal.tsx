@@ -47,7 +47,7 @@ export default function EditTaskModal({
 				);
 			}
 		}
-	}, [form.values]);
+	}, [form, form.values]);
 
 	const submit = async (values: Partial<TaskWithClass>) => {
 		editMutation.mutate(values);

@@ -55,8 +55,8 @@ export default function SignUp() {
 			body: JSON.stringify(values),
 		});
 
+		const data: APIRegisterResponse = await response.json();
 		if (response.ok) {
-			const data = await response.json();
 			console.log(data.jwt);
 			logEvent("sign_up", {
 				category: "user",
@@ -64,7 +64,6 @@ export default function SignUp() {
 			});
 			router.replace("/tasks");
 		} else {
-			const data: APIRegisterResponse = await response.json();
 			setError(data.error?.message || "Unknown error");
 			setLoading(false);
 		}

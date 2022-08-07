@@ -77,7 +77,7 @@ export default function NewTaskModal() {
 				);
 			}
 		}
-	}, [form.values]);
+	}, [form, form.values]);
 
 	const submit = async (values: APINewTaskRequest) => {
 		setLoading(true);

@@ -23,7 +23,7 @@ import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import useTaskMutation from "../../hooks/useTaskMutation";
 import { logEvent } from "../../lib/ga";
-import { secondToTimeDisplay } from "../../utils/utils";
+import { secondToTimeDisplay } from "../../utils/client";
 
 const iconSize = 25;
 

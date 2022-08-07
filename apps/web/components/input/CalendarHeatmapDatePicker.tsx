@@ -5,7 +5,7 @@ import { ReactNode, useContext, useEffect, useState } from "react";
 import { DateAggregation } from "types";
 import { getDateAggregation } from "../../clientapi/dates";
 import { SettingsContext } from "../../contexts/SettingsContext";
-import { dateIsToday, getHeatmapColor } from "../../utils/utils";
+import { dateIsToday, getHeatmapColor } from "../../utils/client";
 
 interface CalendarHeatmapDatePickerProps extends CalendarProps {
 	initialAggregation?: DateAggregation[];
@@ -90,7 +90,7 @@ export default function CalendarHeatmapDatePicker({
 		return style;
 	};
 
-	const getHoursForDay = (date: Date): number | null => {
+	const getMinutesForDay = (date: Date): number | null => {
 		if (!agg) {
 			return null;
 		}
@@ -103,7 +103,7 @@ export default function CalendarHeatmapDatePicker({
 	};
 
 	const getRenderDate = (date: Date): ReactNode => {
-		const hours = getHoursForDay(date);
+		const hours = getMinutesForDay(date);
 		const isToday = dateIsToday(date);
 		return (
 			<Tooltip

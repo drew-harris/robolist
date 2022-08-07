@@ -9,8 +9,7 @@ import {
 	Moon2,
 	Plus,
 	School,
-	Settings,
-	TestPipe,
+	Settings
 } from "tabler-icons-react";
 import NewClassModal from "../modals/NewClassModal";
 import NewTaskModal from "../modals/NewTaskModal";
@@ -67,7 +66,7 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
 			},
 		},
 		{
-			title: "Open Settings",
+			title: "Settings",
 			icon: <Settings />,
 			id: "settings",
 			onTrigger: () => {

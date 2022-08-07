@@ -43,7 +43,6 @@ const DemoTask = ({
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
 
 	const paperSx: Sx = (theme) => {
-		let border: string | undefined;
 
 		return {
 			opacity: task.complete ? 0.4 : 1,

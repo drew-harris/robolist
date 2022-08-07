@@ -18,7 +18,7 @@ import { Settings } from "types";
 import ThemeColorSelector from "../components/input/ThemeColorSelector";
 import { SettingsContext } from "../contexts/SettingsContext";
 import { logEvent } from "../lib/ga";
-import { getUserFromJWT } from "../utils/utils";
+import { getUserFromJWT } from "../utils/server";
 
 export default function SettingsPage() {
 	const { settings, setSettings } = useContext(SettingsContext);
@@ -31,7 +31,7 @@ export default function SettingsPage() {
 
 	useEffect(() => {
 		setSettings(form.values);
-	}, [form]);
+	}, [form, setSettings]);
 
 	const stackSx: Sx = (theme) => ({
 		marginTop: theme.spacing.md,

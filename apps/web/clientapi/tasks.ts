@@ -1,5 +1,4 @@
-import { TaskWithClass } from "types";
-import superjson from "superjson";
+import { APISuccessOrError, APITaskOrError, APITasksOrError, TaskWithClass } from "types";
 
 export async function getTasks(): Promise<TaskWithClass[]> {
 	try {
@@ -25,10 +24,10 @@ export async function getTodayTasks(): Promise<TaskWithClass[]> {
 	try {
 		const data = await fetch("/api/tasks/today");
 		// Parse with superjson
-		const json = await data.json();
-		if (json.error) {
+		const json: APITasksOrError = await data.json();
+		if (json.error || !json.tasks) {
 			console.error(json.error);
-			throw new Error(json.error.message);
+			throw new Error(json?.error?.message || "Could not get tasks");
 		}
 		return json.tasks.map((task: any) => {
 			// Fix dates
@@ -59,10 +58,13 @@ export async function markTaskStatus(
 			}),
 		});
 		// Parse with superjson
-		const json = await data.json();
+		const json: APITaskOrError = await data.json();
 		if (json.error) {
 			console.error(json.error);
 			throw new Error(json.error.message);
+		}
+		if (!json.task) {
+			throw new Error("Could not get task");
 		}
 		// Fix dates
 		json.task.dueDate = new Date(json.task.dueDate);
@@ -85,7 +87,7 @@ export async function deleteTask(id: string) {
 			}),
 		});
 		// Parse with superjson
-		const json = await data.json();
+		const json: APISuccessOrError = await data.json();
 		if (json.error) {
 			console.error(json.error);
 			throw new Error(json.error.message);

@@ -1,9 +1,7 @@
-import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useModals } from "@mantine/modals";
 import { Class } from "@prisma/client";
-import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import useClassMutation from "../../hooks/useClassMutation";
 import ThemeColorSelector from "../input/ThemeColorSelector";
 

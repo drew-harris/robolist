@@ -5,11 +5,12 @@ import { log, withAxiom } from "next-axiom";
 import {
 	APICreateTaskResponse,
 	APINewTaskRequest,
+	APITasksOrError,
 	UserWithoutPassword,
 } from "types";
 import { getPrismaPool } from "../../../serverapi/prismapool";
 import { getTasksFromUserId } from "../../../serverapi/tasks";
-import { getUserFromJWT, unauthorizedResponse } from "../../../utils/utils";
+import { getUserFromJWT, unauthorizedResponse } from "../../../utils/server";
 
 async function createTask(
 	req: NextApiRequest,
@@ -29,10 +30,10 @@ async function createTask(
 
 		const classDoc = data.classId
 			? {
-					connect: {
-						id: data.classId,
-					},
-			  }
+				connect: {
+					id: data.classId,
+				},
+			}
 			: undefined;
 
 		const doc: Prisma.TaskCreateInput = {
@@ -67,7 +68,7 @@ async function createTask(
 
 async function getTasks(
 	req: NextApiRequest,
-	res: NextApiResponse,
+	res: NextApiResponse<APITasksOrError>,
 	user: UserWithoutPassword
 ) {
 	try {

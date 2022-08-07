@@ -2,14 +2,13 @@ import { Prisma } from "@prisma/client";
 import { getCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
 import { log, withAxiom } from "next-axiom";
-import { APICompleteRequest, TaskWithClass } from "types";
-import { logEvent } from "../../../lib/ga";
+import { APICompleteRequest, APITaskOrError, TaskWithClass } from "types";
 import { getPrismaPool } from "../../../serverapi/prismapool";
-import { getUserFromJWT, unauthorizedResponse } from "../../../utils/utils";
+import { getUserFromJWT, unauthorizedResponse } from "../../../utils/server";
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse<APITaskOrError>) {
 	if (req?.method != "POST") {
-		return res.status(405).json({ error: "Method not allowed" });
+		return res.status(405).json({ error: { message: "Method not allowed" } });
 	}
 	const jwt = getCookie("jwt", { req, res });
 	const user = getUserFromJWT(jwt?.toString());

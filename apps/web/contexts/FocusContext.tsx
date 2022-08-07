@@ -23,14 +23,14 @@ export const FocusContext = createContext<{
 	};
 }>({
 	focusState: defaultContextState,
-	setFocusState: () => {},
+	setFocusState: () => { },
 	fn: {
-		start: () => {},
-		cancel: () => {},
-		pause: () => {},
-		play: () => {},
-		startTask: () => {},
-		addTime: (min: number) => {},
+		start: () => { },
+		cancel: () => { },
+		pause: () => { },
+		play: () => { },
+		startTask: () => { },
+		addTime: () => { },
 	},
 });
 
@@ -65,7 +65,7 @@ export default function FocusContextProvider({ children }: any) {
 		return () => {
 			clearInterval(code);
 		};
-	}, []);
+	}, [setFocusState]);
 
 	const fn = {
 		start: () => {
@@ -120,7 +120,6 @@ export default function FocusContextProvider({ children }: any) {
 				secondsElapsed: 0,
 				working: true,
 			});
-			resetNavigationProgress();
 		},
 	};
 

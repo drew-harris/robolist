@@ -1,34 +1,7 @@
 import { isSameDate } from "@mantine/dates";
+import { IoTodayOutline } from "react-icons/io5";
 import tinygradient from "tinygradient";
-import { APIError, TaskWithClass, TDemoTask, UserWithoutPassword } from "types";
-import * as jwt from "jsonwebtoken";
-
-export function getUserFromJWT(
-	token: string | undefined
-): UserWithoutPassword | null {
-	try {
-		const secret = process.env.JWT_SECRET;
-
-		if (!token || !secret) {
-			return null;
-		}
-
-		const payload = jwt.verify(token, secret) as jwt.JwtPayload;
-
-		return {
-			email: payload.email,
-			id: payload.id,
-		};
-	} catch (error) {
-		return null;
-	}
-}
-
-export const unauthorizedResponse = {
-	error: {
-		message: "Unauthorized",
-	} as APIError,
-};
+import { TaskWithClass, TDemoTask } from "types";
 
 export function getHeatmapColor(index: number) {
 	if (index < 0 || index > 1) {
@@ -39,13 +12,17 @@ export function getHeatmapColor(index: number) {
 	return "#" + colorhsv.toHex();
 }
 
+export function thisMorning() {
+	const now = new Date();
+	now.setHours(0, 0, 0, 0);
+	return now;
+}
+
 export function dateIsToday(date: Date): boolean {
 	const today = new Date();
 	try {
 		return (
-			date.getDate() === today.getDate() &&
-			date.getMonth() === today.getMonth() &&
-			date.getFullYear() === today.getFullYear()
+			isSameDate(date, today)
 		);
 	} catch (error) {
 		return false;

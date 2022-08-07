@@ -56,7 +56,7 @@ export default function DemoNewTask() {
 				);
 			}
 		}
-	}, [form.values]);
+	}, [form, form.values]);
 
 	const datePickerProps: DatePickerProps = {
 		minDate: new Date(),
