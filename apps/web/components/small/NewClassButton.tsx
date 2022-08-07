@@ -14,5 +14,5 @@ export default function NewClassButton({ ...props }: NewClassButtonProps) {
       size: "auto",
     });
   }
-  return <Button {...props} onClick={openNewClassModal} variant={props.variant || "subtle"}>New Class</Button>
+  return <Button id="newclassbutton" {...props} onClick={openNewClassModal} variant={props.variant || "subtle"}>New Class</Button>
 }
