@@ -77,7 +77,10 @@ export default function NewTaskModal() {
 				);
 			}
 		}
-	}, [form, form.values]);
+		// Since form.errors updates after form.values, we cant watch form 
+		// without causing an infinite loop
+		// eslint-disable-next-line
+	}, [form.values]);
 
 	const submit = async (values: APINewTaskRequest) => {
 		setLoading(true);
