@@ -1,12 +1,12 @@
-import { Group, Space, Stack, Title, Text, Box } from "@mantine/core";
-import { TaskWithClass, TDemoTask } from "types";
-import Task, { TaskOptionProps } from "../data-display/Task";
-import TaskSkeleton from "../skeletons/TaskSkeleton";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import React, { useContext, useMemo } from "react";
-import { getHumanDateString, reduceDates } from "../../utils/utils";
+import { Box, Divider, Group, Space, Stack, Text, Title } from "@mantine/core";
+import { useContext, useMemo } from "react";
+import { TaskWithClass, TDemoTask } from "types";
 import { SettingsContext } from "../../contexts/SettingsContext";
+import { getHumanDateString, reduceDates, thisMorning } from "../../utils/client";
+import Task, { TaskOptionProps } from "../data-display/Task";
 import DemoTask from "../demo/DemoTask";
+import TaskSkeleton from "../skeletons/TaskSkeleton";
 
 type TaskContainerProps = TaskOptionProps & {
 	tasks: TaskWithClass[] | undefined | TDemoTask[];
@@ -49,7 +49,12 @@ export default function TaskAgendaContainer({
 	}
 
 	const elements: JSX.Element[] = [];
+	let addedDivider = false;
 	groups.forEach((group) => {
+		if (group[0].workDate >= thisMorning() && !addedDivider) {
+			elements.push(<Divider id="divider" my="md" />)
+			addedDivider = true;
+		}
 		elements.push(
 			<Group id={getHumanDateString(group[0].workDate)}>
 				<Title order={4}>{getHumanDateString(group[0].workDate)}</Title>
@@ -68,7 +73,7 @@ export default function TaskAgendaContainer({
 		});
 
 		elements.push(
-			<Box id={getHumanDateString(group[0].workDate) + "-separator"} />
+			<Space />
 		);
 	});
 

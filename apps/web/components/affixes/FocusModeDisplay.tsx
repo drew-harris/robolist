@@ -23,7 +23,7 @@ import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import useTaskMutation from "../../hooks/useTaskMutation";
 import { logEvent } from "../../lib/ga";
-import { secondToTimeDisplay } from "../../utils/utils";
+import { secondToTimeDisplay } from "../../utils/client";
 
 const iconSize = 25;
 
@@ -121,86 +121,72 @@ export default function FocusModeDisplay() {
 	}
 
 	return (
-		<>
-			{focusState.working && focusState.task && (
-				<Head>
-					<title>
-						{secondToTimeDisplay(focusState.secondsElapsed) +
-							" • " +
-							focusState?.task?.title}
-					</title>
-				</Head>
-			)}
+		<Affix zIndex={3} position={{ bottom: 20, right: 20 }}>
+			<Transition
+				transition="slide-up"
+				duration={300}
+				mounted={!!focusState.task && settings.useFocusMode}
+			>
+				{(styles) => (
+					<Paper
+						p="md"
+						withBorder
+						style={styles}
+						radius="md"
+						sx={(theme) => ({
+							backgroundColor:
+								theme.colorScheme === "dark"
+									? theme.colors.dark[6]
+									: theme.colors.white,
+						})}
+						shadow="md"
+					>
+						<Stack>
+							<Group position="center">
+								<Text color={theme.primaryColor} size="lg" weight="bold">
+									{secondToTimeDisplay(focusState.secondsElapsed)}
+								</Text>
 
-			<NavigationProgress />
-
-			<Affix zIndex={3} position={{ bottom: 20, right: 20 }}>
-				<Transition
-					transition="slide-up"
-					duration={300}
-					mounted={!!focusState.task && settings.useFocusMode}
-				>
-					{(styles) => (
-						<Paper
-							p="md"
-							withBorder
-							style={styles}
-							radius="md"
-							sx={(theme) => ({
-								backgroundColor:
-									theme.colorScheme === "dark"
-										? theme.colors.dark[6]
-										: theme.colors.white,
-							})}
-							shadow="md"
-						>
-							<Stack>
-								<Group position="center">
-									<Text color={theme.primaryColor} size="lg" weight="bold">
-										{secondToTimeDisplay(focusState.secondsElapsed)}
+								{!!focusState.task && (
+									<Text size="sm" weight={600}>
+										{focusState.task.title}
 									</Text>
-
-									{!!focusState.task && (
-										<Text size="sm" weight={600}>
-											{focusState.task.title}
-										</Text>
-									)}
-								</Group>
-								<Group position="apart">
-									<Tooltip openDelay={300} label="Stop Working">
-										<ActionIcon onClick={cancelTask} size={iconSize}>
-											<TbX color={theme.colors.red[5]} size={iconSize} />
-										</ActionIcon>
-									</Tooltip>
-									<Tooltip openDelay={300} label="Mark as Done">
-										<ActionIcon
-											loading={checkMutation.isLoading}
-											size={iconSize}
-											onClick={completeTask}
-										>
-											<TbCheck color={theme.colors.green[5]} size={iconSize} />
-										</ActionIcon>
-									</Tooltip>
-									<Tooltip label="(Space)" openDelay={500}>
-										<ActionIcon onClick={toggleWorking}>
-											{focusState.working ? (
-												<TiMediaPause size={iconSize} />
-											) : (
-												<BsPlayFill size={iconSize} />
-											)}
-										</ActionIcon>
-									</Tooltip>
-									<Tooltip label="(Space)" openDelay={500}>
-										<ActionIcon onClick={() => router.replace("/focus")}>
-											<ArrowsMaximize size={iconSize - 6} />
-										</ActionIcon>
-									</Tooltip>
-								</Group>
-							</Stack>
-						</Paper>
-					)}
-				</Transition>
-			</Affix>
-		</>
+								)}
+							</Group>
+							<Group position="apart">
+								<Tooltip openDelay={300} label="Stop Working">
+									<ActionIcon onClick={cancelTask} size={iconSize}>
+										<TbX color={theme.colors.red[5]} size={iconSize} />
+									</ActionIcon>
+								</Tooltip>
+								<Tooltip openDelay={300} label="Mark as Done">
+									<ActionIcon
+										loading={checkMutation.isLoading}
+										size={iconSize}
+										onClick={completeTask}
+									>
+										<TbCheck color={theme.colors.green[5]} size={iconSize} />
+									</ActionIcon>
+								</Tooltip>
+								<Tooltip label="(Space)" openDelay={500}>
+									<ActionIcon onClick={toggleWorking}>
+										{focusState.working ? (
+											<TiMediaPause size={iconSize} />
+										) : (
+											<BsPlayFill size={iconSize} />
+										)}
+									</ActionIcon>
+								</Tooltip>
+								<Tooltip label="(Space)" openDelay={500}>
+									<ActionIcon onClick={() => router.replace("/focus")}>
+										<ArrowsMaximize size={iconSize - 6} />
+									</ActionIcon>
+								</Tooltip>
+							</Group>
+						</Stack>
+					</Paper>
+				)}
+			</Transition>
+		</Affix>
 	);
 }

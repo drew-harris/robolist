@@ -2,8 +2,10 @@ import { ActionIcon, Loader, Tooltip, Text } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import { useContext } from "react";
 
-import { BsCheck } from "react-icons/bs";
+import { BsCheck, BsHourglassTop } from "react-icons/bs";
 import { FaStopwatch } from "react-icons/fa";
+import { TbHourglassHigh } from "react-icons/tb";
+import { HourglassHigh } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { FocusContext } from "../../../contexts/FocusContext";
 import { logEvent } from "../../../lib/ga";
@@ -58,7 +60,7 @@ export default function TaskPlayButton({ task }: TaskPlayButtonProps) {
 			) : (
 				<Tooltip label="Start working" openDelay={200}>
 					<ActionIcon onClick={startTask} size={iconSize}>
-						<FaStopwatch size={iconSize} />
+						<TbHourglassHigh size={iconSize} />
 					</ActionIcon>
 				</Tooltip>
 			)}

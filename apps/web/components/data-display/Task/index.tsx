@@ -23,7 +23,7 @@ import {
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
-import { getHumanDateString } from "../../../utils/utils";
+import { getHumanDateString } from "../../../utils/client";
 import EditTaskModal from "../../modals/EditTaskModal";
 import RescheduleButton from "./RescheduleButton";
 import TaskCheckbox from "./TaskCheckbox";

@@ -2,11 +2,10 @@ import {
 	ColorScheme,
 	ColorSchemeProvider,
 	MantineProvider,
-	MantineThemeOverride,
+	MantineThemeOverride
 } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 import { NotificationsProvider } from "@mantine/notifications";
-import { NavigationProgress } from "@mantine/nprogress";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { getCookie, setCookie } from "cookies-next";
@@ -16,7 +15,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import Script from "next/script";
 import { useEffect, useState } from "react";
-import { RouterTransition } from "../components/affixes/RouterNavigation";
+import FocusTabTitle from "../components/data-display/focus/FocusTabTitle";
 import LayoutShell from "../components/layout/LayoutShell";
 import SpotlightMenu from "../components/layout/SpotlightMenu";
 import FocusContextProvider from "../contexts/FocusContext";
@@ -121,6 +120,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 											{/* <NavigationProgress size={2} stepInterval={10} /> */}
 											{/* <RouterTransition /> */}
 											<LayoutShell>
+												<FocusTabTitle />
 												<Component {...pageProps} />
 											</LayoutShell>
 										</SpotlightMenu>

@@ -11,7 +11,7 @@ import {
 } from "types";
 import { getClassesFromId } from "../../../serverapi/classes";
 import { getPrismaPool } from "../../../serverapi/prismapool";
-import { getUserFromJWT, unauthorizedResponse } from "../../../utils/utils";
+import { getUserFromJWT, unauthorizedResponse } from "../../../utils/server";
 
 async function createClass(
 	req: NextApiRequest,

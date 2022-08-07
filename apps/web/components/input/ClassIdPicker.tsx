@@ -19,11 +19,11 @@ export default function ClassIdPicker(props: IdPickerProps) {
 
 	const classLabels = classes
 		? classes.map((c) => {
-				return {
-					label: c.name,
-					value: c.id,
-				};
-		  })
+			return {
+				label: c.name,
+				value: c.id,
+			};
+		})
 		: [];
 
 	return (
@@ -33,7 +33,7 @@ export default function ClassIdPicker(props: IdPickerProps) {
 			icon={status === "loading" ? <Loader size={18} /> : <School size={18} />}
 			data={classLabels}
 			disabled={!classes || classes.length === 0}
-			placeholder="No Class Selected"
+			placeholder={classes && classes.length === 0 ? "No Classes" : "Select Class"}
 			clearable={true}
 		></Select>
 	);

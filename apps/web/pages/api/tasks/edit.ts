@@ -2,14 +2,14 @@ import { Prisma } from "@prisma/client";
 import { getCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
 import { log, withAxiom } from "next-axiom";
-import { APITaskResponse, TaskWithClass } from "types";
+import { APITaskOrError, TaskWithClass } from "types";
 import { getPrismaPool } from "../../../serverapi/prismapool";
 
-import { getUserFromJWT, unauthorizedResponse } from "../../../utils/utils";
+import { getUserFromJWT, unauthorizedResponse } from "../../../utils/server";
 
 async function handler(
 	req: NextApiRequest,
-	res: NextApiResponse<APITaskResponse>
+	res: NextApiResponse<APITaskOrError>
 ) {
 	if (req?.method != "POST") {
 		return res.status(405).json({ error: { message: "Method not allowed" } });
@@ -31,10 +31,10 @@ async function handler(
 	try {
 		const classDoc = doc.classId
 			? {
-					connect: {
-						id: doc.classId,
-					},
-			  }
+				connect: {
+					id: doc.classId,
+				},
+			}
 			: { disconnect: true };
 		const prisma = getPrismaPool();
 		const updatedTask = await prisma.task.update({

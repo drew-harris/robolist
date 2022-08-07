@@ -1,15 +1,15 @@
 import { Box, Container, Title } from "@mantine/core";
 import { useContext, useState } from "react";
-import { DateAggregation } from "types";
 import DateTaskContainer from "../../components/containers/DateTaskContainer";
 import CalendarHeatmapDatePicker from "../../components/input/CalendarHeatmapDatePicker";
 import CenterInfo from "../../components/small/CenterInfo";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import useInitialPrefetch from "../../hooks/useInitialPrefetch";
+import { thisMorning } from "../../utils/client";
 
 export default function CalendarPage() {
 	const { settings } = useContext(SettingsContext);
-	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+	const [selectedDate, setSelectedDate] = useState<Date | null>(thisMorning());
 	useInitialPrefetch();
 	return (
 		<Box

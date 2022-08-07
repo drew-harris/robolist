@@ -1,12 +1,11 @@
-import { Tooltip, useMantineTheme, Text, Box } from "@mantine/core";
+import { Box, Text, Tooltip, useMantineTheme } from "@mantine/core";
 import { DatePicker, DayModifiers } from "@mantine/dates";
 import { useQuery } from "@tanstack/react-query";
 import { ReactNode, useContext, useEffect, useState } from "react";
-import { Settings } from "tabler-icons-react";
 import { DateAggregation } from "types";
 import { getDateAggregation } from "../../clientapi/dates";
 import { SettingsContext } from "../../contexts/SettingsContext";
-import { dateIsToday, getHeatmapColor } from "../../utils/utils";
+import { dateIsToday, getHeatmapColor } from "../../utils/client";
 
 const label = (
 	<Tooltip label="Shows which days are busiest. More Red = More Busy">
@@ -87,7 +86,7 @@ export default function HeatmapDatePicker(props: any) {
 		return style;
 	};
 
-	const getHoursForDay = (date: Date): number | null => {
+	const getMinutesForDay = (date: Date): number | null => {
 		if (!agg) {
 			return null;
 		}
@@ -100,7 +99,7 @@ export default function HeatmapDatePicker(props: any) {
 	};
 
 	const getRenderDate = (date: Date): ReactNode => {
-		const hours = getHoursForDay(date);
+		const hours = getMinutesForDay(date);
 		const isToday = dateIsToday(date);
 		return (
 			<Tooltip

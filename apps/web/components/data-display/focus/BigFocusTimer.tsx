@@ -1,27 +1,24 @@
 import {
-	ActionIcon,
-	Button,
-	Divider,
-	Group,
+	ActionIcon, Group,
 	Popover,
 	RingProgress,
 	Stack,
 	Text,
 	Tooltip,
-	useMantineTheme,
+	useMantineTheme
 } from "@mantine/core";
-import { useMediaQuery, useViewportSize } from "@mantine/hooks";
+import { useHotkeys, useMediaQuery, useViewportSize } from "@mantine/hooks";
+import { useModals } from "@mantine/modals";
 import { useContext, useEffect, useState } from "react";
 import { BsCheckLg, BsPlayFill } from "react-icons/bs";
 import { GiPauseButton } from "react-icons/gi";
-import { IoClose, IoAdd } from "react-icons/io5";
 import { HiPlus } from "react-icons/hi";
+import { IoClose } from "react-icons/io5";
 import { FocusContext } from "../../../contexts/FocusContext";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
-import { secondToTimeDisplay } from "../../../utils/utils";
-import { useModals } from "@mantine/modals";
 import { logEvent } from "../../../lib/ga";
+import { secondToTimeDisplay } from "../../../utils/client";
 
 export default function BigFocusTimer() {
 	const { focusState, fn: focusFn } = useContext(FocusContext);
@@ -41,6 +38,15 @@ export default function BigFocusTimer() {
 			setPercent(percent);
 		}
 	}, [focusState]);
+
+	useHotkeys([
+		[
+			"space",
+			() => {
+				toggleWorking();
+			},
+		],
+	]);
 
 	// COPIED FROM FocusModeDisplay.tsx
 	const cancelTask = () => {
@@ -142,42 +148,44 @@ export default function BigFocusTimer() {
 				{secondToTimeDisplay((focusState.task?.workTime || 0) * 60)}
 			</Text>
 			<Group mt="lg" position="apart">
-				<Tooltip openDelay={300} label="Stop Working">
-					<ActionIcon size={iconSize}>
-						<IoClose
-							onClick={cancelTask}
-							color={theme.colors.red[5]}
+				<Tooltip.Group openDelay={600} closeDelay={100}>
+					<Tooltip label="Stop Working">
+						<ActionIcon size={iconSize}>
+							<IoClose
+								onClick={cancelTask}
+								color={theme.colors.red[5]}
+								size={iconSize}
+							/>
+						</ActionIcon>
+					</Tooltip>
+					<Tooltip label="Mark as Done">
+						<ActionIcon
+							loading={checkMutation.isLoading}
 							size={iconSize}
-						/>
-					</ActionIcon>
-				</Tooltip>
-				<Tooltip openDelay={300} label="Mark as Done">
-					<ActionIcon
-						loading={checkMutation.isLoading}
-						size={iconSize}
-						onClick={completeTask}
-					>
-						<BsCheckLg color={theme.colors.green[5]} size={iconSize - 16} />
-					</ActionIcon>
-				</Tooltip>
-				<Tooltip label="(Space)" openDelay={500}>
-					<ActionIcon size={iconSize} onClick={toggleWorking}>
-						{focusState.working ? (
-							<GiPauseButton size={iconSize - 14} />
-						) : (
-							<BsPlayFill size={iconSize - 8} />
-						)}
-					</ActionIcon>
-				</Tooltip>
-				<Popover>
-					<Popover.Target>
-						<Tooltip label="Add 5 Minutes" openDelay={500}>
-							<ActionIcon onClick={() => focusFn.addTime(5)} size={iconSize}>
-								<HiPlus size={iconSize - 6} onClick={focusFn.pause} />
-							</ActionIcon>
-						</Tooltip>
-					</Popover.Target>
-				</Popover>
+							onClick={completeTask}
+						>
+							<BsCheckLg color={theme.colors.green[5]} size={iconSize - 16} />
+						</ActionIcon>
+					</Tooltip>
+					<Tooltip label="Pause/Resume (Space)">
+						<ActionIcon size={iconSize} onClick={toggleWorking}>
+							{focusState.working ? (
+								<GiPauseButton size={iconSize - 14} />
+							) : (
+								<BsPlayFill size={iconSize - 8} />
+							)}
+						</ActionIcon>
+					</Tooltip>
+					<Popover>
+						<Popover.Target>
+							<Tooltip label="Add 5 Minutes" >
+								<ActionIcon onClick={() => focusFn.addTime(5)} size={iconSize}>
+									<HiPlus size={iconSize - 6} onClick={focusFn.pause} />
+								</ActionIcon>
+							</Tooltip>
+						</Popover.Target>
+					</Popover>
+				</Tooltip.Group>
 			</Group>
 		</Stack>
 	);

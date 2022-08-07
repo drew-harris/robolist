@@ -1,15 +1,21 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { log, withAxiom } from "next-axiom";
+import { APIError } from "types";
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+interface APIHelloWorldResponse {
+	error?: APIError;
+	message?: string;
+}
+
+async function handler(req: NextApiRequest, res: NextApiResponse<APIHelloWorldResponse>) {
 	log.info("Hello World called");
 	if (req?.method != "GET") {
-		return res.status(405).json({ error: "Method not allowed" });
+		return res.status(405).json({ error: { message: "Method not allowed" } });
 	}
 
 	// Begins here
 	return res.status(200).json({
-		message: "Robolist: The easiest way to get work done",
+		message: "Robolist: Take Control Of Your Assignments",
 	});
 }
 

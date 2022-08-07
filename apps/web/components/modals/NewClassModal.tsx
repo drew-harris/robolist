@@ -73,7 +73,7 @@ export default function NewClassModal() {
 					value={form.values.color}
 					onChange={handleColorChange}
 				/>
-				<Button type="submit" color={form.values.color} size="md">
+				<Button type="submit" id="newclassmodal-submitbutton" color={form.values.color} size="md">
 					Submit
 				</Button>
 			</Stack>

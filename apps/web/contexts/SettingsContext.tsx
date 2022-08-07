@@ -17,7 +17,7 @@ export const SettingsContext = createContext<{
 	setSettings: Dispatch<SetStateAction<Settings>>;
 }>({
 	settings: defaultSettings,
-	setSettings: () => {},
+	setSettings: () => { },
 });
 
 interface SettingsContextProviderProps {
@@ -45,7 +45,7 @@ export default function SettingsContextProvider({
 		if (settings.themeColor) {
 			onColorChange(settings.themeColor);
 		}
-	}, [settings.themeColor]);
+	}, [onColorChange, settings.themeColor]);
 
 	return (
 		<SettingsContext.Provider value={{ settings, setSettings }}>

@@ -85,7 +85,18 @@ export interface APIGetTasksResponse {
 	tasks?: TaskWithClass[];
 }
 
-export interface APITaskResponse {
+export interface APITaskOrError {
 	error?: APIError;
 	task?: TaskWithClass;
+}
+
+
+export interface APISuccessOrError {
+	error?: APIError;
+	success: boolean;
+}
+
+export interface APITasksOrError {
+	error?: APIError;
+	tasks?: TaskWithClass[];
 }

@@ -17,7 +17,7 @@ import { GetServerSidePropsResult, NextPageContext } from "next";
 import Link from "next/link";
 import DemoNewTask from "../components/demo/DemoNewTask";
 import DemoScheduleController from "../components/demo/DemoSchedule";
-import { getUserFromJWT } from "../utils/utils";
+import { getUserFromJWT } from "../utils/server";
 
 export default function Web() {
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
