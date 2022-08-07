@@ -2,18 +2,22 @@ import {
 	ActionIcon,
 	Anchor,
 	AppShell,
+	BackgroundImage,
+	Box,
 	Burger,
 	Group,
 	Header,
+	Kbd,
 	MantineTheme,
 	MediaQuery,
 	Navbar,
 	NavLink,
 	Space,
 	ThemeIcon,
+	Tooltip,
 	useMantineTheme
 } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { useMediaQuery, useOs } from "@mantine/hooks";
 import { openSpotlight } from "@mantine/spotlight";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
@@ -53,6 +57,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 	const [opened, setOpened] = useState(false);
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
 	const { focusState } = useContext(FocusContext);
+	const os = useOs();
 
 	const { settings } = useContext(SettingsContext);
 	const theme = useMantineTheme();
@@ -97,6 +102,23 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		return <Navbar.Section p={theme.spacing.sm}>{elements}</Navbar.Section>;
 	}
 
+	const commandButtonTooltipLabel = os === "macos" ?
+		(
+			<Box
+				sx={{
+					paddingBottom: 5,
+				}}
+			>
+				<Kbd>⌘</Kbd> + <Kbd>K</Kbd>
+			</Box>
+		) : (
+			<Box sx={{
+				paddingBottom: 5,
+			}}>
+				<Kbd>CTRL</Kbd> + <Kbd>K</Kbd>
+			</Box>
+		)
+
 	const topBarContent = (
 		<Group
 			sx={(theme) => ({
@@ -127,13 +149,13 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 						</Link>
 					</>
 				) : (
-					<>
+					<Tooltip openDelay={300} label={commandButtonTooltipLabel} >
 						<ActionIcon onClick={() => openSpotlight()}>
 							<ThemeIcon variant="filled">
 								<Command width={20} height={20} />
 							</ThemeIcon>
 						</ActionIcon>
-					</>
+					</Tooltip>
 				)}
 
 				<ColorSchemeToggle />
@@ -156,7 +178,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
 	return (
 		<AppShell
-			padding={router.pathname === "/" ? 0 : "md"}
+			padding={router.pathname === "/" ? 0 : "lg"}
 			navbar={showUserLinks ? undefined : navbarContent}
 			navbarOffsetBreakpoint="xs"
 			header={<Header height={60}>{topBarContent}</Header>}

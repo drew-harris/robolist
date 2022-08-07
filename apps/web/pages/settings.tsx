@@ -4,26 +4,24 @@ import {
 	Select,
 	Space,
 	Stack,
-	Sx,
-	Tabs,
-	Title,
-	useMantineTheme,
+	Sx, Title,
+	useMantineTheme
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { getCookie, setCookie } from "cookies-next";
-import { GetServerSidePropsResult, NextPageContext } from "next";
+import { useQueryClient } from "@tanstack/react-query";
+import { deleteCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { Settings } from "types";
 import ThemeColorSelector from "../components/input/ThemeColorSelector";
 import { SettingsContext } from "../contexts/SettingsContext";
 import { logEvent } from "../lib/ga";
-import { getUserFromJWT } from "../utils/server";
 
 export default function SettingsPage() {
 	const { settings, setSettings } = useContext(SettingsContext);
 	const theme = useMantineTheme();
 	const router = useRouter();
+	const queryClient = useQueryClient();
 
 	const form = useForm<Settings>({
 		initialValues: settings,
@@ -105,8 +103,9 @@ export default function SettingsPage() {
 
 					<Button
 						onClick={() => {
-							setCookie("jwt", null);
-							router.reload();
+							deleteCookie("jwt");
+							queryClient.removeQueries();
+							router.replace("/login")
 						}}
 					>
 						Sign Out

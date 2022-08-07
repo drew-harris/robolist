@@ -1,14 +1,15 @@
-import { Title } from "@mantine/core";
+import { Box, Group, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { TaskWithClass } from "types";
 import { getTodayTasks } from "../../clientapi/tasks";
 import TaskContainer from "../../components/containers/TaskContainer";
 import CenterInfo from "../../components/small/CenterInfo";
+import NewTaskButton from "../../components/small/NewTaskButton";
 import useInitialPrefetch from "../../hooks/useInitialPrefetch";
 
-interface TodayTasksPageProps {}
+interface TodayTasksPageProps { }
 
-export default function TodayTasksPage({}: TodayTasksPageProps) {
+export default function TodayTasksPage({ }: TodayTasksPageProps) {
 	const {
 		status,
 		data: tasks,
@@ -22,9 +23,17 @@ export default function TodayTasksPage({}: TodayTasksPageProps) {
 
 	return (
 		<>
-			<Title order={2} mb="md">
-				Today
-			</Title>
+			<Box
+				sx={{
+					display: "flex",
+					justifyContent: "space-between",
+				}}
+			>
+				<Title order={2} mb="md">
+					Today
+				</Title>
+				<NewTaskButton />
+			</Box>
 			{error && <CenterInfo color="red" text={error.message} />}
 			{status != "loading" && tasks && tasks.length == 0 && (
 				<CenterInfo text="No tasks today" />

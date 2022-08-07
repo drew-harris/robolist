@@ -47,7 +47,8 @@ export default function EditTaskModal({
 				);
 			}
 		}
-	}, [form, form.values]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [form.values]);
 
 	const submit = async (values: Partial<TaskWithClass>) => {
 		editMutation.mutate(values);
