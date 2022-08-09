@@ -108,7 +108,7 @@ function App(props: AppProps & { colorScheme: ColorScheme }) {
 
 			<QueryClientProvider client={queryClient}>
 				{process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
-				<TrpcReactQueryDevtools position="top-left" />
+				{/* <TrpcReactQueryDevtools position="top-left" /> */}
 				<ColorSchemeProvider
 					colorScheme={colorScheme}
 					toggleColorScheme={toggleColorScheme}

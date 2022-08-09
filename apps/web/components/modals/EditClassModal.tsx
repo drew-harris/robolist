@@ -3,6 +3,7 @@ import { useForm } from "@mantine/form";
 import { useModals } from "@mantine/modals";
 import { Class } from "@prisma/client";
 import useClassMutation from "../../hooks/useClassMutation";
+import { InferMutationInput } from "../../utils/trpc";
 import ThemeColorSelector from "../input/ThemeColorSelector";
 
 interface EditClassModalProps {
@@ -15,7 +16,7 @@ export default function EditClassModal({
 	const modals = useModals();
 	const { editMutation } = useClassMutation();
 
-	const form = useForm<Partial<Class>>({
+	const form = useForm<InferMutationInput<"classes.edit">>({
 		initialValues: {
 			id: initialClass.id,
 			name: initialClass.name,
@@ -27,7 +28,7 @@ export default function EditClassModal({
 		form.setFieldValue("color", color);
 	};
 
-	async function handleSubmit(values: Partial<Class>) {
+	async function handleSubmit(values: InferMutationInput<"classes.edit">) {
 		editMutation.mutate(values);
 		modals.closeAll();
 	}

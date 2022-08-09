@@ -1,6 +1,5 @@
 import { Box, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 import { TaskWithClass } from "types";
 import TaskAgendaContainer from "../../components/containers/TaskAgendaContainer";
 import CenterInfo from "../../components/small/CenterInfo";
@@ -20,9 +19,6 @@ export default function TasksPage() {
 
 	useInitialPrefetch();
 
-	useEffect(() => {
-		console.log(tasks)
-	}, []);
 	return (
 		<>
 			<Box

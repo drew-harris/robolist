@@ -1,16 +1,17 @@
-import { createRouter } from "../server/context"
-import superjson from "superjson"
-import { PrismaClient } from "@prisma/client";
+import superjson from "superjson";
+import { createRouter } from "../server/context";
 import { getPrismaPool } from "../utils";
 
 export const tasks = createRouter()
   .transformer(superjson)
+  .middleware(({ ctx, next }) => {
+    if (!ctx.user) {
+      throw new Error("Unauthorized")
+    }
+    return next({ ctx: { user: ctx.user } })
+  })
   .query("all", {
     resolve: async ({ ctx }) => {
-      console.log("HIT")
-      if (!ctx.user) {
-        throw new Error("Unauthorized")
-      }
 
       const prisma = getPrismaPool();
       const tasks = prisma.task.findMany({
@@ -42,9 +43,6 @@ export const tasks = createRouter()
 
   .query("today", {
     resolve: async ({ ctx }) => {
-      if (!ctx.user) {
-        throw new Error("Unauthorized")
-      }
       try {
         const today = new Date();
         const twentyFourHoursAgo = new Date(today.getTime() - 24 * 60 * 60 * 1000);

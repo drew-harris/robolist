@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { School } from "tabler-icons-react";
 import { getClasses } from "../../clientapi/classes";
+import { vanilla } from "../../utils/trpc";
 
 interface IdPickerProps {
 	form: UseFormReturnType<any>;
@@ -15,7 +16,7 @@ export default function ClassIdPicker(props: IdPickerProps) {
 		data: classes,
 		error,
 		status,
-	} = useQuery<Class[], Error>(["classes"], getClasses);
+	} = useQuery<Class[], Error>(["classes"], () => vanilla.query("classes.all"));
 
 	const classLabels = classes
 		? classes.map((c) => {
