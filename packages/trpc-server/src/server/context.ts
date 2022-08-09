@@ -9,11 +9,10 @@ export async function createContext(opts?: trpcNext.CreateNextContextOptions) {
       const user = await getUserFromJWT(opts.req.cookies.jwt);
       return user;
     }
+    console.log("NO JWT FOUND")
     return null;
   }
-
   const user = await getUserFromHeader();
-
   return {
     user,
   };

@@ -1,7 +1,7 @@
 import { Box, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { TaskWithClass } from "types";
-import { getTasks } from "../../clientapi/tasks";
+import { getTasks, getTodayTasks } from "../../clientapi/tasks";
 import TaskAgendaContainer from "../../components/containers/TaskAgendaContainer";
 import CenterInfo from "../../components/small/CenterInfo";
 import NewTaskButton from "../../components/small/NewTaskButton";
@@ -9,8 +9,15 @@ import useInitialPrefetch from "../../hooks/useInitialPrefetch";
 import { trpc } from "../../utils/trpc";
 
 export default function TasksPage() {
+	const {
+		status,
+		data: tasks,
+		error,
+	} = useQuery<TaskWithClass[], Error>(
+		["tasks", { type: "all" }],
+		getTasks
 
-	const { data: tasks, error, status } = trpc.useQuery(["tasks.all-tasks"]);
+	);
 	return (
 		<>
 			<Box

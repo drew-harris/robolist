@@ -13,6 +13,5 @@ export default function useInitialPrefetch() {
 		queryClient.prefetchQuery(["classes"], getClasses);
 		queryClient.prefetchQuery(["dates"], getDateAggregation);
 
-		trpcQueryClient.prefetchQuery(['tasks.all-tasks']);
 	}, [queryClient]);
 }
