@@ -1,42 +1,42 @@
 {
-  "name": "robolist",
-  "version": "0.0.0",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "studio": "cd packages/prisma-schema && npx prisma studio",
-    "ci": "cd apps/web && npm run ci",
-    "database-reset": "cd apps/reset && npm run reset",
-    "pretty": "prettier --write '**/*.{js,jsx,ts,tsx}'"
-  },
-  "devDependencies": {
-    "eslint-config-custom": "*",
-    "prettier": "2.7.1",
-    "turbo": "latest"
-  },
-  "engines": {
-    "npm": ">=7.0.0",
-    "node": ">=14.0.0"
-  },
-  "dependencies": {
-    "@mantine/core": "^5.0.2",
-    "@mantine/dates": "^5.0.2",
-    "@mantine/form": "^5.0.2",
-    "@mantine/hooks": "^5.0.2",
-    "@mantine/modals": "^5.0.2",
-    "@mantine/next": "^5.0.2",
-    "@mantine/notifications": "^5.0.2",
-    "@mantine/spotlight": "^5.0.2",
-    "babel-plugin-superjson-next": "^0.4.3",
-    "dayjs": "^1.11.3",
-    "superjson": "^1.9.1"
-  },
-  "packageManager": "npm@8.12.1"
+	"name": "robolist",
+	"version": "0.0.0",
+	"private": true,
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"scripts": {
+		"build": "turbo run build",
+		"dev": "turbo run dev --parallel",
+		"lint": "turbo run lint",
+		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
+		"studio": "cd packages/prisma-schema && npx prisma studio",
+		"ci": "cd apps/web && npm run ci",
+		"database-reset": "cd apps/reset && npm run reset",
+		"pretty": "prettier --write '**/*.{js,jsx,ts,tsx}'"
+	},
+	"devDependencies": {
+		"eslint-config-custom": "*",
+		"prettier": "2.7.1",
+		"turbo": "latest"
+	},
+	"engines": {
+		"npm": ">=7.0.0",
+		"node": ">=14.0.0"
+	},
+	"dependencies": {
+		"@mantine/core": "^5.0.2",
+		"@mantine/dates": "^5.0.2",
+		"@mantine/form": "^5.0.2",
+		"@mantine/hooks": "^5.0.2",
+		"@mantine/modals": "^5.0.2",
+		"@mantine/next": "^5.0.2",
+		"@mantine/notifications": "^5.0.2",
+		"@mantine/spotlight": "^5.0.2",
+		"babel-plugin-superjson-next": "^0.4.3",
+		"dayjs": "^1.11.3",
+		"superjson": "^1.9.1"
+	},
+	"packageManager": "npm@8.12.1"
 }

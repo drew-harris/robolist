@@ -6,6 +6,7 @@ import {
 	Calendar,
 	CalendarEvent,
 	List,
+	LockOpen,
 	Moon2,
 	Plus,
 	School,
@@ -55,6 +56,14 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
 			id: "today-tasks",
 			onTrigger: () => {
 				router.replace("/tasks/today");
+			},
+		},
+		{
+			title: "TRPC",
+			icon: <LockOpen />,
+			id: "trpc",
+			onTrigger: () => {
+				router.replace("/testtrpc");
 			},
 		},
 		{
