@@ -1,0 +1,24 @@
+{
+	"name": "trpc-server",
+	"version": "1.0.0",
+	"description": "",
+	"main": "src/index.ts",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@prisma/client": "^4.1.1",
+		"@trpc/client": "^9.27.0",
+		"@trpc/next": "^9.27.0",
+		"@trpc/react": "^9.27.0",
+		"@trpc/server": "^9.27.0",
+		"jsonwebtoken": "^8.5.1",
+		"react-query": "^3.39.2",
+		"superjson": "^1.9.1",
+		"typescript": "^4.7.4",
+		"zod": "^3.17.10",
+		"types": "*"
+	}
+}

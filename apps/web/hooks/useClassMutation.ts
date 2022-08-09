@@ -2,12 +2,13 @@ import { showNotification } from "@mantine/notifications";
 import { Class } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteClass, editClass } from "../clientapi/classes";
+import { InferMutationInput, InferQueryInput, vanilla } from "../utils/trpc";
 
 export default function useClassMutation() {
 	const queryClient = useQueryClient();
 	const deleteMutation = useMutation(
 		(id: string) => {
-			return deleteClass(id);
+			return vanilla.mutation("classes.delete", id)
 		},
 		{
 			onMutate: async (id: string) => {
@@ -33,8 +34,8 @@ export default function useClassMutation() {
 	);
 
 	const editMutation = useMutation(
-		(classData: Partial<Class>) => {
-			return editClass(classData);
+		(classData: InferMutationInput<"classes.edit">) => {
+			return vanilla.mutation("classes.edit", { color: classData.color, name: classData.name, id: classData.id })
 		},
 		{
 			onMutate: async (classData: Partial<Class>) => {

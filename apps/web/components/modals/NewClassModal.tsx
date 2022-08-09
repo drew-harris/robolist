@@ -7,6 +7,7 @@ import { useState } from "react";
 import { APIClassCreate } from "types";
 import { colorChoices } from "types";
 import { logEvent } from "../../lib/ga";
+import { vanilla } from "../../utils/trpc";
 import ThemeColorSelector from "../input/ThemeColorSelector";
 
 export default function NewClassModal() {
@@ -32,22 +33,9 @@ export default function NewClassModal() {
 	async function handleSubmit(values: APIClassCreate) {
 		console.log(values);
 		setLoading(true);
-		const data = await fetch("/api/classes", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(values),
-		});
-		const json = await data.json();
-		if (json.error) {
-			console.error(json.error);
-			showNotification({
-				message: json.error.message,
-				color: "red",
-			});
-			setLoading(false);
-		} else {
+
+		try {
+			const createdClass = await vanilla.mutation("classes.create", values);
 			showNotification({
 				message: "Class created",
 				color: "green",
@@ -55,8 +43,14 @@ export default function NewClassModal() {
 			queryClient.invalidateQueries(["classes"]);
 			modals.closeModal("new-class");
 			logEvent("create_class", {
-				value: values.name,
+				value: createdClass.name
 			});
+		} catch (error: any) {
+			showNotification({
+				message: error.message,
+				color: "red",
+			});
+			setLoading(false);
 		}
 	}
 

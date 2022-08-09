@@ -6,6 +6,7 @@ import {
 	Calendar,
 	CalendarEvent,
 	List,
+	LockOpen,
 	Moon2,
 	Plus,
 	School,

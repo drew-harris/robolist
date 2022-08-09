@@ -6,6 +6,7 @@ import TaskContainer from "../../components/containers/TaskContainer";
 import CenterInfo from "../../components/small/CenterInfo";
 import NewTaskButton from "../../components/small/NewTaskButton";
 import useInitialPrefetch from "../../hooks/useInitialPrefetch";
+import { vanilla } from "../../utils/trpc";
 
 interface TodayTasksPageProps { }
 
@@ -16,7 +17,7 @@ export default function TodayTasksPage({ }: TodayTasksPageProps) {
 		error,
 	} = useQuery<TaskWithClass[], Error>(
 		["tasks", { type: "today" }],
-		getTodayTasks
+		() => vanilla.query("tasks.today")
 	);
 
 	useInitialPrefetch();
