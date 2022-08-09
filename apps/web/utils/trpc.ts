@@ -1,9 +1,15 @@
+import { createTRPCClient } from '@trpc/client';
 import { createReactQueryHooks } from '@trpc/react';
-import { appRouter, AppRouter } from 'trpc-server/src/index';
-import { createSSGHelpers } from '@trpc/react/ssg';
-import { createContext } from 'trpc-server/src/server/context';
-import superjson from "superjson"
-import { middleware } from '../middleware';
+import absoluteUrl from 'next-absolute-url';
+import type { AppRouter } from 'trpc-server/src/index';
+import superjson from "superjson";
 
 export const trpc = createReactQueryHooks<AppRouter>();
 // => { useQuery: ..., useMutation: ...}
+
+
+export const vanilla = createTRPCClient<AppRouter>({
+  url: "http://localhost:3000/api/trpc/",
+  transformer: superjson,
+});
+

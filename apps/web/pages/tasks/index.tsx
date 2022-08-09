@@ -1,12 +1,12 @@
 import { Box, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { TaskWithClass } from "types";
-import { getTasks, getTodayTasks } from "../../clientapi/tasks";
+import { getTasks } from "../../clientapi/tasks";
 import TaskAgendaContainer from "../../components/containers/TaskAgendaContainer";
 import CenterInfo from "../../components/small/CenterInfo";
 import NewTaskButton from "../../components/small/NewTaskButton";
-import useInitialPrefetch from "../../hooks/useInitialPrefetch";
-import { trpc } from "../../utils/trpc";
+import { vanilla } from "../../utils/trpc";
 
 export default function TasksPage() {
 	const {
@@ -16,8 +16,11 @@ export default function TasksPage() {
 	} = useQuery<TaskWithClass[], Error>(
 		["tasks", { type: "all" }],
 		getTasks
-
 	);
+
+	useEffect(() => {
+		console.log(tasks)
+	}, []);
 	return (
 		<>
 			<Box
@@ -30,7 +33,7 @@ export default function TasksPage() {
 				</Title>
 				<NewTaskButton />
 			</Box>
-			{error && <CenterInfo color="red" text={error.message} />}
+			{error && <CenterInfo color="red" text={error?.message || "There was an error getting tasks"} />}
 			{status != "loading" && tasks && tasks.length == 0 && (
 				<CenterInfo text="No tasks yet" />
 			)}

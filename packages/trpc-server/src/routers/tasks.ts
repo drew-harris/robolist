@@ -7,6 +7,7 @@ export const tasks = createRouter()
   .transformer(superjson)
   .query("all", {
     resolve: async ({ ctx }) => {
+      console.log("HIT")
       if (!ctx.user) {
         throw new Error("Unauthorized")
       }
