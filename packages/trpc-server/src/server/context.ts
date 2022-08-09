@@ -5,7 +5,6 @@ import { getUserFromJWT } from "../utils";
 // The app's context - is generated for each incoming request
 export async function createContext(opts?: trpcNext.CreateNextContextOptions) {
   async function getUserFromHeader() {
-    console.log("GEtting upser")
     if (opts?.req.cookies.jwt) {
       const user = await getUserFromJWT(opts.req.cookies.jwt);
       return user;

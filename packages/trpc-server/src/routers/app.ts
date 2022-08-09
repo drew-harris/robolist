@@ -8,7 +8,8 @@ export const appRouter =
       resolve: ({ ctx }) => {
         return {
           greeting: `Whats up, ${ctx.user?.email || "world"}!`,
-          date: new Date()
+          date: new Date(),
+          dogName: "Fido"
         }
       }
     })
