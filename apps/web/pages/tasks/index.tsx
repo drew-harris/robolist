@@ -2,10 +2,10 @@ import { Box, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { TaskWithClass } from "types";
-import { getTasks } from "../../clientapi/tasks";
 import TaskAgendaContainer from "../../components/containers/TaskAgendaContainer";
 import CenterInfo from "../../components/small/CenterInfo";
 import NewTaskButton from "../../components/small/NewTaskButton";
+import useInitialPrefetch from "../../hooks/useInitialPrefetch";
 import { vanilla } from "../../utils/trpc";
 
 export default function TasksPage() {
@@ -15,8 +15,10 @@ export default function TasksPage() {
 		error,
 	} = useQuery<TaskWithClass[], Error>(
 		["tasks", { type: "all" }],
-		getTasks
+		() => vanilla.query("tasks.all")
 	);
+
+	useInitialPrefetch();
 
 	useEffect(() => {
 		console.log(tasks)

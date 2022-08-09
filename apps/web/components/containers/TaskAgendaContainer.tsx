@@ -52,11 +52,11 @@ export default function TaskAgendaContainer({
 	let addedDivider = false;
 	groups.forEach((group) => {
 		if (group[0].workDate >= thisMorning() && !addedDivider) {
-			elements.push(<Divider id="divider" my="md" />)
+			elements.push(<Divider my="md" />)
 			addedDivider = true;
 		}
 		elements.push(
-			<Group id={getHumanDateString(group[0].workDate)}>
+			<Group key={getHumanDateString(group[0].workDate)}>
 				<Title order={4}>{getHumanDateString(group[0].workDate)}</Title>
 				{settings.useTimeEstimate && (
 					<Text color="dimmed">{getGroupTime(group)} min.</Text>
@@ -74,7 +74,8 @@ export default function TaskAgendaContainer({
 
 		elements.push(
 			<Space />
-		);
+		)
+
 	});
 
 	return (
