@@ -59,14 +59,6 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
 			},
 		},
 		{
-			title: "TRPC",
-			icon: <LockOpen />,
-			id: "trpc",
-			onTrigger: () => {
-				router.replace("/testtrpc");
-			},
-		},
-		{
 			title: "All Tasks",
 			icon: <List />,
 			id: "all-tasks",

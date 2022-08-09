@@ -1,17 +1,10 @@
 import * as trpc from "@trpc/server";
 import superjson from "superjson"
+import { tasks } from "./tasks"
 import { createRouter } from "../server/context"
 export const appRouter =
   createRouter()
     .transformer(superjson)
-    .query("helloworld", {
-      resolve: ({ ctx }) => {
-        return {
-          greeting: `Whats up, ${ctx.user?.email || "world"}!`,
-          date: new Date(),
-          dogName: "Fido"
-        }
-      }
-    })
+    .merge("tasks.", tasks)
 
 export type AppRouter = typeof appRouter;

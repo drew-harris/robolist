@@ -6,15 +6,11 @@ import TaskAgendaContainer from "../../components/containers/TaskAgendaContainer
 import CenterInfo from "../../components/small/CenterInfo";
 import NewTaskButton from "../../components/small/NewTaskButton";
 import useInitialPrefetch from "../../hooks/useInitialPrefetch";
+import { trpc } from "../../utils/trpc";
 
 export default function TasksPage() {
-	const {
-		data: tasks,
-		error,
-		status,
-	} = useQuery<TaskWithClass[], Error>(["tasks", { type: "all" }], getTasks);
-	useInitialPrefetch();
 
+	const { data: tasks, error, status } = trpc.useQuery(["tasks.all-tasks"]);
 	return (
 		<>
 			<Box
@@ -35,7 +31,7 @@ export default function TasksPage() {
 				menu={{ delete: true, edit: true }}
 				rescheduleButton
 				skeletonLength={5}
-				loading={status === "loading"}
+				loading={status === "loading" && !error}
 				tasks={tasks}
 			/>
 		</>
