@@ -168,7 +168,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 					</Tooltip>
 				)}
 
-				<ColorSchemeToggle />
+				{/* <ColorSchemeToggle /> */}
 			</Group>
 		</Group>
 	);
