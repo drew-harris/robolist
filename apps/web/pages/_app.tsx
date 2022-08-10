@@ -46,6 +46,8 @@ function MyApp(props: any) {
 		enabled: refreshTheme,
 	});
 
+	const trpcClient = trpc.useContext();
+
 	const router = useRouter();
 
 	const [queryClient] = useState(() => new QueryClient());
@@ -55,10 +57,11 @@ function MyApp(props: any) {
 			value || (colorScheme === "dark" ? "light" : "dark");
 		if (typeof window !== "undefined") {
 			const oneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
 			setCookie("mantine-color-scheme", nextColorScheme, {
 				expires: oneMonth,
 			});
-			router.reload();
+			trpcClient.setQueryData(["theme"], nextColorScheme);
 		}
 	};
 
