@@ -109,7 +109,7 @@ export default function DailyTask({
 				Every day
 			</Badge>
 		) : (
-			task.days.map((dayNum) => {
+			task.days.map((dayNum: number) => {
 				return (
 					<Badge color="gray" size="sm">
 						{getShortNameOfDay(dayNum)}

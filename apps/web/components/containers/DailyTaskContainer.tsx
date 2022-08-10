@@ -34,7 +34,7 @@ export default function DailyTaskContainer({
 function RealDailyTaskContainer({ tasks, ...props }: DailyTaskContainerProps) {
 	const [parent] = useAutoAnimate<HTMLDivElement>();
 	const elements = tasks
-		? tasks.map((task) => {
+		? tasks.map((task: DailyWithClass) => {
 				return <DailyTask {...props} key={task.id} task={task} />;
 		  })
 		: [];
