@@ -109,7 +109,7 @@ export default function CalendarHeatmapDatePicker({
 			<Tooltip
 				label={hours + " min."}
 				disabled={!hours || !settings.useTimeEstimate}
-				openDelay={500}
+				// openDelay={500}
 			>
 				<Box
 					sx={() => ({
@@ -126,13 +126,15 @@ export default function CalendarHeatmapDatePicker({
 	};
 
 	return (
-		<Calendar
-			dayStyle={getDateStyle}
-			value={selectedDate}
-			renderDay={getRenderDate}
-			firstDayOfWeek={settings.firstDayOfWeek}
-			onChange={(date) => onSelectDate(date)}
-			{...props}
-		/>
+		<Tooltip.Group openDelay={400} closeDelay={300}>
+			<Calendar
+				dayStyle={getDateStyle}
+				value={selectedDate}
+				renderDay={getRenderDate}
+				firstDayOfWeek={settings.firstDayOfWeek}
+				onChange={(date) => onSelectDate(date)}
+				{...props}
+			/>
+		</Tooltip.Group>
 	);
 }
