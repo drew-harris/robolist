@@ -7,4 +7,5 @@ export interface Settings {
 	confettiEffect: boolean;
 	useFocusMode: boolean;
 	themeColor: MantineColor;
+	useDailyTasks: boolean;
 }

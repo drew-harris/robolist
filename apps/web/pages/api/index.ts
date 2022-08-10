@@ -7,7 +7,10 @@ interface APIHelloWorldResponse {
 	message?: string;
 }
 
-async function handler(req: NextApiRequest, res: NextApiResponse<APIHelloWorldResponse>) {
+async function handler(
+	req: NextApiRequest,
+	res: NextApiResponse<APIHelloWorldResponse>
+) {
 	log.info("Hello World called");
 	if (req?.method != "GET") {
 		return res.status(405).json({ error: { message: "Method not allowed" } });

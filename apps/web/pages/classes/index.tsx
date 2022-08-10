@@ -22,16 +22,18 @@ const ClassesPage = () => {
 
 	const classElements = classes
 		? classes.map((class_) => {
-			return <ClassSquare key={class_.id} class={class_} />;
-		})
+				return <ClassSquare key={class_.id} class={class_} />;
+		  })
 		: null;
 
 	return (
 		<>
-			<Box sx={{
-				display: "flex",
-				justifyContent: "space-between"
-			}}>
+			<Box
+				sx={{
+					display: "flex",
+					justifyContent: "space-between",
+				}}
+			>
 				<Title order={2} mb="md">
 					Classes
 				</Title>

@@ -1,7 +1,4 @@
-import {
-	ActionIcon,
-	Group, useMantineColorScheme
-} from "@mantine/core";
+import { ActionIcon, Group, useMantineColorScheme } from "@mantine/core";
 import { TbMoon, TbSun } from "react-icons/tb";
 
 export function ColorSchemeToggle() {

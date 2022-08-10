@@ -9,7 +9,7 @@ import { thisMorning } from "../../utils/client";
 
 export default function CalendarPage() {
 	const { settings } = useContext(SettingsContext);
-	const [selectedDate, setSelectedDate] = useState<Date | null>(thisMorning());
+	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 	useInitialPrefetch();
 	return (
 		<Box

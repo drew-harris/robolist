@@ -2,56 +2,72 @@ import {
 	ColorScheme,
 	ColorSchemeProvider,
 	MantineProvider,
-	MantineThemeOverride
+	MantineThemeOverride,
 } from "@mantine/core";
+import { useColorScheme } from "@mantine/hooks";
 import { ModalsProvider } from "@mantine/modals";
 import { NotificationsProvider } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { withTRPC } from "@trpc/next";
-import { ReactQueryDevtools as TrpcReactQueryDevtools } from "react-query/devtools"
-import { getCookie, setCookie } from "cookies-next";
-import { GetServerSidePropsContext } from "next";
-import { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import superjson from "superjson";
+import type { AppRouter } from "trpc-server/src/index";
 import FocusTabTitle from "../components/data-display/focus/FocusTabTitle";
 import LayoutShell from "../components/layout/LayoutShell";
 import SpotlightMenu from "../components/layout/SpotlightMenu";
 import FocusContextProvider from "../contexts/FocusContext";
 import SettingsContextProvider from "../contexts/SettingsContext";
 import "../global.css";
-import superjson from "superjson"
 import { pageview } from "../lib/ga";
-import type { AppRouter } from "trpc-server/src/index"
 import { getBaseUrl } from "../utils/trpc";
 
 export { reportWebVitals } from "next-axiom";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-function App(props: AppProps & { colorScheme: ColorScheme }) {
+function MyApp(props: any) {
+	// function App(props: AppProps & { colorScheme: ColorScheme }) {
 	const { Component, pageProps } = props;
-	const [colorScheme, setColorScheme] = useState<ColorScheme>(
-		props.colorScheme
-	);
+
+	const preferredColorScheme = useColorScheme("dark");
+
+	const [colorScheme, setColorScheme] = useState<ColorScheme | null>(null);
 
 	const router = useRouter();
 
 	const [queryClient] = useState(() => new QueryClient());
 
+	const [loaded, setLoaded] = useState(false);
+
+	useEffect(() => {
+		setLoaded(true);
+	}, []);
+
 	const toggleColorScheme = (value?: ColorScheme) => {
 		const nextColorScheme =
 			value || (colorScheme === "dark" ? "light" : "dark");
 		setColorScheme(nextColorScheme);
-		setCookie("mantine-color-scheme", nextColorScheme, {
-			maxAge: 60 * 60 * 24 * 30,
-		});
+		if (typeof window !== "undefined") {
+			window.localStorage.setItem("theme", nextColorScheme);
+		}
 	};
 
 	const [themeDefaultColor, setThemeDefaultColor] = useState("blue");
+
+	useEffect(() => {
+		if (typeof window === "undefined") {
+			return;
+		} else {
+			setColorScheme(
+				(window.localStorage.getItem("theme") as ColorScheme) ||
+					preferredColorScheme
+			);
+		}
+	}, [preferredColorScheme]);
 
 	// Google analytics
 	useEffect(() => {
@@ -66,7 +82,7 @@ function App(props: AppProps & { colorScheme: ColorScheme }) {
 	}, [router.events]);
 
 	const theme: MantineThemeOverride = {
-		colorScheme,
+		colorScheme: colorScheme ?? preferredColorScheme,
 		fontFamily: "Inter, sans-serif",
 		headings: {
 			fontFamily: "Inter, sans-serif",
@@ -110,7 +126,7 @@ function App(props: AppProps & { colorScheme: ColorScheme }) {
 				{process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
 				{/* <TrpcReactQueryDevtools position="top-left" /> */}
 				<ColorSchemeProvider
-					colorScheme={colorScheme}
+					colorScheme={colorScheme ?? preferredColorScheme}
 					toggleColorScheme={toggleColorScheme}
 				>
 					<MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
@@ -123,10 +139,12 @@ function App(props: AppProps & { colorScheme: ColorScheme }) {
 								<ModalsProvider>
 									<NotificationsProvider>
 										<SpotlightMenu>
-											<LayoutShell>
-												<FocusTabTitle />
-												<Component {...pageProps} />
-											</LayoutShell>
+											{loaded && (
+												<LayoutShell>
+													<FocusTabTitle />
+													<Component {...pageProps} />
+												</LayoutShell>
+											)}
 										</SpotlightMenu>
 									</NotificationsProvider>
 								</ModalsProvider>
@@ -139,30 +157,24 @@ function App(props: AppProps & { colorScheme: ColorScheme }) {
 	);
 }
 
-App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-	colorScheme: getCookie("mantine-color-scheme", ctx) || "light",
-});
-
-
-// Used by trpc
-
 export default withTRPC<AppRouter>({
 	config({ ctx }) {
 		/**
 		 * If you want to use SSR, you need to use the server's full URL
 		 * @link https://trpc.io/docs/ssr
 		 */
+
 		return {
 			url: `${getBaseUrl()}/api/trpc`,
 			transformer: superjson,
 			/**
 			 * @link https://react-query-v3.tanstack.com/reference/QueryClient
 			 */
-			// queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
+			queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
 		};
 	},
 	/**
 	 * @link https://trpc.io/docs/ssr
 	 */
 	ssr: false,
-})(App);
+})(MyApp);

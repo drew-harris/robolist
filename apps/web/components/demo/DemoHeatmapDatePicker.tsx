@@ -147,7 +147,7 @@ export default function DemoHeatmapDatePicker({
 
 	const getRenderDate = (date: Date): ReactNode => {
 		const hours = getMinutesForDay(date);
-		const isToday = isSameDate(date, thisMorning)
+		const isToday = isSameDate(date, thisMorning);
 		return (
 			<Tooltip
 				label={hours + " min."}

@@ -77,7 +77,7 @@ export default function NewTaskModal() {
 				);
 			}
 		}
-		// Since form.errors updates after form.values, we cant watch form 
+		// Since form.errors updates after form.values, we cant watch form
 		// without causing an infinite loop
 		// eslint-disable-next-line
 	}, [form.values]);

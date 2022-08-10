@@ -15,4 +15,4 @@ describe("Classes", () => {
 	});
 });
 
-export { };
+export {};

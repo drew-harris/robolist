@@ -43,7 +43,7 @@ export default function NewClassModal() {
 			queryClient.invalidateQueries(["classes"]);
 			modals.closeModal("new-class");
 			logEvent("create_class", {
-				value: createdClass.name
+				value: createdClass.name,
 			});
 		} catch (error: any) {
 			showNotification({
@@ -67,7 +67,12 @@ export default function NewClassModal() {
 					value={form.values.color}
 					onChange={handleColorChange}
 				/>
-				<Button type="submit" id="newclassmodal-submitbutton" color={form.values.color} size="md">
+				<Button
+					type="submit"
+					id="newclassmodal-submitbutton"
+					color={form.values.color}
+					size="md"
+				>
 					Submit
 				</Button>
 			</Stack>

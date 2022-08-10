@@ -5,14 +5,17 @@ import { useRouter } from "next/router";
 import {
 	Calendar,
 	CalendarEvent,
+	CalendarPlus,
+	CalendarTime,
 	List,
 	LockOpen,
 	Moon2,
 	Plus,
 	School,
-	Settings
+	Settings,
 } from "tabler-icons-react";
 import NewClassModal from "../modals/NewClassModal";
+import NewDailyTaskModal from "../modals/NewDailyTaskModal";
 import NewTaskModal from "../modals/NewTaskModal";
 
 interface SpotlightMenuProps {
@@ -51,6 +54,18 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
 			},
 		},
 		{
+			title: "New Daily Task",
+			icon: <CalendarPlus />,
+			id: "new-daily-task",
+			onTrigger: () => {
+				openModal({
+					children: <NewDailyTaskModal />,
+					title: "New Daily Task",
+					// size: "auto",
+				});
+			},
+		},
+		{
 			title: "Today's Tasks",
 			icon: <Calendar />,
 			id: "today-tasks",
@@ -72,6 +87,14 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
 			id: "settings",
 			onTrigger: () => {
 				router.replace("/settings");
+			},
+		},
+		{
+			title: "Daily Tasks",
+			icon: <CalendarTime />,
+			id: "settings",
+			onTrigger: () => {
+				router.replace("/daily");
 			},
 		},
 		{

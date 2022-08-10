@@ -21,9 +21,7 @@ export function thisMorning() {
 export function dateIsToday(date: Date): boolean {
 	const today = new Date();
 	try {
-		return (
-			isSameDate(date, today)
-		);
+		return isSameDate(date, today);
 	} catch (error) {
 		return false;
 	}
@@ -87,4 +85,26 @@ export const secondToTimeDisplay = (seconds: number) => {
 	const minutes = Math.floor(seconds / 60);
 	const secondsLeft = seconds - minutes * 60;
 	return `${minutes}:${secondsLeft < 10 ? "0" : ""}${secondsLeft}`;
+};
+
+export const getNameOfDay = (day: number) => {
+	const dates = [
+		"Sunday",
+		"Monday",
+		"Tuesday",
+		"Wednesday",
+		"Thursday",
+		"Friday",
+		"Saturday",
+	];
+	return dates[day];
+};
+
+export const getShortNameOfDay = (day: number) => {
+	const dates = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+	return dates[day];
+};
+
+export const getWeekdayNumber = (): number => {
+	return new Date().getDay();
 };

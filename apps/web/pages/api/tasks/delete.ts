@@ -5,9 +5,14 @@ import { APISuccessOrError } from "types";
 import { getPrismaPool } from "../../../serverapi/prismapool";
 import { getUserFromJWT, unauthorizedResponse } from "../../../utils/server";
 
-async function handler(req: NextApiRequest, res: NextApiResponse<APISuccessOrError>) {
+async function handler(
+	req: NextApiRequest,
+	res: NextApiResponse<APISuccessOrError>
+) {
 	if (req?.method != "POST") {
-		return res.status(405).json({ error: { message: "Method not allowed" }, success: false, });
+		return res
+			.status(405)
+			.json({ error: { message: "Method not allowed" }, success: false });
 	}
 	const jwt = getCookie("jwt", { req, res });
 	const user = getUserFromJWT(jwt?.toString());
@@ -18,10 +23,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse<APISuccessOrErr
 
 	const { id } = req.body;
 	if (!id) {
-		return res.status(400).json({ error: { message: "Missing id" }, success: false });
+		return res
+			.status(400)
+			.json({ error: { message: "Missing id" }, success: false });
 	}
 	if (typeof id !== "string") {
-		return res.status(400).json({ error: { message: "id must be a string" }, success: false });
+		return res
+			.status(400)
+			.json({ error: { message: "id must be a string" }, success: false });
 	}
 
 	try {

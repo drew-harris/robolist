@@ -3,7 +3,11 @@ import { Box, Divider, Group, Space, Stack, Text, Title } from "@mantine/core";
 import { useContext, useMemo } from "react";
 import { TaskWithClass, TDemoTask } from "types";
 import { SettingsContext } from "../../contexts/SettingsContext";
-import { getHumanDateString, reduceDates, thisMorning } from "../../utils/client";
+import {
+	getHumanDateString,
+	reduceDates,
+	thisMorning,
+} from "../../utils/client";
 import Task, { TaskOptionProps } from "../data-display/Task";
 import DemoTask from "../demo/DemoTask";
 import TaskSkeleton from "../skeletons/TaskSkeleton";
@@ -24,20 +28,6 @@ export default function TaskAgendaContainer({
 	demo = false,
 	...props
 }: TaskContainerProps) {
-	const [parent] = useAutoAnimate<HTMLDivElement>();
-
-	const { settings } = useContext(SettingsContext);
-	const groups: TaskWithClass[][] = useMemo(() => {
-		if (!tasks) {
-			return [];
-		}
-		return reduceDates(tasks);
-	}, [tasks]);
-
-	const getGroupTime = (group: TaskWithClass[]) => {
-		return group.reduce((acc, task) => acc + (task.workTime || 0), 0);
-	};
-
 	if (loading || !tasks) {
 		return (
 			<Stack spacing="sm">
@@ -48,11 +38,32 @@ export default function TaskAgendaContainer({
 		);
 	}
 
+	return <RealTaskAgendaContainer tasks={tasks} {...props} />;
+}
+
+function RealTaskAgendaContainer({ tasks, ...props }: TaskContainerProps) {
+	const [parent] = useAutoAnimate<HTMLDivElement>({
+		duration: 300,
+	});
+
+	const getGroupTime = (group: TaskWithClass[]) => {
+		return group.reduce((acc, task) => acc + (task.workTime || 0), 0);
+	};
+
+	const { settings } = useContext(SettingsContext);
+
+	const groups: TaskWithClass[][] = useMemo(() => {
+		if (!tasks) {
+			return [];
+		}
+		return reduceDates(tasks);
+	}, [tasks]);
+
 	const elements: JSX.Element[] = [];
 	let addedDivider = false;
 	groups.forEach((group) => {
 		if (group[0].workDate >= thisMorning() && !addedDivider) {
-			elements.push(<Divider my="md" />)
+			elements.push(<Divider my="md" />);
 			addedDivider = true;
 		}
 		elements.push(
@@ -65,21 +76,18 @@ export default function TaskAgendaContainer({
 		);
 
 		group.forEach((task) => {
-			if (demo) {
+			if (props.demo) {
 				elements.push(<DemoTask {...props} key={task.id} task={task} />);
 			} else {
 				elements.push(<Task {...props} key={task.id} task={task} />);
 			}
 		});
 
-		elements.push(
-			<Space />
-		)
-
+		elements.push(<Space />);
 	});
 
 	return (
-		<Stack spacing="sm" ref={disableAnimation ? null : parent}>
+		<Stack spacing="sm" ref={parent}>
 			{elements}
 		</Stack>
 	);

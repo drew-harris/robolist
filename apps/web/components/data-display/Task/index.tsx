@@ -4,6 +4,7 @@ import {
 	Group,
 	Menu,
 	Paper,
+	PaperProps,
 	Space,
 	Stack,
 	Sx,
@@ -15,6 +16,7 @@ import { useModals } from "@mantine/modals";
 import { useContext } from "react";
 import {
 	AlertTriangle,
+	Check,
 	Dots,
 	Pencil,
 	Rotate2,
@@ -49,6 +51,12 @@ export interface TaskMenuOptions {
 	delete?: boolean;
 	edit?: boolean;
 }
+
+export const taskPaperProps: PaperProps = {
+	withBorder: true,
+	p: "md",
+	shadow: "xs",
+};
 
 const Task = ({
 	task,
@@ -120,19 +128,33 @@ const Task = ({
 				</ActionIcon>
 			</Menu.Target>
 			<Menu.Dropdown>
-				{settings.useFocusMode && task.complete && checkbox && (
-					<Menu.Item
-						onClick={() => {
-							checkMutation.mutate({
-								id: task.id,
-								complete: false,
-							});
-						}}
-						icon={<Rotate2 />}
-					>
-						Undo Complete
-					</Menu.Item>
-				)}
+				{settings.useFocusMode &&
+					checkbox &&
+					(task.complete ? (
+						<Menu.Item
+							onClick={() => {
+								checkMutation.mutate({
+									id: task.id,
+									complete: false,
+								});
+							}}
+							icon={<Rotate2 />}
+						>
+							Undo Complete
+						</Menu.Item>
+					) : (
+						<Menu.Item
+							onClick={() => {
+								checkMutation.mutate({
+									id: task.id,
+									complete: true,
+								});
+							}}
+							icon={<Check />}
+						>
+							Mark Complete
+						</Menu.Item>
+					))}
 				{menuOptions.edit && (
 					<Menu.Item onClick={promptEdit} icon={<Pencil />}>
 						Edit
@@ -200,7 +222,7 @@ const Task = ({
 
 	if (isMobile && !props.inline) {
 		return (
-			<Paper onClick={onClick} withBorder p="md" shadow="xs" sx={paperSx}>
+			<Paper {...taskPaperProps} onClick={onClick} sx={paperSx}>
 				<Stack>
 					<Group position="apart">
 						<Text weight="bolder" size="sm">
@@ -233,7 +255,7 @@ const Task = ({
 	}
 
 	return (
-		<Paper onClick={onClick} withBorder p="md" shadow="xs" sx={paperSx}>
+		<Paper onClick={onClick} {...taskPaperProps} sx={paperSx}>
 			<Group sx={{ width: "100%" }} position="apart">
 				<Group>
 					{checkbox && checkboxElement}
