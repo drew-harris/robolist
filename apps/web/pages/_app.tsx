@@ -10,6 +10,7 @@ import { NotificationsProvider } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { withTRPC } from "@trpc/next";
+import { setCookie } from "cookies-next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Script from "next/script";
@@ -23,7 +24,7 @@ import FocusContextProvider from "../contexts/FocusContext";
 import SettingsContextProvider from "../contexts/SettingsContext";
 import "../global.css";
 import { pageview } from "../lib/ga";
-import { getBaseUrl } from "../utils/trpc";
+import { getBaseUrl, trpc } from "../utils/trpc";
 
 export { reportWebVitals } from "next-axiom";
 
@@ -35,39 +36,33 @@ function MyApp(props: any) {
 
 	const preferredColorScheme = useColorScheme("dark");
 
-	const [colorScheme, setColorScheme] = useState<ColorScheme | null>(null);
+	const { data: colorScheme } = trpc.useQuery(["theme"], {
+		refetchOnWindowFocus: false,
+		refetchInterval: 90000000000,
+		cacheTime: 900000000000,
+		refetchOnMount: false,
+		refetchOnReconnect: false,
+		ssr: true,
+	});
 
 	const router = useRouter();
 
 	const [queryClient] = useState(() => new QueryClient());
 
-	const [loaded, setLoaded] = useState(false);
-
-	useEffect(() => {
-		setLoaded(true);
-	}, []);
-
+	const trpcClient = trpc.useContext();
 	const toggleColorScheme = (value?: ColorScheme) => {
+		console.log("toggling");
 		const nextColorScheme =
 			value || (colorScheme === "dark" ? "light" : "dark");
-		setColorScheme(nextColorScheme);
+
+		// setColorScheme(nextColorScheme);
 		if (typeof window !== "undefined") {
-			window.localStorage.setItem("theme", nextColorScheme);
+			trpcClient.setQueryData(["theme"], nextColorScheme);
+			setCookie("mantine-color-scheme", nextColorScheme);
 		}
 	};
 
 	const [themeDefaultColor, setThemeDefaultColor] = useState("blue");
-
-	useEffect(() => {
-		if (typeof window === "undefined") {
-			return;
-		} else {
-			setColorScheme(
-				(window.localStorage.getItem("theme") as ColorScheme) ||
-					preferredColorScheme
-			);
-		}
-	}, [preferredColorScheme]);
 
 	// Google analytics
 	useEffect(() => {
@@ -82,7 +77,7 @@ function MyApp(props: any) {
 	}, [router.events]);
 
 	const theme: MantineThemeOverride = {
-		colorScheme: colorScheme ?? preferredColorScheme,
+		colorScheme: colorScheme || preferredColorScheme,
 		fontFamily: "Inter, sans-serif",
 		headings: {
 			fontFamily: "Inter, sans-serif",
@@ -126,7 +121,7 @@ function MyApp(props: any) {
 				{process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
 				{/* <TrpcReactQueryDevtools position="top-left" /> */}
 				<ColorSchemeProvider
-					colorScheme={colorScheme ?? preferredColorScheme}
+					colorScheme={colorScheme || preferredColorScheme}
 					toggleColorScheme={toggleColorScheme}
 				>
 					<MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
@@ -139,12 +134,10 @@ function MyApp(props: any) {
 								<ModalsProvider>
 									<NotificationsProvider>
 										<SpotlightMenu>
-											{loaded && (
-												<LayoutShell>
-													<FocusTabTitle />
-													<Component {...pageProps} />
-												</LayoutShell>
-											)}
+											<LayoutShell>
+												<FocusTabTitle />
+												<Component {...pageProps} />
+											</LayoutShell>
 										</SpotlightMenu>
 									</NotificationsProvider>
 								</ModalsProvider>
@@ -171,10 +164,12 @@ export default withTRPC<AppRouter>({
 			 * @link https://react-query-v3.tanstack.com/reference/QueryClient
 			 */
 			queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
+			// Foreward the headers to the server
+			headers: ctx?.req?.headers,
 		};
 	},
 	/**
 	 * @link https://trpc.io/docs/ssr
 	 */
-	ssr: false,
+	ssr: true,
 })(MyApp);
