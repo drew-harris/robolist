@@ -30,7 +30,7 @@ export default function EditDailyTaskModal({
 }: EditDailyTaskModalProps) {
 	const form = useForm<IForm>({
 		initialValues: {
-			days: initialTask.days.map((num) => num.toString()),
+			days: initialTask.days.map((num: number) => num.toString()),
 			title: initialTask.title,
 			classId: initialTask.classId,
 		},

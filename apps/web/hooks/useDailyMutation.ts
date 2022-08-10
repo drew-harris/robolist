@@ -78,11 +78,11 @@ export default function useDailyMutation() {
 
 	const deleteDaily = trpc.useMutation("daily.delete", {
 		onMutate: async (res) => {
-			trpcQueryClient.setQueryData(["daily.all"], (old) => {
+			trpcQueryClient.setQueryData(["daily.all"], (old: any) => {
 				if (!old) {
 					return [];
 				}
-				return old.filter((daily) => daily.id !== res);
+				return old.filter((daily: DailyWithClass) => daily.id !== res);
 			});
 		},
 
