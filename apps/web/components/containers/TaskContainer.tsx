@@ -1,9 +1,8 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Stack } from "@mantine/core";
 import { TaskWithClass } from "types";
 import Task, { TaskOptionProps } from "../data-display/Task";
 import TaskSkeleton from "../skeletons/TaskSkeleton";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import React from "react";
 
 type TaskContainerProps = TaskOptionProps & {
 	tasks: TaskWithClass[] | undefined;
@@ -19,14 +18,6 @@ export default function TaskContainer({
 	disableAnimation = false,
 	...props
 }: TaskContainerProps) {
-	const [parent] = useAutoAnimate<HTMLDivElement>();
-
-	const taskElements = tasks
-		? tasks.map((task) => {
-				return <Task {...props} key={task.id} task={task} />;
-		  })
-		: null;
-
 	if (loading || !tasks) {
 		return (
 			<Stack spacing="sm">
@@ -37,8 +28,18 @@ export default function TaskContainer({
 		);
 	}
 
+	return <RealTaskContainer tasks={tasks} {...props} />;
+}
+
+function RealTaskContainer({ tasks, ...props }: TaskContainerProps) {
+	const [parent] = useAutoAnimate<HTMLDivElement>();
+	const taskElements = tasks
+		? tasks.map((task) => {
+				return <Task {...props} key={task.id} task={task} />;
+		  })
+		: null;
 	return (
-		<Stack spacing="sm" ref={disableAnimation ? null : parent}>
+		<Stack spacing="sm" ref={parent}>
 			{taskElements}
 		</Stack>
 	);

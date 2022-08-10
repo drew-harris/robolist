@@ -1,24 +1,35 @@
-import { Box, Group, Title } from "@mantine/core";
+import { Box, Divider, Group, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
+import { useContext } from "react";
 import { TaskWithClass } from "types";
 import { getTodayTasks } from "../../clientapi/tasks";
+import DailyTaskContainer from "../../components/containers/DailyTaskContainer";
 import TaskContainer from "../../components/containers/TaskContainer";
 import CenterInfo from "../../components/small/CenterInfo";
 import NewTaskButton from "../../components/small/NewTaskButton";
+import { SettingsContext } from "../../contexts/SettingsContext";
 import useInitialPrefetch from "../../hooks/useInitialPrefetch";
-import { vanilla } from "../../utils/trpc";
+import { getWeekdayNumber } from "../../utils/client";
+import { trpc, vanilla } from "../../utils/trpc";
 
-interface TodayTasksPageProps { }
+interface TodayTasksPageProps {}
 
-export default function TodayTasksPage({ }: TodayTasksPageProps) {
+export default function TodayTasksPage({}: TodayTasksPageProps) {
 	const {
 		status,
 		data: tasks,
 		error,
-	} = useQuery<TaskWithClass[], Error>(
-		["tasks", { type: "today" }],
-		() => vanilla.query("tasks.today")
+	} = useQuery<TaskWithClass[], Error>(["tasks", { type: "today" }], () =>
+		vanilla.query("tasks.today")
 	);
+
+	const {
+		status: dailyStatus,
+		data: dailyTasks,
+		error: dailyError,
+	} = trpc.useQuery(["daily.on-dates", [getWeekdayNumber()]]);
+
+	const { settings } = useContext(SettingsContext);
 
 	useInitialPrefetch();
 
@@ -41,31 +52,31 @@ export default function TodayTasksPage({ }: TodayTasksPageProps) {
 			)}
 			<TaskContainer
 				loading={status == "loading"}
-				skeletonLength={2}
+				skeletonLength={3}
 				checkbox
 				menu={{ delete: true, edit: true }}
 				tasks={tasks}
 			/>
+			{settings.useDailyTasks && (
+				<>
+					<Divider my="lg" />
+					<Title mb="md" order={4}>
+						Daily Tasks
+					</Title>
+					{error && (
+						<CenterInfo
+							color="red"
+							text={dailyError?.message || "Error getting daily tasks"}
+						/>
+					)}
+					<DailyTaskContainer
+						skeletonLength={1}
+						loading={dailyStatus === "loading"}
+						tasks={dailyTasks}
+						checkbox
+					/>
+				</>
+			)}
 		</>
 	);
 }
-
-// export async function getServerSideProps(
-// 	context: NextPageContext
-// ): Promise<GetServerSidePropsResult<TodayTasksPageProps>> {
-// 	const jwt = getCookie("jwt", context);
-// 	const user = getUserFromJWT(jwt?.toString());
-// 	if (!user) {
-// 		return {
-// 			redirect: {
-// 				destination: "/",
-// 				permanent: false,
-// 			},
-// 		};
-// 	}
-
-// 	const tasks = await getTodayTasksFromId(user.id);
-// 	return {
-// 		props: { tasks }, // will be passed to the page component as props
-// 	};
-// }

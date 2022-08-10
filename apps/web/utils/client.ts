@@ -88,3 +88,18 @@ export const secondToTimeDisplay = (seconds: number) => {
 	const secondsLeft = seconds - minutes * 60;
 	return `${minutes}:${secondsLeft < 10 ? "0" : ""}${secondsLeft}`;
 };
+
+
+export const getNameOfDay = (day: number) => {
+	const dates = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+	return dates[day];
+}
+
+export const getShortNameOfDay = (day: number) => {
+	const dates = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+	return dates[day];
+}
+
+export const getWeekdayNumber = (): number => {
+	return new Date().getDay();
+}

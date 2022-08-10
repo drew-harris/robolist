@@ -4,8 +4,9 @@ import {
 	Select,
 	Space,
 	Stack,
-	Sx, Title,
-	useMantineTheme
+	Sx,
+	Title,
+	useMantineTheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useQueryClient } from "@tanstack/react-query";
@@ -70,6 +71,11 @@ export default function SettingsPage() {
 						{...form.getInputProps("useFocusMode")}
 						checked={form.values.useFocusMode}
 					/>
+					<Checkbox
+						label="Daily Tasks"
+						{...form.getInputProps("useDailyTasks")}
+						checked={form.values.useDailyTasks}
+					/>
 				</Stack>
 				<Stack sx={stackSx}>
 					<Select
@@ -105,7 +111,7 @@ export default function SettingsPage() {
 						onClick={() => {
 							deleteCookie("jwt");
 							queryClient.removeQueries();
-							router.replace("/login")
+							router.replace("/login");
 						}}
 					>
 						Sign Out

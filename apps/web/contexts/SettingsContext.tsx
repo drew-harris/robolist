@@ -10,6 +10,7 @@ const defaultSettings: Settings = {
 	confettiEffect: true,
 	useFocusMode: false,
 	themeColor: "blue",
+	useDailyTasks: true,
 };
 
 export const SettingsContext = createContext<{
@@ -17,7 +18,7 @@ export const SettingsContext = createContext<{
 	setSettings: Dispatch<SetStateAction<Settings>>;
 }>({
 	settings: defaultSettings,
-	setSettings: () => { },
+	setSettings: () => {},
 });
 
 interface SettingsContextProviderProps {

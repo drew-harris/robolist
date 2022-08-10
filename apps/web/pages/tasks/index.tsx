@@ -12,9 +12,8 @@ export default function TasksPage() {
 		status,
 		data: tasks,
 		error,
-	} = useQuery<TaskWithClass[], Error>(
-		["tasks", { type: "all" }],
-		() => vanilla.query("tasks.all")
+	} = useQuery<TaskWithClass[], Error>(["tasks", { type: "all" }], () =>
+		vanilla.query("tasks.all")
 	);
 
 	useInitialPrefetch();
@@ -25,20 +24,26 @@ export default function TasksPage() {
 				sx={{
 					display: "flex",
 					justifyContent: "space-between",
-				}}>
+				}}
+			>
 				<Title mb="md" order={2}>
 					All Tasks
 				</Title>
 				<NewTaskButton />
 			</Box>
-			{error && <CenterInfo color="red" text={error?.message || "There was an error getting tasks"} />}
+			{error && (
+				<CenterInfo
+					color="red"
+					text={error?.message || "There was an error getting tasks"}
+				/>
+			)}
 			{status != "loading" && tasks && tasks.length == 0 && (
 				<CenterInfo text="No tasks yet" />
 			)}
 			<TaskAgendaContainer
 				menu={{ delete: true, edit: true }}
 				rescheduleButton
-				skeletonLength={5}
+				skeletonLength={10}
 				loading={status === "loading" && !error}
 				tasks={tasks}
 			/>

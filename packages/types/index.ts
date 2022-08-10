@@ -1,4 +1,4 @@
-import type { Class, Task, User } from "@prisma/client";
+import type { Class, Daily, Task, User } from "@prisma/client";
 export type UserWithoutPassword = Omit<User, "password">;
 
 export * from "./settings";
@@ -38,3 +38,8 @@ export type TDemoTask = Pick<
 	TaskWithClass,
 	"id" | "title" | "workDate" | "workTime" | "class" | "complete"
 >;
+
+
+export type DailyWithClass = (Daily & {
+	class: Class | null;
+})

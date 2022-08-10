@@ -15,7 +15,7 @@ import {
 	Space,
 	ThemeIcon,
 	Tooltip,
-	useMantineTheme
+	useMantineTheme,
 } from "@mantine/core";
 import { useMediaQuery, useOs } from "@mantine/hooks";
 import { openSpotlight } from "@mantine/spotlight";
@@ -24,12 +24,13 @@ import { NextRouter, useRouter } from "next/router";
 import { ReactElement, useContext, useState } from "react";
 import {
 	Calendar,
+	CalendarTime,
 	Clock,
 	Command,
 	Hourglass,
 	List,
 	School,
-	Settings
+	Settings,
 } from "tabler-icons-react";
 import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
@@ -62,12 +63,20 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 	const { settings } = useContext(SettingsContext);
 	const theme = useMantineTheme();
 
-	const tasksGroup: SidebarLink[] = [
+	let tasksGroup: SidebarLink[] = [
 		{ href: "/tasks/today", label: "Today", icon: <Clock /> },
 		{ href: "/tasks", label: "All Tasks", icon: <List /> },
 		{ href: "/calendar", label: "Calendar", icon: <Calendar /> },
-		{ href: "/focus", label: "Focus", icon: <Hourglass /> },
 	];
+
+	if (settings.useDailyTasks) {
+		tasksGroup.push({ href: "/daily", label: "Daily", icon: <CalendarTime /> });
+	}
+
+	if (settings.useFocusMode) {
+		tasksGroup.push({ href: "/focus", label: "Focus", icon: <Hourglass /> });
+	}
+
 	const classesGroup: SidebarLink[] = [
 		{ href: "/classes", label: "Classes", icon: <School /> },
 		{ href: "/settings", label: "Settings", icon: <Settings /> },
@@ -78,7 +87,6 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		router.pathname === "/login" ||
 		router.pathname === "/signup" ||
 		router.pathname === "/closed";
-
 
 	// Conponent
 	function SidebarGroup({ links }: SidebarGroupProps) {
@@ -102,8 +110,8 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		return <Navbar.Section p={theme.spacing.sm}>{elements}</Navbar.Section>;
 	}
 
-	const commandButtonTooltipLabel = os === "macos" ?
-		(
+	const commandButtonTooltipLabel =
+		os === "macos" ? (
 			<Box
 				sx={{
 					paddingBottom: 5,
@@ -112,12 +120,14 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 				<Kbd>⌘</Kbd> + <Kbd>K</Kbd>
 			</Box>
 		) : (
-			<Box sx={{
-				paddingBottom: 5,
-			}}>
+			<Box
+				sx={{
+					paddingBottom: 5,
+				}}
+			>
 				<Kbd>CTRL</Kbd> + <Kbd>K</Kbd>
 			</Box>
-		)
+		);
 
 	const topBarContent = (
 		<Group
@@ -149,7 +159,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 						</Link>
 					</>
 				) : (
-					<Tooltip openDelay={300} label={commandButtonTooltipLabel} >
+					<Tooltip openDelay={300} label={commandButtonTooltipLabel}>
 						<ActionIcon onClick={() => openSpotlight()}>
 							<ThemeIcon variant="filled">
 								<Command width={20} height={20} />
