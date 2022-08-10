@@ -9,6 +9,7 @@ import { ModalsProvider } from "@mantine/modals";
 import { NotificationsProvider } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { TRPCClient } from "@trpc/client/dist/declarations/src/internals/TRPCClient";
 import { withTRPC } from "@trpc/next";
 import { setCookie } from "cookies-next";
 import Head from "next/head";
@@ -163,10 +164,11 @@ export default withTRPC<AppRouter>({
 			 * @link https://react-query-v3.tanstack.com/reference/QueryClient
 			 */
 			queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
+			headers: ctx?.req?.headers,
 		};
 	},
 	/**
 	 * @link https://trpc.io/docs/ssr
 	 */
-	ssr: false,
+	ssr: true,
 })(MyApp);
