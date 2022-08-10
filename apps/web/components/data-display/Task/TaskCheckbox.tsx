@@ -1,11 +1,12 @@
 import { Box, Checkbox } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
 import { useContext, useState } from "react";
-import Confetti, { ConfettiConfig } from "react-dom-confetti";
+import Confetti from "react-dom-confetti";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
 import { logEvent } from "../../../lib/ga";
+import { confettiConfig } from "../../../utils/confetti";
 
 interface TaskCheckboxProps {
 	task: TaskWithClass;
@@ -14,22 +15,7 @@ interface TaskCheckboxProps {
 
 export default function TaskCheckbox({ task, disabled }: TaskCheckboxProps) {
 	const { settings } = useContext(SettingsContext);
-	const confettiConfig: ConfettiConfig = {
-		angle: 90,
-		spread: 350,
-		startVelocity: 30,
-		elementCount: 100,
-		dragFriction: 0.12,
-		duration: 1000,
-		stagger: 0,
-		width: "10px",
-		height: "10px",
-		colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"],
-	};
-
 	const [showConfetti, setShowConfetti] = useState(false);
-
-	const queryClient = useQueryClient();
 	const { checkMutation } = useTaskMutation();
 
 	const onCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +39,9 @@ export default function TaskCheckbox({ task, disabled }: TaskCheckboxProps) {
 				onChange={onCheck}
 				disabled={disabled}
 			/>
-			<Confetti active={showConfetti} config={confettiConfig} />
+			{settings.confettiEffect && (
+				<Confetti active={showConfetti} config={confettiConfig} />
+			)}
 		</Box>
 	);
 }

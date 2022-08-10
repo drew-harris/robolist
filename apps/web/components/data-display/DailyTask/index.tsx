@@ -1,6 +1,7 @@
 import {
 	ActionIcon,
 	Badge,
+	Box,
 	Checkbox,
 	Group,
 	Menu,
@@ -8,15 +9,14 @@ import {
 	Text,
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
+import { useContext, useState } from "react";
+import Confetti from "react-dom-confetti";
 import { Dots, Pencil, Trash } from "tabler-icons-react";
 import { DailyWithClass } from "types";
+import { SettingsContext } from "../../../contexts/SettingsContext";
 import useDailyMutation from "../../../hooks/useDailyMutation";
-import tasks from "../../../pages/api/tasks";
-import {
-	getNameOfDay,
-	getShortNameOfDay,
-	thisMorning,
-} from "../../../utils/client";
+import { getShortNameOfDay, thisMorning } from "../../../utils/client";
+import { confettiConfig } from "../../../utils/confetti";
 import { TaskMenuOptions } from "../../demo/DemoTask";
 import EditDailyTaskModal from "../../modals/EditDailyTaskModal";
 import { taskPaperProps } from "../Task";
@@ -40,6 +40,8 @@ export default function DailyTask({
 	const isChecked = task.lastCompleted.getTime() > thisMorning().getTime();
 	const { completeDaily, uncheckDaily, deleteDaily } = useDailyMutation();
 	const modals = useModals();
+	const [showConfetti, setShowConfetti] = useState(false);
+	const { settings } = useContext(SettingsContext);
 
 	const promptDelete = () => {
 		modals.openConfirmModal({
@@ -75,6 +77,7 @@ export default function DailyTask({
 			uncheckDaily.mutate(task.id);
 			return;
 		}
+		setShowConfetti(true);
 		completeDaily.mutate(task.id);
 	};
 
@@ -125,7 +128,18 @@ export default function DailyTask({
 		>
 			<Group position="apart">
 				<Group>
-					{checkbox && <Checkbox onClick={check} checked={isChecked} />}
+					{checkbox && (
+						<Box>
+							<Checkbox
+								aria-label="Complete task"
+								onClick={check}
+								checked={isChecked}
+							/>
+							{settings.confettiEffect && (
+								<Confetti active={showConfetti} config={confettiConfig} />
+							)}
+						</Box>
+					)}
 					<Text weight="bolder" size="sm">
 						{task.title}
 					</Text>
