@@ -24,7 +24,7 @@ import FocusContextProvider from "../contexts/FocusContext";
 import SettingsContextProvider from "../contexts/SettingsContext";
 import "../global.css";
 import { pageview } from "../lib/ga";
-import { getBaseUrl, trpc } from "../utils/trpc";
+import { getBaseUrl, trpc, vanilla } from "../utils/trpc";
 
 export { reportWebVitals } from "next-axiom";
 
@@ -36,20 +36,14 @@ function MyApp(props: any) {
 
 	const preferredColorScheme = useColorScheme("dark");
 
-	const { data: colorScheme } = trpc.useQuery(["theme"], {
-		refetchOnWindowFocus: false,
-		refetchInterval: 90000000000,
-		cacheTime: 900000000000,
-		refetchOnMount: false,
-		refetchOnReconnect: false,
-		ssr: true,
-	});
+	const [colorScheme, setColorScheme] = useState(
+		preferredColorScheme || "dark"
+	);
 
 	const router = useRouter();
 
 	const [queryClient] = useState(() => new QueryClient());
 
-	const trpcClient = trpc.useContext();
 	const toggleColorScheme = (value?: ColorScheme) => {
 		console.log("toggling");
 		const nextColorScheme =
@@ -57,10 +51,19 @@ function MyApp(props: any) {
 
 		// setColorScheme(nextColorScheme);
 		if (typeof window !== "undefined") {
-			trpcClient.setQueryData(["theme"], nextColorScheme);
+			setColorScheme(nextColorScheme);
 			setCookie("mantine-color-scheme", nextColorScheme);
 		}
 	};
+
+	useEffect(() => {
+		const getTheme = async () => {
+			const theme = await vanilla.query("theme");
+			setColorScheme(theme || preferredColorScheme);
+		};
+
+		getTheme();
+	}, []);
 
 	const [themeDefaultColor, setThemeDefaultColor] = useState("blue");
 
