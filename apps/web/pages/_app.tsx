@@ -35,24 +35,34 @@ function MyApp(props: any) {
 
 	const preferredColorScheme = useColorScheme("dark");
 
-	// const [colorScheme, setColorScheme] =
-	// 	useState<ColorScheme>(preferredColorScheme);
+	const [colorScheme, setColorScheme] =
+		useState<ColorScheme>(preferredColorScheme);
 
 	const router = useRouter();
 
 	const [queryClient] = useState(() => new QueryClient());
 
 	const toggleColorScheme = (value?: ColorScheme) => {
-		// const nextColorScheme =
-		// 	value || (colorScheme === "dark" ? "light" : "dark");
-		// setColorScheme(nextColorScheme);
-		// const date = new Date(Date.now() + 7 * 24 * 60 * 6000 * 1000);
-		// setCookie("mantine-color-scheme", nextColorScheme, {
-		// 	expires: date,
-		// });
+		const nextColorScheme =
+			value || (colorScheme === "dark" ? "light" : "dark");
+		setColorScheme(nextColorScheme);
+		if (typeof window !== "undefined") {
+			window.localStorage.setItem("theme", nextColorScheme);
+		}
 	};
 
 	const [themeDefaultColor, setThemeDefaultColor] = useState("blue");
+
+	useEffect(() => {
+		if (typeof window === "undefined") {
+			return;
+		} else {
+			setColorScheme(
+				(window.localStorage.getItem("theme") as ColorScheme) ||
+					preferredColorScheme
+			);
+		}
+	}, []);
 
 	// Google analytics
 	useEffect(() => {
@@ -67,7 +77,7 @@ function MyApp(props: any) {
 	}, [router.events]);
 
 	const theme: MantineThemeOverride = {
-		colorScheme: preferredColorScheme,
+		colorScheme,
 		fontFamily: "Inter, sans-serif",
 		headings: {
 			fontFamily: "Inter, sans-serif",
@@ -82,7 +92,7 @@ function MyApp(props: any) {
 				<link rel="manifest" href="/manifest.json" />
 				<meta
 					name="theme-color"
-					content={preferredColorScheme == "dark" ? "#1a1b1e" : "white"}
+					content={colorScheme == "dark" ? "#1a1b1e" : "white"}
 				/>
 				<link rel="apple-touch-icon" href="/logo-96x96.png" />
 				<meta name="apple-mobile-web-app-capable" content="yes"></meta>
@@ -111,7 +121,7 @@ function MyApp(props: any) {
 				{process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
 				{/* <TrpcReactQueryDevtools position="top-left" /> */}
 				<ColorSchemeProvider
-					colorScheme={preferredColorScheme}
+					colorScheme={colorScheme}
 					toggleColorScheme={toggleColorScheme}
 				>
 					<MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
@@ -139,20 +149,6 @@ function MyApp(props: any) {
 		</>
 	);
 }
-
-// AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-// MyApp.getInitialProps = async (appContext: AppContext) => {
-// 	// const scheme = getCookie("mantine-color-scheme", ctx);
-// 	// console.log("Got initial props", scheme);
-// 	const appProps = await App.getInitialProps(appContext);
-// 	return {
-// 		// colorScheme: getCookie("mantine-color-scheme", ctx) || "light",
-// 		testing: 123,
-// 		...appProps,
-// 	};
-// };
-
-// Used by trpc
 
 export default withTRPC<AppRouter>({
 	config({ ctx }) {

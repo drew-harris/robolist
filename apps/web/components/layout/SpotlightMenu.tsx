@@ -106,15 +106,15 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
 			},
 		},
 
-		// {
-		// 	title: "Toggle Dark Mode",
-		// 	icon: <Moon2 />,
-		// 	id: "toggle-dark-mode",
-		// 	keywords: ["theme", "dark", "light", "switch theme"],
-		// 	onTrigger: () => {
-		// 		toggleColorScheme();
-		// 	},
-		// },
+		{
+			title: "Toggle Dark Mode",
+			icon: <Moon2 />,
+			id: "toggle-dark-mode",
+			keywords: ["theme", "dark", "light", "switch theme"],
+			onTrigger: () => {
+				toggleColorScheme();
+			},
+		},
 	];
 	return (
 		<SpotlightProvider overlayBlur={0} actions={actions}>
