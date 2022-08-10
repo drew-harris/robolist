@@ -12,8 +12,17 @@ export async function createContext(opts?: trpcNext.CreateNextContextOptions) {
 		console.log("NO JWT FOUND");
 		return null;
 	}
+
+	async function getTheme() {
+		if (opts?.req.cookies["mantine-color-scheme"]) {
+			return opts.req.cookies["mantine-color-scheme"];
+		}
+		return null;
+	}
 	const user = await getUserFromHeader();
+	const theme = await getTheme();
 	return {
+		theme,
 		user,
 	};
 }

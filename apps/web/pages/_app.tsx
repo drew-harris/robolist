@@ -9,7 +9,9 @@ import { ModalsProvider } from "@mantine/modals";
 import { NotificationsProvider } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { TRPCClient } from "@trpc/client/dist/declarations/src/internals/TRPCClient";
 import { withTRPC } from "@trpc/next";
+import { setCookie } from "cookies-next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Script from "next/script";
@@ -23,7 +25,7 @@ import FocusContextProvider from "../contexts/FocusContext";
 import SettingsContextProvider from "../contexts/SettingsContext";
 import "../global.css";
 import { pageview } from "../lib/ga";
-import { getBaseUrl } from "../utils/trpc";
+import { getBaseUrl, trpc } from "../utils/trpc";
 
 export { reportWebVitals } from "next-axiom";
 
@@ -35,39 +37,35 @@ function MyApp(props: any) {
 
 	const preferredColorScheme = useColorScheme("dark");
 
-	const [colorScheme, setColorScheme] = useState<ColorScheme | null>(null);
+	const [refreshTheme, setRefreshTheme] = useState(true);
+	useEffect(() => {
+		setRefreshTheme(false);
+	}, []);
+
+	const { data: colorScheme } = trpc.useQuery(["theme"], {
+		enabled: refreshTheme,
+	});
+
+	const trpcClient = trpc.useContext();
 
 	const router = useRouter();
 
 	const [queryClient] = useState(() => new QueryClient());
 
-	const [loaded, setLoaded] = useState(false);
-
-	useEffect(() => {
-		setLoaded(true);
-	}, []);
-
 	const toggleColorScheme = (value?: ColorScheme) => {
 		const nextColorScheme =
 			value || (colorScheme === "dark" ? "light" : "dark");
-		setColorScheme(nextColorScheme);
 		if (typeof window !== "undefined") {
-			window.localStorage.setItem("theme", nextColorScheme);
+			const oneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
+			setCookie("mantine-color-scheme", nextColorScheme, {
+				expires: oneMonth,
+			});
+			trpcClient.setQueryData(["theme"], nextColorScheme);
 		}
 	};
 
 	const [themeDefaultColor, setThemeDefaultColor] = useState("blue");
-
-	useEffect(() => {
-		if (typeof window === "undefined") {
-			return;
-		} else {
-			setColorScheme(
-				(window.localStorage.getItem("theme") as ColorScheme) ||
-					preferredColorScheme
-			);
-		}
-	}, [preferredColorScheme]);
 
 	// Google analytics
 	useEffect(() => {
@@ -139,12 +137,10 @@ function MyApp(props: any) {
 								<ModalsProvider>
 									<NotificationsProvider>
 										<SpotlightMenu>
-											{loaded && (
-												<LayoutShell>
-													<FocusTabTitle />
-													<Component {...pageProps} />
-												</LayoutShell>
-											)}
+											<LayoutShell>
+												<FocusTabTitle />
+												<Component {...pageProps} />
+											</LayoutShell>
 										</SpotlightMenu>
 									</NotificationsProvider>
 								</ModalsProvider>
@@ -171,10 +167,11 @@ export default withTRPC<AppRouter>({
 			 * @link https://react-query-v3.tanstack.com/reference/QueryClient
 			 */
 			queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
+			headers: ctx?.req?.headers,
 		};
 	},
 	/**
 	 * @link https://trpc.io/docs/ssr
 	 */
-	ssr: false,
+	ssr: true,
 })(MyApp);
