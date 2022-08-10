@@ -87,7 +87,7 @@ export default function DemoScheduleController() {
 				.map((task) => {
 					task.workDate = new Date(
 						thisMorning.getTime() +
-						24 * 60 * 60 * 1000 * (Math.floor(Math.random() * 5) + 1)
+							24 * 60 * 60 * 1000 * (Math.floor(Math.random() * 5) + 1)
 					);
 					return task;
 				})

@@ -39,7 +39,6 @@ export type TDemoTask = Pick<
 	"id" | "title" | "workDate" | "workTime" | "class" | "complete"
 >;
 
-
-export type DailyWithClass = (Daily & {
+export type DailyWithClass = Daily & {
 	class: Class | null;
-})
+};

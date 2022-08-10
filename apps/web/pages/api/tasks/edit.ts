@@ -31,10 +31,10 @@ async function handler(
 	try {
 		const classDoc = doc.classId
 			? {
-				connect: {
-					id: doc.classId,
-				},
-			}
+					connect: {
+						id: doc.classId,
+					},
+			  }
 			: { disconnect: true };
 		const prisma = getPrismaPool();
 		const updatedTask = await prisma.task.update({

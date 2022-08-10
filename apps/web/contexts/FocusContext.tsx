@@ -23,14 +23,14 @@ export const FocusContext = createContext<{
 	};
 }>({
 	focusState: defaultContextState,
-	setFocusState: () => { },
+	setFocusState: () => {},
 	fn: {
-		start: () => { },
-		cancel: () => { },
-		pause: () => { },
-		play: () => { },
-		startTask: () => { },
-		addTime: () => { },
+		start: () => {},
+		cancel: () => {},
+		pause: () => {},
+		play: () => {},
+		startTask: () => {},
+		addTime: () => {},
 	},
 });
 

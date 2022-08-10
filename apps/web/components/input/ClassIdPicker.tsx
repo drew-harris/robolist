@@ -20,11 +20,11 @@ export default function ClassIdPicker(props: IdPickerProps) {
 
 	const classLabels = classes
 		? classes.map((c) => {
-			return {
-				label: c.name,
-				value: c.id,
-			};
-		})
+				return {
+					label: c.name,
+					value: c.id,
+				};
+		  })
 		: [];
 
 	return (

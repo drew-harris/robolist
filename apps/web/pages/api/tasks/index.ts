@@ -30,10 +30,10 @@ async function createTask(
 
 		const classDoc = data.classId
 			? {
-				connect: {
-					id: data.classId,
-				},
-			}
+					connect: {
+						id: data.classId,
+					},
+			  }
 			: undefined;
 
 		const doc: Prisma.TaskCreateInput = {

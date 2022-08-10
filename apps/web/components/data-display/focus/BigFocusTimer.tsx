@@ -1,11 +1,12 @@
 import {
-	ActionIcon, Group,
+	ActionIcon,
+	Group,
 	Popover,
 	RingProgress,
 	Stack,
 	Text,
 	Tooltip,
-	useMantineTheme
+	useMantineTheme,
 } from "@mantine/core";
 import { useHotkeys, useMediaQuery, useViewportSize } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
@@ -178,7 +179,7 @@ export default function BigFocusTimer() {
 					</Tooltip>
 					<Popover>
 						<Popover.Target>
-							<Tooltip label="Add 5 Minutes" >
+							<Tooltip label="Add 5 Minutes">
 								<ActionIcon onClick={() => focusFn.addTime(5)} size={iconSize}>
 									<HiPlus size={iconSize - 6} onClick={focusFn.pause} />
 								</ActionIcon>

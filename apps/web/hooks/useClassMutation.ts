@@ -8,7 +8,7 @@ export default function useClassMutation() {
 	const queryClient = useQueryClient();
 	const deleteMutation = useMutation(
 		(id: string) => {
-			return vanilla.mutation("classes.delete", id)
+			return vanilla.mutation("classes.delete", id);
 		},
 		{
 			onMutate: async (id: string) => {
@@ -35,7 +35,11 @@ export default function useClassMutation() {
 
 	const editMutation = useMutation(
 		(classData: InferMutationInput<"classes.edit">) => {
-			return vanilla.mutation("classes.edit", { color: classData.color, name: classData.name, id: classData.id })
+			return vanilla.mutation("classes.edit", {
+				color: classData.color,
+				name: classData.name,
+				id: classData.id,
+			});
 		},
 		{
 			onMutate: async (classData: Partial<Class>) => {

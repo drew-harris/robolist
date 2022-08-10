@@ -90,7 +90,6 @@ export interface APITaskOrError {
 	task?: TaskWithClass;
 }
 
-
 export interface APISuccessOrError {
 	error?: APIError;
 	success: boolean;

@@ -35,12 +35,17 @@ function MyApp(props: any) {
 
 	const preferredColorScheme = useColorScheme("dark");
 
-	const [colorScheme, setColorScheme] =
-		useState<ColorScheme>(preferredColorScheme);
+	const [colorScheme, setColorScheme] = useState<ColorScheme | null>(null);
 
 	const router = useRouter();
 
 	const [queryClient] = useState(() => new QueryClient());
+
+	const [loaded, setLoaded] = useState(false);
+
+	useEffect(() => {
+		setLoaded(true);
+	}, []);
 
 	const toggleColorScheme = (value?: ColorScheme) => {
 		const nextColorScheme =
@@ -62,7 +67,7 @@ function MyApp(props: any) {
 					preferredColorScheme
 			);
 		}
-	}, []);
+	}, [preferredColorScheme]);
 
 	// Google analytics
 	useEffect(() => {
@@ -77,7 +82,7 @@ function MyApp(props: any) {
 	}, [router.events]);
 
 	const theme: MantineThemeOverride = {
-		colorScheme,
+		colorScheme: colorScheme ?? preferredColorScheme,
 		fontFamily: "Inter, sans-serif",
 		headings: {
 			fontFamily: "Inter, sans-serif",
@@ -121,7 +126,7 @@ function MyApp(props: any) {
 				{process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
 				{/* <TrpcReactQueryDevtools position="top-left" /> */}
 				<ColorSchemeProvider
-					colorScheme={colorScheme}
+					colorScheme={colorScheme ?? preferredColorScheme}
 					toggleColorScheme={toggleColorScheme}
 				>
 					<MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
@@ -134,10 +139,12 @@ function MyApp(props: any) {
 								<ModalsProvider>
 									<NotificationsProvider>
 										<SpotlightMenu>
-											<LayoutShell>
-												<FocusTabTitle />
-												<Component {...pageProps} />
-											</LayoutShell>
+											{loaded && (
+												<LayoutShell>
+													<FocusTabTitle />
+													<Component {...pageProps} />
+												</LayoutShell>
+											)}
 										</SpotlightMenu>
 									</NotificationsProvider>
 								</ModalsProvider>

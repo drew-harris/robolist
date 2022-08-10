@@ -6,7 +6,10 @@ import { APICompleteRequest, APITaskOrError, TaskWithClass } from "types";
 import { getPrismaPool } from "../../../serverapi/prismapool";
 import { getUserFromJWT, unauthorizedResponse } from "../../../utils/server";
 
-async function handler(req: NextApiRequest, res: NextApiResponse<APITaskOrError>) {
+async function handler(
+	req: NextApiRequest,
+	res: NextApiResponse<APITaskOrError>
+) {
 	if (req?.method != "POST") {
 		return res.status(405).json({ error: { message: "Method not allowed" } });
 	}

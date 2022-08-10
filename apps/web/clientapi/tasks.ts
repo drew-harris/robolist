@@ -1,4 +1,9 @@
-import { APISuccessOrError, APITaskOrError, APITasksOrError, TaskWithClass } from "types";
+import {
+	APISuccessOrError,
+	APITaskOrError,
+	APITasksOrError,
+	TaskWithClass,
+} from "types";
 
 export async function getTasks(): Promise<TaskWithClass[]> {
 	try {

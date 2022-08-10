@@ -43,7 +43,6 @@ const DemoTask = ({
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
 
 	const paperSx: Sx = (theme) => {
-
 		return {
 			opacity: task.complete ? 0.4 : 1,
 			transition: "opacity .20s linear, height 1.20s linear",

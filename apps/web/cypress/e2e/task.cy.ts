@@ -10,4 +10,4 @@ describe("task", () => {
 	});
 });
 
-export { };
+export {};

@@ -98,7 +98,9 @@ export async function getTaskById(
 	userId: string | undefined = undefined
 ): Promise<TaskWithClass | null> {
 	try {
-		const yesterdayMorning = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+		const yesterdayMorning = new Date(
+			new Date().getTime() - 24 * 60 * 60 * 1000
+		);
 		yesterdayMorning.setHours(0, 0, 0, 0);
 		const prisma = getPrismaPool();
 		const task = await prisma.task.findFirst({
@@ -107,7 +109,7 @@ export async function getTaskById(
 				userId: userId,
 				dueDate: {
 					gte: yesterdayMorning,
-				}
+				},
 			},
 			include: {
 				class: true,
