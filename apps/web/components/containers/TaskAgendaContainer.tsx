@@ -62,7 +62,7 @@ function RealTaskAgendaContainer({ tasks, ...props }: TaskContainerProps) {
 	const elements: JSX.Element[] = [];
 	let addedDivider = false;
 	groups.forEach((group) => {
-		if (group[0].workDate >= thisMorning() && !addedDivider) {
+		if (group[0].workDate >= thisMorning() && !addedDivider && !props.demo) {
 			elements.push(<Divider my="md" />);
 			addedDivider = true;
 		}
