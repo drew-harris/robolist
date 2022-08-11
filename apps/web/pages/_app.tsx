@@ -1,7 +1,9 @@
 import {
 	ColorScheme,
 	ColorSchemeProvider,
+	MantineColor,
 	MantineProvider,
+	MantineThemeColors,
 	MantineThemeOverride,
 } from "@mantine/core";
 import { useColorScheme } from "@mantine/hooks";
@@ -9,7 +11,6 @@ import { ModalsProvider } from "@mantine/modals";
 import { NotificationsProvider } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { TRPCClient } from "@trpc/client/dist/declarations/src/internals/TRPCClient";
 import { withTRPC } from "@trpc/next";
 import { setCookie } from "cookies-next";
 import Head from "next/head";
@@ -42,7 +43,7 @@ function MyApp(props: any) {
 		setRefreshTheme(false);
 	}, []);
 
-	const { data: colorScheme } = trpc.useQuery(["theme"], {
+	const { data: settingsAndTheme } = trpc.useQuery(["theme-and-settings"], {
 		enabled: refreshTheme,
 	});
 
@@ -54,18 +55,22 @@ function MyApp(props: any) {
 
 	const toggleColorScheme = (value?: ColorScheme) => {
 		const nextColorScheme =
-			value || (colorScheme === "dark" ? "light" : "dark");
+			value || (settingsAndTheme?.theme === "dark" ? "light" : "dark");
 		if (typeof window !== "undefined") {
 			const oneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
 			setCookie("mantine-color-scheme", nextColorScheme, {
 				expires: oneMonth,
 			});
-			trpcClient.setQueryData(["theme"], nextColorScheme);
+			trpcClient.setQueryData(["theme-and-settings"], {
+				settings: settingsAndTheme?.settings || null,
+				theme: nextColorScheme,
+			});
 		}
 	};
 
-	const [themeDefaultColor, setThemeDefaultColor] = useState("blue");
+	const [themeDefaultColor, setThemeDefaultColor] =
+		useState<MantineColor | null>(null);
 
 	// Google analytics
 	useEffect(() => {
@@ -80,12 +85,13 @@ function MyApp(props: any) {
 	}, [router.events]);
 
 	const theme: MantineThemeOverride = {
-		colorScheme: colorScheme ?? preferredColorScheme,
+		colorScheme: settingsAndTheme?.theme ?? preferredColorScheme,
 		fontFamily: "Inter, sans-serif",
 		headings: {
 			fontFamily: "Inter, sans-serif",
 		},
-		primaryColor: themeDefaultColor,
+		primaryColor:
+			themeDefaultColor ?? settingsAndTheme?.settings?.themeColor ?? "blue",
 	};
 
 	return (
@@ -95,7 +101,7 @@ function MyApp(props: any) {
 				<link rel="manifest" href="/manifest.json" />
 				<meta
 					name="theme-color"
-					content={colorScheme == "dark" ? "#1a1b1e" : "white"}
+					content={settingsAndTheme?.theme == "dark" ? "#1a1b1e" : "white"}
 				/>
 				<link rel="apple-touch-icon" href="/logo-96x96.png" />
 				<meta name="apple-mobile-web-app-capable" content="yes"></meta>
@@ -124,7 +130,7 @@ function MyApp(props: any) {
 				{process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
 				{/* <TrpcReactQueryDevtools position="top-left" /> */}
 				<ColorSchemeProvider
-					colorScheme={colorScheme ?? preferredColorScheme}
+					colorScheme={settingsAndTheme?.theme ?? preferredColorScheme}
 					toggleColorScheme={toggleColorScheme}
 				>
 					<MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
@@ -132,6 +138,7 @@ function MyApp(props: any) {
 							onColorChange={(color) => {
 								setThemeDefaultColor(color);
 							}}
+							ssrSettings={settingsAndTheme?.settings ?? null}
 						>
 							<FocusContextProvider>
 								<ModalsProvider>

@@ -1,5 +1,6 @@
 import { MantineColor } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
+import { setCookie } from "cookies-next";
 import { createContext, Dispatch, SetStateAction, useEffect } from "react";
 import type { Settings } from "types";
 
@@ -15,7 +16,7 @@ const defaultSettings: Settings = {
 
 export const SettingsContext = createContext<{
 	settings: Settings;
-	setSettings: Dispatch<SetStateAction<Settings>>;
+	setSettings: (settings: Settings) => void;
 }>({
 	settings: defaultSettings,
 	setSettings: () => {},
@@ -24,12 +25,14 @@ export const SettingsContext = createContext<{
 interface SettingsContextProviderProps {
 	onColorChange: (color: MantineColor) => void;
 	children: React.ReactNode;
+	ssrSettings: Settings | null;
 }
 export default function SettingsContextProvider({
 	children,
 	onColorChange,
+	ssrSettings,
 }: SettingsContextProviderProps) {
-	const [settings, setSettings] = useLocalStorage<Settings>({
+	const [settings, setRawSettings] = useLocalStorage<Settings>({
 		key: "settings",
 		serialize: (settings) => JSON.stringify(settings),
 		deserialize: (str) => {
@@ -39,14 +42,23 @@ export default function SettingsContextProvider({
 				return defaultSettings;
 			}
 		},
-		defaultValue: defaultSettings,
+		defaultValue: ssrSettings || defaultSettings,
 	});
+
+	useEffect(() => {
+		console.log("SSR SETTINGS:, ", ssrSettings);
+	}, []);
 
 	useEffect(() => {
 		if (settings.themeColor) {
 			onColorChange(settings.themeColor);
 		}
 	}, [onColorChange, settings.themeColor]);
+
+	const setSettings = (newSettings: Settings) => {
+		setRawSettings(newSettings);
+		setCookie("settings", JSON.stringify(newSettings));
+	};
 
 	return (
 		<SettingsContext.Provider value={{ settings, setSettings }}>
