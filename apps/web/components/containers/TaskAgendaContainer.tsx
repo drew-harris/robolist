@@ -38,10 +38,14 @@ export default function TaskAgendaContainer({
 		);
 	}
 
-	return <RealTaskAgendaContainer tasks={tasks} {...props} />;
+	return <RealTaskAgendaContainer demo={demo} tasks={tasks} {...props} />;
 }
 
-function RealTaskAgendaContainer({ tasks, ...props }: TaskContainerProps) {
+function RealTaskAgendaContainer({
+	tasks,
+	demo,
+	...props
+}: TaskContainerProps) {
 	const [parent] = useAutoAnimate<HTMLDivElement>({
 		duration: 300,
 	});
@@ -62,7 +66,8 @@ function RealTaskAgendaContainer({ tasks, ...props }: TaskContainerProps) {
 	const elements: JSX.Element[] = [];
 	let addedDivider = false;
 	groups.forEach((group) => {
-		if (group[0].workDate >= thisMorning() && !addedDivider && !props.demo) {
+		console.log(demo);
+		if (group[0].workDate >= thisMorning() && !addedDivider && !demo) {
 			elements.push(<Divider my="md" />);
 			addedDivider = true;
 		}
@@ -76,7 +81,7 @@ function RealTaskAgendaContainer({ tasks, ...props }: TaskContainerProps) {
 		);
 
 		group.forEach((task) => {
-			if (props.demo) {
+			if (demo) {
 				elements.push(<DemoTask {...props} key={task.id} task={task} />);
 			} else {
 				elements.push(<Task {...props} key={task.id} task={task} />);
