@@ -9,7 +9,6 @@ export async function createContext(opts?: trpcNext.CreateNextContextOptions) {
 			const user = await getUserFromJWT(opts.req.cookies.jwt);
 			return user;
 		}
-		console.log("NO JWT FOUND");
 		return null;
 	}
 
@@ -19,11 +18,20 @@ export async function createContext(opts?: trpcNext.CreateNextContextOptions) {
 		}
 		return null;
 	}
+
+	async function getSettings() {
+		if (opts?.req.cookies["settings"]) {
+			return opts.req.cookies["settings"];
+		}
+		return null;
+	}
 	const user = await getUserFromHeader();
 	const theme = await getTheme();
+	const settings = await getSettings();
 	return {
 		theme,
 		user,
+		settings,
 	};
 }
 type Context = trpc.inferAsyncReturnType<typeof createContext>;
