@@ -5,7 +5,6 @@ import CalendarHeatmapDatePicker from "../../components/input/CalendarHeatmapDat
 import CenterInfo from "../../components/small/CenterInfo";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import useInitialPrefetch from "../../hooks/useInitialPrefetch";
-import { thisMorning } from "../../utils/client";
 
 export default function CalendarPage() {
 	const { settings } = useContext(SettingsContext);

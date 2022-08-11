@@ -1,5 +1,4 @@
 import { isSameDate } from "@mantine/dates";
-import { IoTodayOutline } from "react-icons/io5";
 import tinygradient from "tinygradient";
 import { TaskWithClass, TDemoTask } from "types";
 

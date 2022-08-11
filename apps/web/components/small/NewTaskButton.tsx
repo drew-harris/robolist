@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from "@mantine/core";
-import { openModal, useModals } from "@mantine/modals";
+import { openModal } from "@mantine/modals";
 import { Plus } from "tabler-icons-react";
 import NewTaskModal from "../modals/NewTaskModal";
 

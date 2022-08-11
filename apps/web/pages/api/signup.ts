@@ -1,13 +1,13 @@
-import { Prisma, PrismaClient, User } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import * as bcrypt from "bcrypt";
 import { setCookie } from "cookies-next";
 import * as EmailValidator from "email-validator";
 import * as JWT from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
+import { log, withAxiom } from "next-axiom";
 import type { APIRegisterResponse } from "types";
 import { UserWithoutPassword } from "types";
 import { getPrismaPool } from "../../serverapi/prismapool";
-import { log, withAxiom } from "next-axiom";
 
 const PASSWORD_MIN_LENGTH = 5;
 

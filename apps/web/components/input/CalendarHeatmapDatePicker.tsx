@@ -1,4 +1,4 @@
-import { Box, Tooltip, useMantineTheme, Text, Center } from "@mantine/core";
+import { Box, Tooltip, useMantineTheme } from "@mantine/core";
 import { Calendar, CalendarProps, DayModifiers } from "@mantine/dates";
 import { useQuery } from "@tanstack/react-query";
 import { ReactNode, useContext, useEffect, useState } from "react";

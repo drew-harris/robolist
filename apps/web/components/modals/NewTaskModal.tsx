@@ -6,7 +6,6 @@ import {
 	Stack,
 	TextInput,
 } from "@mantine/core";
-import { defaultShouldCreate } from "@mantine/core/lib/Select/Select";
 import { DatePicker, DatePickerProps } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useModals } from "@mantine/modals";

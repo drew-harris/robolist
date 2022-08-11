@@ -1,11 +1,9 @@
 import { Box, Popover, Text, Tooltip, useMantineTheme } from "@mantine/core";
 import { DatePicker, DayModifiers, isSameDate } from "@mantine/dates";
-import { useQuery } from "@tanstack/react-query";
 import { ReactNode, useContext, useEffect, useState } from "react";
 import { DateAggregation } from "types";
-import { getDateAggregation } from "../../clientapi/dates";
 import { SettingsContext } from "../../contexts/SettingsContext";
-import { dateIsToday, getHeatmapColor } from "../../utils/client";
+import { getHeatmapColor } from "../../utils/client";
 
 const label = (
 	<Tooltip label="Shows which days are busiest. More Red = More Busy">

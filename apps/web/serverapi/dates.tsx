@@ -1,4 +1,3 @@
-import { log } from "next-axiom";
 import { DateAggregation, UserWithoutPassword } from "types";
 import { getPrismaPool } from "./prismapool";
 

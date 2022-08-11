@@ -1,6 +1,5 @@
-import { Prisma, Task } from "@prisma/client";
 import type { Class } from "@prisma/client";
-import { ClassNames } from "@emotion/react";
+import { Prisma, Task } from "@prisma/client";
 import { DateAggregation, TaskWithClass } from "..";
 
 export interface APIRegisterResponse {

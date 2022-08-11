@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Rotate360 } from "tabler-icons-react";
-import { TaskWithClass, TDemoTask } from "types";
+import { TDemoTask } from "types";
 
 type TaskProps = TaskOptionProps & {
 	task: TDemoTask;

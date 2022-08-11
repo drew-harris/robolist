@@ -2,7 +2,6 @@ import {
 	ActionIcon,
 	Anchor,
 	AppShell,
-	BackgroundImage,
 	Box,
 	Burger,
 	Group,

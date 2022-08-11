@@ -1,5 +1,5 @@
-import { APIError, UserWithoutPassword } from "types";
 import * as jwt from "jsonwebtoken";
+import { APIError, UserWithoutPassword } from "types";
 
 export function getUserFromJWT(
 	token: string | undefined

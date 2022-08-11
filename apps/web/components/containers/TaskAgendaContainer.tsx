@@ -1,5 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Box, Divider, Group, Space, Stack, Text, Title } from "@mantine/core";
+import { Divider, Group, Space, Stack, Text, Title } from "@mantine/core";
 import { useContext, useMemo } from "react";
 import { TaskWithClass, TDemoTask } from "types";
 import { SettingsContext } from "../../contexts/SettingsContext";

@@ -1,5 +1,4 @@
 import { Box, Checkbox } from "@mantine/core";
-import { useQueryClient } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import Confetti from "react-dom-confetti";
 import { TaskWithClass } from "types";

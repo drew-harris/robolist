@@ -8,7 +8,6 @@ import {
 	CalendarPlus,
 	CalendarTime,
 	List,
-	LockOpen,
 	Moon2,
 	Plus,
 	School,

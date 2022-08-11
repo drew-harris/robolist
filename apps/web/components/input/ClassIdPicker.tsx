@@ -2,9 +2,7 @@ import { Loader, Select } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import { Class } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import { School } from "tabler-icons-react";
-import { getClasses } from "../../clientapi/classes";
 import { vanilla } from "../../utils/trpc";
 
 interface IdPickerProps {

@@ -11,8 +11,6 @@ import {
 } from "@mantine/core";
 import { useHotkeys } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
-import { NavigationProgress } from "@mantine/nprogress";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { BsPlayFill } from "react-icons/bs";

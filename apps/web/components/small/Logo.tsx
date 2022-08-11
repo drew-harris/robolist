@@ -1,6 +1,5 @@
 import { Title } from "@mantine/core";
 import Link from "next/link";
-import { ComponentProps } from "react";
 
 export default function Logo() {
 	return (

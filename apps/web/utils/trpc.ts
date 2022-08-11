@@ -1,12 +1,12 @@
 import { createTRPCClient } from "@trpc/client";
 import { createReactQueryHooks } from "@trpc/react";
-import superjson from "superjson";
-import type { AppRouter } from "trpc-server/src/index";
 import type {
-	inferProcedureOutput,
 	inferProcedureInput,
+	inferProcedureOutput,
 	inferSubscriptionOutput,
 } from "@trpc/server";
+import superjson from "superjson";
+import type { AppRouter } from "trpc-server/src/index";
 
 export const trpc = createReactQueryHooks<AppRouter>();
 // => { useQuery: ..., useMutation: ...}

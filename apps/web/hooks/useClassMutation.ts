@@ -1,8 +1,7 @@
 import { showNotification } from "@mantine/notifications";
 import { Class } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteClass, editClass } from "../clientapi/classes";
-import { InferMutationInput, InferQueryInput, vanilla } from "../utils/trpc";
+import { InferMutationInput, vanilla } from "../utils/trpc";
 
 export default function useClassMutation() {
 	const queryClient = useQueryClient();

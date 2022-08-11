@@ -1,5 +1,5 @@
-import { Box, Center, Stack, Title } from "@mantine/core";
-import { AlertTriangle, MoodSad } from "tabler-icons-react";
+import { Center, Stack, Title } from "@mantine/core";
+import { MoodSad } from "tabler-icons-react";
 
 export default function ClosedPage() {
 	const message = "Sorry, We're Closed";

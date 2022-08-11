@@ -1,5 +1,4 @@
 import { useInterval } from "@mantine/hooks";
-import _ from "cypress/types/lodash";
 import { useEffect, useState } from "react";
 import { TDemoTask } from "types";
 import TaskAgendaContainer from "../containers/TaskAgendaContainer";

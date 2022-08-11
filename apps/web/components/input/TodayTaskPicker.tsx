@@ -1,4 +1,4 @@
-import { Box, Loader, Stack, Text } from "@mantine/core";
+import { Loader, Stack, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 import { TaskWithClass } from "types";

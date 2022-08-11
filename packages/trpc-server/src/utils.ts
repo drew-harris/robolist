@@ -1,6 +1,6 @@
-import { UserWithoutPassword } from "types";
-import * as jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
+import * as jwt from "jsonwebtoken";
+import { UserWithoutPassword } from "types";
 export function getUserFromJWT(
 	token: string | undefined
 ): UserWithoutPassword | null {

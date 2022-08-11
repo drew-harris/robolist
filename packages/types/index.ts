@@ -1,9 +1,9 @@
 import type { Class, Daily, Task, User } from "@prisma/client";
 export type UserWithoutPassword = Omit<User, "password">;
 
-export * from "./settings";
 export * from "./api";
 export * from "./focus";
+export * from "./settings";
 
 export const colorChoices: string[] = [
 	"red",

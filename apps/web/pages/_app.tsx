@@ -3,7 +3,6 @@ import {
 	ColorSchemeProvider,
 	MantineColor,
 	MantineProvider,
-	MantineThemeColors,
 	MantineThemeOverride,
 } from "@mantine/core";
 import { useColorScheme } from "@mantine/hooks";
