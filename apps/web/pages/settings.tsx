@@ -76,6 +76,11 @@ export default function SettingsPage() {
 						{...form.getInputProps("useDailyTasks")}
 						checked={form.values.useDailyTasks}
 					/>
+					<Checkbox
+						label="Strict Mode"
+						{...form.getInputProps("useStrictMode")}
+						checked={form.values.useStrictMode}
+					/>
 				</Stack>
 				<Stack sx={stackSx}>
 					<Select

@@ -1,10 +1,11 @@
 import { ActionIcon, Modal, Tooltip } from "@mantine/core";
-import { isSameDate } from "@mantine/dates";
-import { useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { Rotate360 } from "tabler-icons-react";
 import { TaskWithClass } from "types";
+import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
 import { logEvent } from "../../../lib/ga";
+import { canReschedule } from "../../../utils/tasks";
 import CalendarHeatmapDatePicker from "../../input/CalendarHeatmapDatePicker";
 
 interface RescheduleButtonProps {
@@ -14,6 +15,7 @@ export default function RescheduleButton(props: RescheduleButtonProps) {
 	const { task } = props;
 	const [opened, setOpened] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date | null>(task.workDate);
+	const { settings } = useContext(SettingsContext);
 
 	const { rescheduleMutation } = useTaskMutation();
 
@@ -52,12 +54,7 @@ export default function RescheduleButton(props: RescheduleButtonProps) {
 		}
 	};
 
-	if (
-		(isSameDate(task.workDate, times.thisMorning) &&
-			!task.complete &&
-			task.dueDate <= times.thisMorning) ||
-		task.complete
-	) {
+	if (!canReschedule(task, settings)) {
 		return null;
 	}
 

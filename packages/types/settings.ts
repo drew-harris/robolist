@@ -8,4 +8,5 @@ export interface Settings {
 	useFocusMode: boolean;
 	themeColor: MantineColor;
 	useDailyTasks: boolean;
+	useStrictMode: boolean;
 }

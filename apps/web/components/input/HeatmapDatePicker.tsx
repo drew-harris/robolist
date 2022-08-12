@@ -1,5 +1,5 @@
 import { Box, Text, Tooltip, useMantineTheme } from "@mantine/core";
-import { DatePicker, DayModifiers } from "@mantine/dates";
+import { DatePicker, DatePickerProps, DayModifiers } from "@mantine/dates";
 import { useQuery } from "@tanstack/react-query";
 import { ReactNode, useContext, useEffect, useState } from "react";
 import { DateAggregation } from "types";
@@ -7,13 +7,7 @@ import { getDateAggregation } from "../../clientapi/dates";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import { dateIsToday, getHeatmapColor } from "../../utils/client";
 
-const label = (
-	<Tooltip label="Shows which days are busiest. More Red = More Busy">
-		<div>Work Date</div>
-	</Tooltip>
-);
-
-export default function HeatmapDatePicker(props: any) {
+export default function HeatmapDatePicker(props: DatePickerProps) {
 	const { data: agg } = useQuery<DateAggregation[], Error>(
 		["dates"],
 		getDateAggregation
@@ -52,7 +46,7 @@ export default function HeatmapDatePicker(props: any) {
 	const getDateStyle = (
 		date: Date,
 		modifiers: DayModifiers
-	): React.CSSProperties | null => {
+	): React.CSSProperties => {
 		let style: React.CSSProperties = {
 			backgroundColor: undefined,
 		};
@@ -119,6 +113,12 @@ export default function HeatmapDatePicker(props: any) {
 			</Tooltip>
 		);
 	};
+
+	const label = (
+		<Tooltip label="Shows which days are busiest. More Red = More Busy">
+			<div>{props.label || "Work Date"}</div>
+		</Tooltip>
+	);
 
 	return (
 		<DatePicker
