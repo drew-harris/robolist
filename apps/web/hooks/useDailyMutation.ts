@@ -1,3 +1,4 @@
+import { showNotification } from "@mantine/notifications";
 import { DailyWithClass } from "types";
 import { getWeekdayNumber } from "../utils/client";
 import { trpc } from "../utils/trpc";
@@ -117,6 +118,13 @@ export default function useDailyMutation() {
 				["daily.on-dates", [getWeekdayNumber()]],
 				updater
 			);
+		},
+
+		onError: (err) => {
+			showNotification({
+				message: err.message || "Error editing daily",
+				color: "red",
+			});
 		},
 
 		onSettled: (res) => {
