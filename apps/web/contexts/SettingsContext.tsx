@@ -1,7 +1,7 @@
 import { MantineColor } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { setCookie } from "cookies-next";
-import { createContext, Dispatch, SetStateAction, useEffect } from "react";
+import { createContext, useEffect } from "react";
 import type { Settings } from "types";
 
 const defaultSettings: Settings = {
@@ -11,6 +11,7 @@ const defaultSettings: Settings = {
 	confettiEffect: true,
 	useFocusMode: false,
 	themeColor: "blue",
+	useStrictMode: false,
 	useDailyTasks: true,
 };
 
@@ -25,7 +26,7 @@ export const SettingsContext = createContext<{
 interface SettingsContextProviderProps {
 	onColorChange: (color: MantineColor) => void;
 	children: React.ReactNode;
-	ssrSettings: Settings | null;
+	ssrSettings: Partial<Settings> | null;
 }
 export default function SettingsContextProvider({
 	children,
@@ -42,12 +43,8 @@ export default function SettingsContextProvider({
 				return defaultSettings;
 			}
 		},
-		defaultValue: ssrSettings || defaultSettings,
+		defaultValue: { ...defaultSettings, ...ssrSettings },
 	});
-
-	useEffect(() => {
-		console.log("SSR SETTINGS:, ", ssrSettings);
-	}, []);
 
 	useEffect(() => {
 		if (settings.themeColor) {

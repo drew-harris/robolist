@@ -12,10 +12,9 @@ export const appRouter = createRouter()
 	.merge("daily.", daily)
 	.query("theme-and-settings", {
 		resolve: (ctx) => {
-			console.log("returning theme: ", ctx.ctx.theme);
-			let settings: Settings | null = null;
+			let settings: Partial<Settings> | null = null;
 			if (ctx.ctx.settings) {
-				settings = JSON.parse(ctx.ctx.settings) as Settings;
+				settings = JSON.parse(ctx.ctx.settings) as Partial<Settings>;
 			}
 			return {
 				theme: ctx.ctx.theme as ColorScheme | null,
