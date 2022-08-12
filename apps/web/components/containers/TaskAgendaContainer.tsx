@@ -66,7 +66,6 @@ function RealTaskAgendaContainer({
 	const elements: JSX.Element[] = [];
 	let addedDivider = false;
 	groups.forEach((group) => {
-		console.log(demo);
 		if (group[0].workDate >= thisMorning() && !addedDivider && !demo) {
 			elements.push(<Divider my="md" />);
 			addedDivider = true;

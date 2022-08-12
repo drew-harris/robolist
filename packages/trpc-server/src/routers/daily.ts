@@ -1,4 +1,6 @@
+import { Prisma } from "@prisma/client";
 import superjson from "superjson";
+import { DailyWithClass } from "types";
 import { z } from "zod";
 import { createRouter } from "../server/context";
 import { getPrismaPool } from "../utils";
@@ -133,7 +135,7 @@ export const daily = createRouter()
 		resolve: async ({ ctx, input }) => {
 			try {
 				const prisma = getPrismaPool();
-				const dailies = await prisma.daily.findMany({
+				const dailies: DailyWithClass[] = await prisma.daily.findMany({
 					where: {
 						user: {
 							id: ctx.user.id,
@@ -170,12 +172,14 @@ export const daily = createRouter()
 	})
 
 	.mutation("edit", {
-		input: z.object({
-			id: z.string().min(1),
-			title: z.string().min(1).max(50),
-			days: z.number().array().min(1).max(7),
-			classId: z.string().min(1).nullable(),
-		}),
+		input: z
+			.object({
+				id: z.string().min(1),
+				title: z.string().min(1).max(50),
+				days: z.number().array().min(1).max(7),
+				classId: z.string().min(1).nullable(),
+			})
+			.strict(),
 		resolve: async ({ ctx, input }) => {
 			const prisma = getPrismaPool();
 			try {
@@ -185,7 +189,10 @@ export const daily = createRouter()
 								id: input.classId,
 							},
 					  }
-					: undefined;
+					: {
+							disconnect: true,
+					  };
+				console.log(classDoc);
 				const updated = await prisma.daily.update({
 					where: {
 						id: input.id,
