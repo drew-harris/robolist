@@ -1,28 +1,25 @@
 import {
-	Button,
-	Checkbox,
 	Select,
 	Space,
 	Stack,
+	Switch,
 	Sx,
+	Tabs,
 	Title,
 	useMantineTheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useQueryClient } from "@tanstack/react-query";
-import { deleteCookie } from "cookies-next";
-import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
+import { Paint, ThreeDCubeSphere } from "tabler-icons-react";
 import { Settings } from "types";
 import ThemeColorSelector from "../components/input/ThemeColorSelector";
+import Setting from "../components/small/Setting";
 import { SettingsContext } from "../contexts/SettingsContext";
 import { logEvent } from "../lib/ga";
 
 export default function SettingsPage() {
 	const { settings, setSettings } = useContext(SettingsContext);
 	const theme = useMantineTheme();
-	const router = useRouter();
-	const queryClient = useQueryClient();
 
 	const form = useForm<Settings>({
 		initialValues: settings,
@@ -36,7 +33,7 @@ export default function SettingsPage() {
 		marginTop: theme.spacing.md,
 		marginInline: theme.spacing.md,
 		gap: theme.spacing.lg,
-		maxWidth: 250,
+		// maxWidth: 250,
 	});
 
 	return (
@@ -44,74 +41,129 @@ export default function SettingsPage() {
 			<Title order={2}>Settings</Title>
 			<Space h={theme.spacing.md} />
 			<form>
-				<Stack sx={stackSx}>
-					<Checkbox
-						label="Confetti Effect"
-						{...form.getInputProps("confettiEffect")}
-						checked={form.values.confettiEffect}
-					/>
-					<ThemeColorSelector
-						value={form.values.themeColor}
-						onChange={(color) => {
-							logEvent("change_theme_color", {
-								value: color,
-							});
-							form.setFieldValue("themeColor", color);
-						}}
-					/>
-				</Stack>
-				<Stack sx={stackSx}>
-					<Checkbox
-						label="Use Time Estimation"
-						{...form.getInputProps("useTimeEstimate")}
-						checked={form.values.useTimeEstimate}
-					/>
-					<Checkbox
-						label="Use focus timer"
-						{...form.getInputProps("useFocusMode")}
-						checked={form.values.useFocusMode}
-					/>
-					<Checkbox
-						label="Daily Tasks"
-						{...form.getInputProps("useDailyTasks")}
-						checked={form.values.useDailyTasks}
-					/>
-					<Checkbox
-						label="Strict Mode"
-						{...form.getInputProps("useStrictMode")}
-						checked={form.values.useStrictMode}
-					/>
-				</Stack>
-				<Stack sx={stackSx}>
-					<Select
-						label="Date Picker Format"
-						data={[
-							{
-								value: "modal",
-								label: "Pop-up",
-							},
-							{
-								value: "popover",
-								label: "Dropdown",
-							},
-						]}
-						{...form.getInputProps("datePickerFormat")}
-					></Select>
-					<Select
-						label="First Day of Week"
-						data={[
-							{
-								value: "sunday",
-								label: "Sunday",
-							},
-							{
-								value: "monday",
-								label: "Monday",
-							},
-						]}
-						{...form.getInputProps("firstDayOfWeek")}
-					></Select>
+				<Tabs defaultValue="appearance">
+					<Tabs.List>
+						<Tabs.Tab value="appearance" icon={<Paint />}>
+							Appearance
+						</Tabs.Tab>
+						<Tabs.Tab value="behavior" icon={<ThreeDCubeSphere />}>
+							Behavior
+						</Tabs.Tab>
+					</Tabs.List>
 
+					<Tabs.Panel value="appearance">
+						<Setting
+							isSwitch
+							title="Confetti Effect"
+							description="Shows confetti effects when tasks are completed"
+						>
+							<Switch
+								// label="Confetti Effect"
+								{...form.getInputProps("confettiEffect")}
+								checked={form.values.confettiEffect}
+								size="md"
+							/>
+						</Setting>
+
+						<Setting title="Color Theme">
+							<ThemeColorSelector
+								value={form.values.themeColor}
+								onChange={(color) => {
+									logEvent("change_theme_color", {
+										value: color,
+									});
+									form.setFieldValue("themeColor", color);
+								}}
+							/>
+						</Setting>
+						<Setting
+							title="Date Picker Format"
+							description="Controls how date selection is displayed"
+						>
+							<Select
+								data={[
+									{
+										value: "modal",
+										label: "Pop-up",
+									},
+									{
+										value: "popover",
+										label: "Dropdown",
+									},
+								]}
+								{...form.getInputProps("datePickerFormat")}
+							></Select>
+						</Setting>
+						<Setting
+							description="Affects all calendar views"
+							title="First Day Of The Week"
+						>
+							<Select
+								data={[
+									{
+										value: "sunday",
+										label: "Sunday",
+									},
+									{
+										value: "monday",
+										label: "Monday",
+									},
+								]}
+								{...form.getInputProps("firstDayOfWeek")}
+							></Select>
+						</Setting>
+					</Tabs.Panel>
+
+					<Tabs.Panel value="behavior">
+						<Setting
+							isSwitch
+							title="Time Estimation"
+							description="Estimate how long tasks will take (recommended)"
+						>
+							<Switch
+								{...form.getInputProps("useTimeEstimate")}
+								checked={form.values.useTimeEstimate}
+								size="md"
+							/>
+						</Setting>
+						<Setting
+							isSwitch
+							title="Focus Timer"
+							description="Race against the estimate and keep track of how long you've worked"
+						>
+							<Switch
+								{...form.getInputProps("useFocusMode")}
+								checked={form.values.useFocusMode}
+								size="md"
+							/>
+						</Setting>
+						<Setting
+							isSwitch
+							title="Daily Tasks"
+							description="Schedule simple tasks on specific days"
+						>
+							<Switch
+								size="md"
+								{...form.getInputProps("useDailyTasks")}
+								checked={form.values.useDailyTasks}
+							/>
+						</Setting>
+						<Setting
+							description="Blocks same-day rescheduling"
+							isSwitch
+							title="Strict Mode"
+						>
+							<Switch
+								size="md"
+								{...form.getInputProps("useStrictMode")}
+								checked={form.values.useStrictMode}
+							/>
+						</Setting>
+					</Tabs.Panel>
+				</Tabs>
+				<Stack sx={stackSx}></Stack>
+				<Stack sx={stackSx}>
+					{/* 
 					<Button
 						onClick={() => {
 							deleteCookie("jwt");
@@ -120,7 +172,7 @@ export default function SettingsPage() {
 						}}
 					>
 						Sign Out
-					</Button>
+					</Button> */}
 				</Stack>
 			</form>
 		</>
