@@ -1,13 +1,18 @@
 import * as trpc from "@trpc/server";
 import * as trpcNext from "@trpc/server/adapters/next";
+import { UserWithoutPassword } from "types";
 import { getUserFromJWT } from "../utils";
 
 // The app's context - is generated for each incoming request
 export async function createContext(opts?: trpcNext.CreateNextContextOptions) {
-	async function getUserFromHeader() {
+	async function getUserFromHeader(): Promise<UserWithoutPassword | null> {
 		if (opts?.req.cookies.jwt) {
-			const user = await getUserFromJWT(opts.req.cookies.jwt);
-			return user;
+			try {
+				const user = await getUserFromJWT(opts.req.cookies.jwt);
+				return user;
+			} catch (error) {
+				return null;
+			}
 		}
 		return null;
 	}

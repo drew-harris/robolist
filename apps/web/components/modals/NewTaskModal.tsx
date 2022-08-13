@@ -56,6 +56,13 @@ export default function NewTaskModal() {
 					return "Title Required";
 				}
 			},
+
+			workTime: (value: number) => {
+				console.log(value);
+				if (value == null) {
+					return "Work time is required";
+				}
+			},
 		},
 	});
 
@@ -146,6 +153,7 @@ export default function NewTaskModal() {
 						{settings.useTimeEstimate && (
 							<TextInput
 								value={form.values.workTime?.toString() || ""}
+								error={form.errors.workTime}
 								onChange={(e) => {
 									const num = parseInt(e.target.value);
 									if (num === NaN) {

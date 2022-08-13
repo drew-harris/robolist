@@ -8,18 +8,18 @@ export function middleware(request: NextRequest) {
 	const cookie = request.cookies.get("jwt");
 	if (!cookie) {
 		const url = request.nextUrl.clone();
-		url.pathname = "/closed";
+		url.pathname = "/login";
 		return NextResponse.redirect(url);
 	}
 }
 
 export const config = {
 	matcher: [
-		"/login",
-		"/signup",
 		"/settings",
 		"/tasks",
 		"/focus",
 		"/tasks/:path*",
+		"/daily",
+		"/calendar",
 	],
 };
