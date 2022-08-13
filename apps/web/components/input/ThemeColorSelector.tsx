@@ -1,4 +1,4 @@
-import { ColorSwatch, Group, useMantineTheme } from "@mantine/core";
+import { ColorSwatch, Group, GroupProps, useMantineTheme } from "@mantine/core";
 import { colorChoices } from "types";
 
 interface ThemeColorSelectorProps {

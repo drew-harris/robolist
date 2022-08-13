@@ -133,7 +133,7 @@ export default function DailyTask({
 							<Checkbox
 								aria-label="Complete task"
 								onClick={check}
-								checked={isChecked}
+								defaultChecked={isChecked}
 							/>
 							{settings.confettiEffect && (
 								<Confetti active={showConfetti} config={confettiConfig} />
