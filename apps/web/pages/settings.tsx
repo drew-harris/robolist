@@ -1,4 +1,5 @@
 import {
+	Button,
 	Select,
 	Space,
 	Stack,
@@ -9,8 +10,11 @@ import {
 	useMantineTheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useQueryClient } from "@tanstack/react-query";
+import { deleteCookie } from "cookies-next";
+import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
-import { Paint, ThreeDCubeSphere } from "tabler-icons-react";
+import { Paint, ThreeDCubeSphere, User } from "tabler-icons-react";
 import { Settings } from "types";
 import ThemeColorSelector from "../components/input/ThemeColorSelector";
 import Setting from "../components/small/Setting";
@@ -20,6 +24,8 @@ import { logEvent } from "../lib/ga";
 export default function SettingsPage() {
 	const { settings, setSettings } = useContext(SettingsContext);
 	const theme = useMantineTheme();
+	const queryClient = useQueryClient();
+	const router = useRouter();
 
 	const form = useForm<Settings>({
 		initialValues: settings,
@@ -48,6 +54,9 @@ export default function SettingsPage() {
 						</Tabs.Tab>
 						<Tabs.Tab value="behavior" icon={<ThreeDCubeSphere />}>
 							Behavior
+						</Tabs.Tab>
+						<Tabs.Tab value="account" icon={<User />}>
+							Account
 						</Tabs.Tab>
 					</Tabs.List>
 
@@ -160,20 +169,19 @@ export default function SettingsPage() {
 							/>
 						</Setting>
 					</Tabs.Panel>
+					<Tabs.Panel value="account">
+						<Button
+							m="lg"
+							onClick={() => {
+								deleteCookie("jwt");
+								queryClient.removeQueries();
+								router.replace("/login");
+							}}
+						>
+							Sign Out
+						</Button>
+					</Tabs.Panel>
 				</Tabs>
-				<Stack sx={stackSx}></Stack>
-				<Stack sx={stackSx}>
-					{/* 
-					<Button
-						onClick={() => {
-							deleteCookie("jwt");
-							queryClient.removeQueries();
-							router.replace("/login");
-						}}
-					>
-						Sign Out
-					</Button> */}
-				</Stack>
 			</form>
 		</>
 	);

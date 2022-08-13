@@ -9,7 +9,7 @@ const defaultSettings: Settings = {
 	firstDayOfWeek: "sunday",
 	useTimeEstimate: true,
 	confettiEffect: true,
-	useFocusMode: false,
+	useFocusMode: true,
 	themeColor: "blue",
 	useStrictMode: false,
 	useDailyTasks: true,
