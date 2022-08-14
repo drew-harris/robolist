@@ -171,6 +171,7 @@ export default function SettingsPage() {
 					</Tabs.Panel>
 					<Tabs.Panel value="account">
 						<Button
+							variant="light"
 							m="lg"
 							onClick={() => {
 								deleteCookie("jwt");

@@ -1,5 +1,6 @@
 import { showNotification } from "@mantine/notifications";
 import { DailyWithClass } from "types";
+import { logEvent } from "../lib/ga";
 import { getWeekdayNumber } from "../utils/client";
 import { trpc } from "../utils/trpc";
 
@@ -10,6 +11,9 @@ export default function useDailyMutation() {
 		onMutate: () => {
 			trpcQueryClient.cancelQuery(["daily.all"]);
 			trpcQueryClient.cancelQuery(["daily.on-dates", [getWeekdayNumber()]]);
+		},
+		onSuccess: () => {
+			logEvent("create-daily");
 		},
 		onSettled: (res) => {
 			trpcQueryClient.invalidateQueries("daily.all");
@@ -40,6 +44,9 @@ export default function useDailyMutation() {
 				["daily.on-dates", [getWeekdayNumber()]],
 				updater
 			);
+		},
+		onSuccess: () => {
+			logEvent("complete-daily");
 		},
 		onSettled: (res) => {
 			trpcQueryClient.invalidateQueries("daily.all");
@@ -87,6 +94,10 @@ export default function useDailyMutation() {
 			});
 		},
 
+		onSuccess: () => {
+			logEvent("delete-daily");
+		},
+
 		onSettled: (res) => {
 			trpcQueryClient.invalidateQueries("daily.all");
 			trpcQueryClient.invalidateQueries("daily.on-dates");
@@ -125,6 +136,10 @@ export default function useDailyMutation() {
 				message: err.message || "Error editing daily",
 				color: "red",
 			});
+		},
+
+		onSuccess: () => {
+			logEvent("edit-daily");
 		},
 
 		onSettled: (res) => {

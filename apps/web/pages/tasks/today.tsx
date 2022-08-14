@@ -47,7 +47,7 @@ export default function TodayTasksPage({}: TodayTasksPageProps) {
 			</Box>
 			{error && <CenterInfo color="red" text={error.message} />}
 			{status != "loading" && tasks && tasks.length == 0 && (
-				<CenterInfo text="No tasks today" />
+				<CenterInfo mb="md" text="No tasks today" />
 			)}
 			<TaskContainer
 				loading={status == "loading"}
@@ -70,6 +70,7 @@ export default function TodayTasksPage({}: TodayTasksPageProps) {
 					)}
 					<DailyTaskContainer
 						skeletonLength={1}
+						grid
 						loading={dailyStatus === "loading"}
 						tasks={dailyTasks}
 						checkbox
