@@ -86,6 +86,7 @@ function MyApp(props: any) {
 	const theme: MantineThemeOverride = {
 		colorScheme: settingsAndTheme?.theme ?? preferredColorScheme,
 		fontFamily: "Inter, sans-serif",
+		cursorType: "pointer",
 		headings: {
 			fontFamily: "Inter, sans-serif",
 		},
