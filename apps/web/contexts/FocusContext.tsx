@@ -1,20 +1,21 @@
 import { useLocalStorage } from "@mantine/hooks";
 import { resetNavigationProgress } from "@mantine/nprogress";
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 import { FocusModeState, TaskWithClass } from "types";
-import useTaskMutation from "../hooks/useTaskMutation";
+import superjson from "superjson";
 
 const defaultContextState: FocusModeState = {
 	task: null,
-	secondsElapsed: 0,
 	working: false,
+	pauseTime: null,
+	startTime: null,
+	secondsElapsed: 0,
 };
 
 export const FocusContext = createContext<{
 	focusState: FocusModeState;
 	setFocusState: (state: FocusModeState) => void;
 	fn: {
-		start: () => void;
 		cancel: () => void;
 		pause: () => void;
 		play: () => void;
@@ -25,7 +26,6 @@ export const FocusContext = createContext<{
 	focusState: defaultContextState,
 	setFocusState: () => {},
 	fn: {
-		start: () => {},
 		cancel: () => {},
 		pause: () => {},
 		play: () => {},
@@ -35,13 +35,12 @@ export const FocusContext = createContext<{
 });
 
 export default function FocusContextProvider({ children }: any) {
-	const { editMutation } = useTaskMutation();
 	const [focusState, setFocusState] = useLocalStorage<FocusModeState>({
 		key: "focusState",
-		serialize: (state) => JSON.stringify(state),
+		serialize: (state) => superjson.stringify(state),
 		deserialize: (str) => {
 			try {
-				return JSON.parse(str);
+				return superjson.parse(str);
 			} catch (e) {
 				return defaultContextState;
 			}
@@ -51,35 +50,39 @@ export default function FocusContextProvider({ children }: any) {
 	useEffect(() => {
 		const code = setInterval(() => {
 			setFocusState((state) => {
-				if (state.working) {
+				if (!state.startTime) {
 					return {
 						...state,
-						secondsElapsed: state.secondsElapsed + 1,
 					};
-				} else {
-					return state;
 				}
+				const timeToAdd = state.pauseTime?.getTime() ?? 0;
+				let seconds = 0;
+				if (timeToAdd > 0) {
+					seconds = Math.round((timeToAdd - state.startTime.getTime()) / 1000);
+				} else {
+					seconds = Math.round(
+						(Date.now() - timeToAdd - state.startTime.getTime()) / 1000
+					);
+				}
+				return {
+					...state,
+					secondsElapsed: seconds,
+				};
 			});
-		}, 1000);
+		}, 300);
 
 		return () => {
 			clearInterval(code);
 		};
-	}, [setFocusState]);
+	}, []);
 
 	const fn = {
-		start: () => {
-			setFocusState({
-				...focusState,
-				working: true,
-			});
-			resetNavigationProgress();
-		},
-
 		cancel: () => {
 			setFocusState({
 				...focusState,
 				working: false,
+				startTime: null,
+				pauseTime: null,
 				secondsElapsed: 0,
 				task: null,
 			});
@@ -90,13 +93,34 @@ export default function FocusContextProvider({ children }: any) {
 			setFocusState({
 				...focusState,
 				working: false,
+				pauseTime: new Date(),
 			});
 		},
 
 		play: () => {
-			setFocusState({
-				...focusState,
-				working: true,
+			setFocusState((prevState) => {
+				if (!prevState.startTime) {
+					return prevState;
+				}
+				// Get time since pause
+				const now = new Date();
+				const timeToAdd = prevState.pauseTime
+					? now.getTime() - prevState.pauseTime.getTime()
+					: 0;
+				const timeSincePause = prevState.pauseTime
+					? now.getTime() - prevState.pauseTime.getTime()
+					: 0;
+
+				// Subtract time since pause from previous time elapsed
+				const newStartTime = new Date(
+					prevState.startTime.getTime() + timeSincePause
+				);
+				return {
+					...focusState,
+					working: true,
+					pauseTime: null,
+					startTime: newStartTime,
+				};
 			});
 		},
 
@@ -117,6 +141,8 @@ export default function FocusContextProvider({ children }: any) {
 			setFocusState({
 				...focusState,
 				task,
+				pauseTime: null,
+				startTime: new Date(),
 				secondsElapsed: 0,
 				working: true,
 			});

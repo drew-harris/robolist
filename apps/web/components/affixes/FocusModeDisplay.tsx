@@ -175,7 +175,7 @@ export default function FocusModeDisplay() {
 										)}
 									</ActionIcon>
 								</Tooltip>
-								<Tooltip label="(Space)" openDelay={500}>
+								<Tooltip label="Full Screen" openDelay={500}>
 									<ActionIcon onClick={() => router.replace("/focus")}>
 										<ArrowsMaximize size={iconSize - 6} />
 									</ActionIcon>
