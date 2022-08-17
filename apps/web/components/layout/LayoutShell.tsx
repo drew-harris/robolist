@@ -151,7 +151,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 				{showUserLinks ? (
 					<>
 						<Link href="/login">
-							<Anchor>Login</Anchor>
+							<Anchor>Log In</Anchor>
 						</Link>
 						<Link href="/signup">
 							<Anchor>Sign Up</Anchor>
