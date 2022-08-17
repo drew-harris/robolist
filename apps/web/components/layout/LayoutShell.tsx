@@ -56,7 +56,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 	const router: NextRouter = useRouter();
 	const [opened, setOpened] = useState(false);
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
-	const { focusState } = useContext(FocusContext);
+	// const { focusState } = useContext(FocusContext);
 	const os = useOs();
 
 	const { settings } = useContext(SettingsContext);
@@ -185,6 +185,8 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		</Navbar>
 	);
 
+	console.log("REndered appshell");
+
 	return (
 		<AppShell
 			padding={router.pathname === "/" ? 0 : "lg"}
@@ -206,9 +208,9 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
 			{children}
 
-			{focusState.task && !router.pathname.includes("focus") && (
+			{/* {focusState.task && !router.pathname.includes("focus") && (
 				<Space w="xl" h={110} />
-			)}
+			)} */}
 		</AppShell>
 	);
 }

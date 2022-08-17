@@ -6,5 +6,4 @@ export interface FocusModeState {
 	// secondsElapsed: number;
 	startTime: Date | null;
 	pauseTime: Date | null;
-	secondsElapsed: number;
 }

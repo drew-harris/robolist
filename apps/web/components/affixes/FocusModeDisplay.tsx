@@ -17,7 +17,10 @@ import { BsPlayFill } from "react-icons/bs";
 import { TbCheck, TbX } from "react-icons/tb";
 import { TiMediaPause } from "react-icons/ti";
 import { ArrowsMaximize } from "tabler-icons-react";
-import { FocusContext } from "../../contexts/FocusContext";
+import {
+	FocusContext,
+	SecondsElapsedContext,
+} from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import useTaskMutation from "../../hooks/useTaskMutation";
 import { logEvent } from "../../lib/ga";
@@ -27,6 +30,7 @@ const iconSize = 25;
 
 export default function FocusModeDisplay() {
 	const { focusState, fn: focusFn } = useContext(FocusContext);
+	const secondsElapsed = useContext(SecondsElapsedContext);
 	const { settings } = useContext(SettingsContext);
 	const modals = useModals();
 	const theme = useMantineTheme();
@@ -95,7 +99,7 @@ export default function FocusModeDisplay() {
 				checkMutation.mutate({
 					complete: true,
 					id: focusState.task.id,
-					minutes: Math.floor(focusState.secondsElapsed / 60),
+					minutes: Math.floor(secondsElapsed / 60),
 				});
 				focusFn.cancel();
 				logEvent("complete_task", {
@@ -142,7 +146,7 @@ export default function FocusModeDisplay() {
 						<Stack>
 							<Group position="center">
 								<Text color={theme.primaryColor} size="lg" weight="bold">
-									{secondToTimeDisplay(focusState.secondsElapsed)}
+									{secondToTimeDisplay(secondsElapsed)}
 								</Text>
 
 								{!!focusState.task && (
