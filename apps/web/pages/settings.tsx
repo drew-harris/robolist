@@ -18,11 +18,13 @@ import { Paint, ThreeDCubeSphere, User } from "tabler-icons-react";
 import { Settings } from "types";
 import ThemeColorSelector from "../components/input/ThemeColorSelector";
 import Setting from "../components/small/Setting";
+import { FocusContext } from "../contexts/FocusContext";
 import { SettingsContext } from "../contexts/SettingsContext";
 import { logEvent } from "../lib/ga";
 
 export default function SettingsPage() {
 	const { settings, setSettings } = useContext(SettingsContext);
+	const { fn: focusFn } = useContext(FocusContext);
 	const theme = useMantineTheme();
 	const queryClient = useQueryClient();
 	const router = useRouter();
@@ -175,6 +177,9 @@ export default function SettingsPage() {
 							m="lg"
 							onClick={() => {
 								deleteCookie("jwt");
+								window.localStorage.removeItem("jwt");
+								window.localStorage.removeItem("focusState");
+								focusFn.cancel();
 								queryClient.removeQueries();
 								router.replace("/login");
 							}}
