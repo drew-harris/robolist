@@ -12,7 +12,7 @@ export default function ClosedPage() {
 			<Group align="center">
 				<Logo size={24} />
 				<Text size={22} weight={500} ml={-9}>
-					opens August 21th
+					opens August 21st
 				</Text>
 			</Group>
 		</Center>
