@@ -1,5 +1,5 @@
-import { Center, Stack, Title } from "@mantine/core";
-import { MoodSad } from "tabler-icons-react";
+import { Center, Group, Stack, Title, Text } from "@mantine/core";
+import Logo from "../components/small/Logo";
 
 export default function ClosedPage() {
 	const message = "Sorry, We're Closed";
@@ -9,10 +9,12 @@ export default function ClosedPage() {
 				height: "40vh",
 			}}
 		>
-			<Stack align="center">
-				<MoodSad size={40} />
-				<Title order={2}>{message}</Title>
-			</Stack>
+			<Group align="center">
+				<Logo size={24} />
+				<Text size={22} weight={500} ml={-9}>
+					opens August 21th
+				</Text>
+			</Group>
 		</Center>
 	);
 }

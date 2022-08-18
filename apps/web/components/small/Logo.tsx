@@ -1,19 +1,20 @@
-import { Title } from "@mantine/core";
+import { TextProps, Title, TitleProps, Text } from "@mantine/core";
 import Link from "next/link";
 
-export default function Logo() {
+export default function Logo(props: TextProps) {
 	return (
 		<Link href="/">
-			<Title
-				order={3}
+			<Text
+				size={props.size || 22}
 				sx={(theme) => ({
 					fontWeight: 700,
 					letterSpacing: -1.3,
 					cursor: "pointer",
 				})}
+				{...props}
 			>
 				robolist
-			</Title>
+			</Text>
 		</Link>
 	);
 }
