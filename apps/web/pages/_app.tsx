@@ -94,15 +94,25 @@ function MyApp(props: any) {
 			themeDefaultColor ?? settingsAndTheme?.settings?.themeColor ?? "blue",
 	};
 
+	function showDark() {
+		if (settingsAndTheme?.theme) {
+			if (settingsAndTheme.theme === "dark") {
+				return true;
+			} else {
+				return false;
+			}
+		} else if (preferredColorScheme === "dark") {
+			return true;
+		}
+		return false;
+	}
+
 	return (
 		<>
 			<Head>
 				<title>Robolist</title>
 				<link rel="manifest" href="/manifest.json" />
-				<meta
-					name="theme-color"
-					content={settingsAndTheme?.theme == "dark" ? "#1a1b1e" : "white"}
-				/>
+				<meta name="theme-color" content={showDark() ? "#1a1b1e" : "white"} />
 				<link rel="apple-touch-icon" href="/logo-96x96.png" />
 				<meta name="apple-mobile-web-app-capable" content="yes"></meta>
 				<meta
