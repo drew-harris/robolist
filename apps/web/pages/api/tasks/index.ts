@@ -48,7 +48,8 @@ async function createTask(
 			class: classDoc,
 			complete: false,
 			description: data.description,
-			workTime: data.workTime || 20,
+			workTime: data.workTime || null,
+			noWorkTime: !data.workTime,
 		};
 
 		const task = await prisma.task.create({

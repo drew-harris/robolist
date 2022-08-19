@@ -25,9 +25,10 @@ export type TaskWithClass = Task & {
 };
 
 export interface DateAggregation {
-	_count: number;
 	_sum: { workTime: number | null };
 	workDate: Date;
+	simpleTasksCount: number;
+	totalWorkTime: number;
 }
 export interface RescheduleInput {
 	task: TaskWithClass;

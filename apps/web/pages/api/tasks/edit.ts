@@ -47,6 +47,7 @@ async function handler(
 				dueDate: doc.dueDate || undefined,
 				workTime: doc.workTime,
 				class: classDoc,
+				noWorkTime: doc.noWorkTime || false,
 			},
 			include: {
 				class: true,

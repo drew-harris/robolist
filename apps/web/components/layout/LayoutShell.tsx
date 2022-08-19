@@ -2,6 +2,7 @@ import {
 	ActionIcon,
 	Anchor,
 	AppShell,
+	Badge,
 	Box,
 	Burger,
 	Group,
@@ -44,6 +45,7 @@ interface SidebarLink {
 	href: string;
 	label: string;
 	icon: ReactElement;
+	isBeta?: boolean;
 }
 
 interface SidebarGroupProps {
@@ -91,6 +93,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			return (
 				<Link href={link.href} id={link.href}>
 					<NavLink
+						rightSection={link.isBeta ? <Badge size="sm">Beta</Badge> : null}
 						onClick={() => {
 							setOpened(false);
 						}}

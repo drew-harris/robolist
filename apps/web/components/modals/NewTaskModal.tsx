@@ -56,13 +56,6 @@ export default function NewTaskModal() {
 					return "Title Required";
 				}
 			},
-
-			workTime: (value: number) => {
-				console.log(value);
-				if (value == null) {
-					return "Work time is required";
-				}
-			},
 		},
 	});
 
@@ -150,24 +143,23 @@ export default function NewTaskModal() {
 						mt="lg"
 					>
 						<ClassIdPicker form={form} />
-						{settings.useTimeEstimate && (
-							<TextInput
-								value={form.values.workTime?.toString() || ""}
-								error={form.errors.workTime}
-								onChange={(e) => {
-									const num = parseInt(e.target.value);
-									if (num === NaN) {
-										form.setFieldValue("workTime", 0);
-									} else {
-										form.setFieldValue("workTime", num);
-									}
-								}}
-								label="Estimated Work Time (minutes)"
-								inputMode="numeric"
-								type="number"
-								icon={<Clock size={18} />}
-							/>
-						)}
+						<TextInput
+							value={form.values.workTime?.toString() || ""}
+							error={form.errors.workTime}
+							onChange={(e) => {
+								const num = parseInt(e.target.value);
+								if (num === NaN) {
+									form.setFieldValue("workTime", 0);
+								} else {
+									form.setFieldValue("workTime", num);
+								}
+							}}
+							label="Estimated Work Time (min)"
+							placeholder="Optional"
+							inputMode="numeric"
+							type="number"
+							icon={<Clock size={18} />}
+						/>
 					</Box>
 				</MediaQuery>
 				<MediaQuery smallerThan={"xs"} styles={{ flexDirection: "column" }}>

@@ -12,12 +12,23 @@ export async function getDates(
 				complete: false,
 			},
 			by: ["workDate"],
-			_count: true,
+			_count: {
+				workTime: true,
+				_all: true,
+			},
 			_sum: {
 				workTime: true,
 			},
+			orderBy: {
+				workDate: "asc",
+			},
 		});
-		return dates;
+		return dates.map((date) => ({
+			workDate: date.workDate,
+			_sum: date._sum,
+			simpleTasksCount: date._count._all - date._count.workTime,
+			totalWorkTime: date._sum.workTime || 0,
+		}));
 	} catch (error) {
 		console.log(error);
 		throw error;
