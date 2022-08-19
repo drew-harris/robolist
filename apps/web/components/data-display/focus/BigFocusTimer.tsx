@@ -41,7 +41,7 @@ export default function BigFocusTimer() {
 			const percent = (secondsElapsed / (focusState.task.workTime * 60)) * 100;
 			setPercent(percent);
 		}
-	}, [focusState]);
+	}, [secondsElapsed]);
 
 	useHotkeys([
 		[

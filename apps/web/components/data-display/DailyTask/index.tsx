@@ -144,7 +144,9 @@ export default function DailyTask({
 						{task.title}
 					</Text>
 					{task.class && (
-						<Badge color={task.class?.color}>{task.class.name}</Badge>
+						<Badge size="sm" color={task.class?.color}>
+							{task.class.name}
+						</Badge>
 					)}
 					{showBadges && dayBadges}
 				</Group>

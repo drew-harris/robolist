@@ -12,6 +12,7 @@ import {
 	MediaQuery,
 	Navbar,
 	NavLink,
+	Space,
 	ThemeIcon,
 	Tooltip,
 	useMantineTheme,
@@ -31,7 +32,9 @@ import {
 	School,
 	Settings,
 } from "tabler-icons-react";
+import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
+import FocusModeContentSpacer from "../affixes/FocusModeContentSpacer";
 import FocusModeDisplay from "../affixes/FocusModeDisplay";
 import { ColorSchemeToggle } from "../ColorSchemeToggle";
 
@@ -56,7 +59,6 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 	const router: NextRouter = useRouter();
 	const [opened, setOpened] = useState(false);
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
-	// const { focusState } = useContext(FocusContext);
 	const os = useOs();
 
 	const { settings } = useContext(SettingsContext);
@@ -186,8 +188,6 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		</Navbar>
 	);
 
-	console.log("REndered appshell");
-
 	return (
 		<AppShell
 			padding={router.pathname === "/" ? 0 : "lg"}
@@ -209,9 +209,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
 			{children}
 
-			{/* {focusState.task && !router.pathname.includes("focus") && (
-				<Space w="xl" h={110} />
-			)} */}
+			<FocusModeContentSpacer />
 		</AppShell>
 	);
 }

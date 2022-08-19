@@ -25,7 +25,7 @@ export default function CalendarPage() {
 					gap: theme.spacing.lg,
 				})}
 			>
-				<Paper p="sm" radius="md">
+				<Paper p="sm" radius="md" withBorder>
 					<CalendarHeatmapDatePicker
 						hideOutsideDates
 						firstDayOfWeek={settings.firstDayOfWeek}
