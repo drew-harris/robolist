@@ -1,8 +1,7 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Divider, Group, Space, Stack, Text, Title } from "@mantine/core";
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { TaskWithClass, TDemoTask } from "types";
-import { SettingsContext } from "../../contexts/SettingsContext";
 import {
 	getHumanDateString,
 	reduceDates,
@@ -54,8 +53,6 @@ function RealTaskAgendaContainer({
 		return group.reduce((acc, task) => acc + (task.workTime || 0), 0);
 	};
 
-	const { settings } = useContext(SettingsContext);
-
 	const groups: TaskWithClass[][] = useMemo(() => {
 		if (!tasks) {
 			return [];
@@ -63,19 +60,42 @@ function RealTaskAgendaContainer({
 		return reduceDates(tasks);
 	}, [tasks]);
 
+	const hasOneTaskBeforeToday = useMemo(() => {
+		if (!tasks) {
+			return false;
+		}
+		if (tasks.findIndex((task) => task.workDate < thisMorning()) > -1) {
+			return true;
+		}
+		return false;
+	}, [tasks]);
+
 	const elements: JSX.Element[] = [];
 	let addedDivider = false;
 	groups.forEach((group) => {
-		if (group[0].workDate >= thisMorning() && !addedDivider && !demo) {
-			elements.push(<Divider my="md" />);
+		if (
+			group[0].workDate >= thisMorning() &&
+			!addedDivider &&
+			!demo &&
+			hasOneTaskBeforeToday
+		) {
+			elements.push(
+				<Divider
+					label="Now"
+					variant="solid"
+					labelPosition="center"
+					mb="md"
+					mt="xs"
+				/>
+			);
 			addedDivider = true;
 		}
+		let groupTime = getGroupTime(group);
+		let timeLabel = groupTime > 0 ? groupTime + " min." : null;
 		elements.push(
 			<Group key={getHumanDateString(group[0].workDate)}>
 				<Title order={4}>{getHumanDateString(group[0].workDate)}</Title>
-				{settings.useTimeEstimate && (
-					<Text color="dimmed">{getGroupTime(group)} min.</Text>
-				)}
+				{timeLabel && <Text color="dimmed">{timeLabel}</Text>}
 			</Group>
 		);
 

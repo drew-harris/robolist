@@ -1,13 +1,4 @@
-import {
-	Box,
-	BoxProps,
-	Divider,
-	Group,
-	GroupProps,
-	Stack,
-	Sx,
-	Text,
-} from "@mantine/core";
+import { Box, BoxProps, Divider, Stack, Sx, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 
 interface SettingProps extends BoxProps {

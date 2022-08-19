@@ -192,10 +192,14 @@ export default function useTaskMutation() {
 					}
 				);
 				if (focus.focusState.task && focus.focusState.task.id === task.id) {
-					focus.setFocusState({
-						...focus.focusState,
-						task: data,
-					});
+					if (!data.workTime) {
+						focus.fn.cancel();
+					} else {
+						focus.setFocusState({
+							...focus.focusState,
+							task: data,
+						});
+					}
 				}
 			},
 

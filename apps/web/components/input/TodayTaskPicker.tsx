@@ -35,7 +35,7 @@ export default function TodayTaskPicker(props: TodayTaskPickerProps) {
 	}
 
 	const choices = tasks
-		.filter((task) => !task.complete)
+		.filter((task) => !task.complete && task.workTime)
 		.map((task) => {
 			return (
 				<Task
@@ -49,12 +49,14 @@ export default function TodayTaskPicker(props: TodayTaskPickerProps) {
 		});
 
 	if (choices.length === 0) {
-		return <CenterInfo text="No tasks today!" />;
+		return <CenterInfo text="No timed tasks today" />;
 	}
 
 	return (
 		<Stack>
-			<Text align="center">Select A Task</Text>
+			<Text align="center" weight="bolder">
+				Select A Task
+			</Text>
 			{choices}
 		</Stack>
 	);

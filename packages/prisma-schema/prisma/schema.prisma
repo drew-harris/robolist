@@ -12,9 +12,10 @@ model User {
   email    String @unique
   password String
 
-  tasks   Task[]
-  classes Class[]
-  dailies Daily[]
+  tasks    Task[]
+  classes  Class[]
+  dailies  Daily[]
+  feedback Feedback[]
 }
 
 model Task {
@@ -27,7 +28,7 @@ model Task {
   updatedAt   DateTime @updatedAt
   workDate    DateTime
 
-  workTime Int // Estimate time for work
+  workTime Int? // Estimate time for work
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
@@ -43,6 +44,9 @@ model Class {
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   tasks   Task[]
   dailies Daily[]
@@ -60,4 +64,12 @@ model Daily {
 
   class   Class?  @relation(fields: [classId], references: [id])
   classId String?
+}
+
+model Feedback {
+  id        String   @id @unique @default(uuid())
+  text      String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  userId    String
 }

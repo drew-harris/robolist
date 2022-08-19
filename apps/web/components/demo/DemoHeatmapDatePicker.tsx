@@ -16,21 +16,24 @@ thisMorning.setHours(0, 0, 0, 0);
 
 const aggs: DateAggregation[] = [
 	{
-		_count: 2,
+		simpleTasksCount: 0,
+		totalWorkTime: 15,
 		_sum: {
 			workTime: 30,
 		},
 		workDate: thisMorning,
 	},
 	{
-		_count: 2,
+		simpleTasksCount: 0,
+		totalWorkTime: 15,
 		_sum: {
 			workTime: 40,
 		},
 		workDate: new Date(thisMorning.getTime() + 1000 * 60 * 60 * 24),
 	},
 	{
-		_count: 2,
+		simpleTasksCount: 0,
+		totalWorkTime: 15,
 		_sum: {
 			workTime: 1,
 		},
@@ -39,10 +42,11 @@ const aggs: DateAggregation[] = [
 ];
 
 const generateInitalValue = (): DateAggregation[] => {
-	const agg = [];
+	const agg: DateAggregation[] = [];
 	for (let i = 0; i < 40; i++) {
 		agg.push({
-			_count: 0,
+			simpleTasksCount: 0,
+			totalWorkTime: 15,
 			_sum: {
 				workTime: Math.floor(Math.random() * 60),
 			},
@@ -147,11 +151,7 @@ export default function DemoHeatmapDatePicker({
 		const hours = getMinutesForDay(date);
 		const isToday = isSameDate(date, thisMorning);
 		return (
-			<Tooltip
-				label={hours + " min."}
-				disabled={!hours || !settings.useTimeEstimate}
-				openDelay={500}
-			>
+			<Tooltip label={hours + " min."} disabled={!hours} openDelay={500}>
 				<Box
 					sx={{
 						position: "relative",

@@ -15,7 +15,10 @@ import { BsCheckLg, BsPlayFill } from "react-icons/bs";
 import { GiPauseButton } from "react-icons/gi";
 import { HiPlus } from "react-icons/hi";
 import { IoClose } from "react-icons/io5";
-import { FocusContext } from "../../../contexts/FocusContext";
+import {
+	FocusContext,
+	SecondsElapsedContext,
+} from "../../../contexts/FocusContext";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
 import { logEvent } from "../../../lib/ga";
@@ -23,6 +26,7 @@ import { secondToTimeDisplay } from "../../../utils/client";
 
 export default function BigFocusTimer() {
 	const { focusState, fn: focusFn } = useContext(FocusContext);
+	const secondsElapsed = useContext(SecondsElapsedContext);
 	const { settings } = useContext(SettingsContext);
 	const [percent, setPercent] = useState(50);
 	const { height, width } = useViewportSize();
@@ -34,11 +38,10 @@ export default function BigFocusTimer() {
 
 	useEffect(() => {
 		if (focusState.task?.workTime) {
-			const percent =
-				(focusState.secondsElapsed / (focusState.task.workTime * 60)) * 100;
+			const percent = (secondsElapsed / (focusState.task.workTime * 60)) * 100;
 			setPercent(percent);
 		}
-	}, [focusState]);
+	}, [secondsElapsed]);
 
 	useHotkeys([
 		[
@@ -101,7 +104,7 @@ export default function BigFocusTimer() {
 				checkMutation.mutate({
 					complete: true,
 					id: focusState.task.id,
-					minutes: Math.floor(focusState.secondsElapsed / 60),
+					minutes: Math.floor(secondsElapsed / 60),
 				});
 				focusFn.cancel();
 				logEvent("complete_task", {
@@ -138,7 +141,7 @@ export default function BigFocusTimer() {
 				{focusState.task?.title}
 			</Text>
 			<Text size={isMobile ? "xl" : 20} align="center" weight={600}>
-				{secondToTimeDisplay(focusState.secondsElapsed)}
+				{secondToTimeDisplay(secondsElapsed)}
 			</Text>
 			<Text
 				size={isMobile ? "sm" : "xs"}

@@ -9,7 +9,7 @@ describe("Logs in", () => {
 	});
 	it("navigates to login page", () => {
 		cy.visit("/");
-		cy.get("*").contains("Login").click();
+		cy.get("*").contains("Log In").click();
 		// Expect button
 		cy.contains("Welcome back!");
 		cy.get(".mantine-TextInput-root").type("invalidemail");

@@ -7,9 +7,8 @@ import type { Settings } from "types";
 const defaultSettings: Settings = {
 	datePickerFormat: "modal",
 	firstDayOfWeek: "sunday",
-	useTimeEstimate: true,
 	confettiEffect: true,
-	useFocusMode: false,
+	useFocusMode: true,
 	themeColor: "blue",
 	useStrictMode: false,
 	useDailyTasks: true,

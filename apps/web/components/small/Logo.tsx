@@ -1,4 +1,4 @@
-import { TextProps, Title, TitleProps, Text } from "@mantine/core";
+import { Text, TextProps } from "@mantine/core";
 import Link from "next/link";
 
 export default function Logo(props: TextProps) {

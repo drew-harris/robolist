@@ -43,7 +43,7 @@ export default function TasksPage() {
 			<TaskAgendaContainer
 				menu={{ delete: true, edit: true }}
 				rescheduleButton
-				skeletonLength={10}
+				skeletonLength={5}
 				loading={status === "loading" && !error}
 				tasks={tasks}
 			/>

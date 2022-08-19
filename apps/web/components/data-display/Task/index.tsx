@@ -74,11 +74,12 @@ const Task = ({
 	const { deleteMutation, checkMutation } = useTaskMutation();
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
 
-	const checkboxElement = settings.useFocusMode ? (
-		<TaskPlayButton task={task} />
-	) : (
-		<TaskCheckbox task={task} disabled={disableCheck} key={task.id} />
-	);
+	const checkboxElement =
+		task.workTime && settings.useFocusMode ? (
+			<TaskPlayButton task={task} />
+		) : (
+			<TaskCheckbox task={task} disabled={disableCheck} key={task.id} />
+		);
 
 	const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
 	const isLateWork =
@@ -120,6 +121,40 @@ const Task = ({
 		});
 	};
 
+	const completeMenuOption = () => {
+		if (!task.workTime) {
+			return null;
+		} else if (checkbox && task.complete) {
+			return (
+				<Menu.Item
+					onClick={() => {
+						checkMutation.mutate({
+							id: task.id,
+							complete: false,
+						});
+					}}
+					icon={<Rotate2 />}
+				>
+					Undo Complete
+				</Menu.Item>
+			);
+		} else {
+			return (
+				<Menu.Item
+					onClick={() => {
+						checkMutation.mutate({
+							id: task.id,
+							complete: true,
+						});
+					}}
+					icon={<Check />}
+				>
+					Mark Complete
+				</Menu.Item>
+			);
+		}
+	};
+
 	const menuComponent = menuOptions ? (
 		<Menu position="bottom-end" withinPortal={true}>
 			<Menu.Target>
@@ -128,33 +163,7 @@ const Task = ({
 				</ActionIcon>
 			</Menu.Target>
 			<Menu.Dropdown>
-				{settings.useFocusMode &&
-					checkbox &&
-					(task.complete ? (
-						<Menu.Item
-							onClick={() => {
-								checkMutation.mutate({
-									id: task.id,
-									complete: false,
-								});
-							}}
-							icon={<Rotate2 />}
-						>
-							Undo Complete
-						</Menu.Item>
-					) : (
-						<Menu.Item
-							onClick={() => {
-								checkMutation.mutate({
-									id: task.id,
-									complete: true,
-								});
-							}}
-							icon={<Check />}
-						>
-							Mark Complete
-						</Menu.Item>
-					))}
+				{completeMenuOption()}
 				{menuOptions.edit && (
 					<Menu.Item onClick={promptEdit} icon={<Pencil />}>
 						Edit
@@ -245,9 +254,7 @@ const Task = ({
 							{rescheduleButton && <RescheduleButton task={task} />}
 							{menuComponent}
 						</Group>
-						{settings.useTimeEstimate && (
-							<Text size="sm">{task.workTime + "min."}</Text>
-						)}
+						{task.workTime && <Text size="sm">{task.workTime + "min."}</Text>}
 					</Group>
 				</Stack>
 			</Paper>
@@ -280,9 +287,7 @@ const Task = ({
 					)}
 				</Group>
 				<Group>
-					{settings.useTimeEstimate && (
-						<Text size="sm">{task.workTime + "min."}</Text>
-					)}
+					{task.workTime && <Text size="sm">{task.workTime + "min."}</Text>}
 					{rescheduleButton && <RescheduleButton task={task} />}
 					{menuComponent}
 				</Group>

@@ -2,6 +2,7 @@ import {
 	ActionIcon,
 	Anchor,
 	AppShell,
+	Badge,
 	Box,
 	Burger,
 	Group,
@@ -33,6 +34,7 @@ import {
 } from "tabler-icons-react";
 import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
+import FocusModeContentSpacer from "../affixes/FocusModeContentSpacer";
 import FocusModeDisplay from "../affixes/FocusModeDisplay";
 import { ColorSchemeToggle } from "../ColorSchemeToggle";
 
@@ -46,6 +48,7 @@ interface SidebarLink {
 	href: string;
 	label: string;
 	icon: ReactElement;
+	isBeta?: boolean;
 }
 
 interface SidebarGroupProps {
@@ -56,7 +59,6 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 	const router: NextRouter = useRouter();
 	const [opened, setOpened] = useState(false);
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
-	const { focusState } = useContext(FocusContext);
 	const os = useOs();
 
 	const { settings } = useContext(SettingsContext);
@@ -93,6 +95,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			return (
 				<Link href={link.href} id={link.href}>
 					<NavLink
+						rightSection={link.isBeta ? <Badge size="sm">Beta</Badge> : null}
 						onClick={() => {
 							setOpened(false);
 						}}
@@ -151,7 +154,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 				{showUserLinks ? (
 					<>
 						<Link href="/login">
-							<Anchor>Login</Anchor>
+							<Anchor>Log In</Anchor>
 						</Link>
 						<Link href="/signup">
 							<Anchor>Sign Up</Anchor>
@@ -206,9 +209,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
 			{children}
 
-			{focusState.task && !router.pathname.includes("focus") && (
-				<Space w="xl" h={110} />
-			)}
+			<FocusModeContentSpacer />
 		</AppShell>
 	);
 }

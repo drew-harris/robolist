@@ -1,4 +1,6 @@
 import {
+	Box,
+	Button,
 	Select,
 	Space,
 	Stack,
@@ -9,17 +11,26 @@ import {
 	useMantineTheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { openModal } from "@mantine/modals";
+import { useQueryClient } from "@tanstack/react-query";
+import { deleteCookie } from "cookies-next";
+import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
-import { Paint, ThreeDCubeSphere } from "tabler-icons-react";
+import { MailFast, Paint, ThreeDCubeSphere, User } from "tabler-icons-react";
 import { Settings } from "types";
 import ThemeColorSelector from "../components/input/ThemeColorSelector";
+import SendFeedbackModal from "../components/modals/SendFeedbackModal";
 import Setting from "../components/small/Setting";
+import { FocusContext } from "../contexts/FocusContext";
 import { SettingsContext } from "../contexts/SettingsContext";
 import { logEvent } from "../lib/ga";
 
 export default function SettingsPage() {
 	const { settings, setSettings } = useContext(SettingsContext);
+	const { fn: focusFn } = useContext(FocusContext);
 	const theme = useMantineTheme();
+	const queryClient = useQueryClient();
+	const router = useRouter();
 
 	const form = useForm<Settings>({
 		initialValues: settings,
@@ -33,12 +44,32 @@ export default function SettingsPage() {
 		marginTop: theme.spacing.md,
 		marginInline: theme.spacing.md,
 		gap: theme.spacing.lg,
-		// maxWidth: 250,
 	});
 
 	return (
 		<>
-			<Title order={2}>Settings</Title>
+			<Box
+				sx={{
+					display: "flex",
+					justifyContent: "space-between",
+				}}
+			>
+				<Title order={2}>Settings</Title>
+				<Button
+					variant="subtle"
+					onClick={() => {
+						openModal({
+							children: <SendFeedbackModal />,
+							title: "Leave Feedback",
+							size: "lg",
+						});
+					}}
+					leftIcon={<MailFast />}
+					size="xs"
+				>
+					Leave Feedback
+				</Button>
+			</Box>
 			<Space h={theme.spacing.md} />
 			<form>
 				<Tabs defaultValue="appearance">
@@ -48,6 +79,9 @@ export default function SettingsPage() {
 						</Tabs.Tab>
 						<Tabs.Tab value="behavior" icon={<ThreeDCubeSphere />}>
 							Behavior
+						</Tabs.Tab>
+						<Tabs.Tab value="account" icon={<User />}>
+							Account
 						</Tabs.Tab>
 					</Tabs.List>
 
@@ -117,17 +151,6 @@ export default function SettingsPage() {
 					<Tabs.Panel value="behavior">
 						<Setting
 							isSwitch
-							title="Time Estimation"
-							description="Estimate how long tasks will take (recommended)"
-						>
-							<Switch
-								{...form.getInputProps("useTimeEstimate")}
-								checked={form.values.useTimeEstimate}
-								size="md"
-							/>
-						</Setting>
-						<Setting
-							isSwitch
 							title="Focus Timer"
 							description="Race against the estimate and keep track of how long you've worked"
 						>
@@ -160,20 +183,24 @@ export default function SettingsPage() {
 							/>
 						</Setting>
 					</Tabs.Panel>
+					<Tabs.Panel value="account">
+						<Button
+							variant="light"
+							m="lg"
+							onClick={() => {
+								deleteCookie("jwt");
+								window.localStorage.removeItem("jwt");
+								window.localStorage.removeItem("focusState");
+								window.localStorage.removeItem("settings");
+								focusFn.cancel();
+								queryClient.removeQueries();
+								router.replace("/login");
+							}}
+						>
+							Sign Out
+						</Button>
+					</Tabs.Panel>
 				</Tabs>
-				<Stack sx={stackSx}></Stack>
-				<Stack sx={stackSx}>
-					{/* 
-					<Button
-						onClick={() => {
-							deleteCookie("jwt");
-							queryClient.removeQueries();
-							router.replace("/login");
-						}}
-					>
-						Sign Out
-					</Button> */}
-				</Stack>
 			</form>
 		</>
 	);
