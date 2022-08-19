@@ -63,7 +63,7 @@ const ClassSquare = (props: ClassSquareProps) => {
 	};
 
 	return (
-		<Paper sx={squareSx} shadow="md">
+		<Paper sx={squareSx} withBorder shadow="md">
 			<Group
 				sx={{
 					overflow: "hidden",

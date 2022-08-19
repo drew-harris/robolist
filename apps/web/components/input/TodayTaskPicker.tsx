@@ -54,7 +54,9 @@ export default function TodayTaskPicker(props: TodayTaskPickerProps) {
 
 	return (
 		<Stack>
-			<Text align="center">Select A Task</Text>
+			<Text align="center" weight="bolder">
+				Select A Task
+			</Text>
 			{choices}
 		</Stack>
 	);

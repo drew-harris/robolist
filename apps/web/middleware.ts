@@ -1,16 +1,41 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { date } from "zod";
+
+const accessNeededPaths = [
+	"/settings",
+	"/tasks",
+	"/focus",
+	"/tasks/:path*",
+	"/daily",
+	"/classes",
+	"/calendar",
+];
+
+const accountPaths = ["/login", "/signup"];
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
-	// See if jwt cookie is set
-
+	const path = request.nextUrl.pathname;
+	const isBeforeRelease =
+		new Date().getTime() < new Date("2022-08-21T15:58:00.000Z").getTime();
 	const cookie = request.cookies.get("jwt");
-	if (!cookie) {
-		const url = request.nextUrl.clone();
-		url.pathname = "/login";
-		return NextResponse.redirect(url);
+
+	if (cookie) {
+		return;
 	}
+
+	if (accountPaths.includes(path)) {
+		if (isBeforeRelease) {
+			const url = request.nextUrl.clone();
+			url.pathname = "/closed";
+			return NextResponse.redirect(url);
+		}
+		return;
+	}
+	const url = request.nextUrl.clone();
+	url.pathname = "/login";
+	return NextResponse.redirect(url);
 }
 
 export const config = {
@@ -20,6 +45,10 @@ export const config = {
 		"/focus",
 		"/tasks/:path*",
 		"/daily",
+		"/classes",
 		"/calendar",
+
+		"/login",
+		"/signup",
 	],
 };

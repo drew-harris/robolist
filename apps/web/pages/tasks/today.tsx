@@ -1,4 +1,5 @@
-import { Box, Divider, Title } from "@mantine/core";
+import { Box, Divider, Group, Space, Title } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 import { TaskWithClass } from "types";
@@ -6,6 +7,7 @@ import DailyTaskContainer from "../../components/containers/DailyTaskContainer";
 import TaskContainer from "../../components/containers/TaskContainer";
 import CenterInfo from "../../components/small/CenterInfo";
 import NewTaskButton from "../../components/small/NewTaskButton";
+import TodayTimeSum from "../../components/small/TodayTimeSum";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import useInitialPrefetch from "../../hooks/useInitialPrefetch";
 import { getWeekdayNumber } from "../../utils/client";
@@ -32,6 +34,8 @@ export default function TodayTasksPage({}: TodayTasksPageProps) {
 
 	useInitialPrefetch();
 
+	const isMobile = useMediaQuery("(max-width: 900px)", false);
+
 	return (
 		<>
 			<Box
@@ -40,9 +44,17 @@ export default function TodayTasksPage({}: TodayTasksPageProps) {
 					justifyContent: "space-between",
 				}}
 			>
-				<Title order={2} mb="md">
-					Today
-				</Title>
+				<Box
+					sx={(theme) => ({
+						display: isMobile ? "block" : "flex",
+						alignItems: "baseline",
+						gap: theme.spacing.md,
+					})}
+					mb="md"
+				>
+					<Title order={2}>Today</Title>
+					{!isMobile && <TodayTimeSum tasks={tasks} />}
+				</Box>
 				<NewTaskButton />
 			</Box>
 			{error && <CenterInfo color="red" text={error.message} />}
