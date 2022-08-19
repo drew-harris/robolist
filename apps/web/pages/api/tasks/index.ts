@@ -49,7 +49,6 @@ async function createTask(
 			complete: false,
 			description: data.description,
 			workTime: data.workTime || null,
-			noWorkTime: !data.workTime,
 		};
 
 		const task = await prisma.task.create({

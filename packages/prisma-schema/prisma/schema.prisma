@@ -27,8 +27,7 @@ model Task {
   updatedAt   DateTime @updatedAt
   workDate    DateTime
 
-  workTime   Int? // Estimate time for work
-  noWorkTime Boolean @default(false) // If true, workTime is not used
+  workTime Int? // Estimate time for work
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
