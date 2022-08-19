@@ -79,7 +79,15 @@ function RealTaskAgendaContainer({
 			!demo &&
 			hasOneTaskBeforeToday
 		) {
-			elements.push(<Divider mb="md" />);
+			elements.push(
+				<Divider
+					label="Now"
+					variant="solid"
+					labelPosition="center"
+					mb="md"
+					mt="xs"
+				/>
+			);
 			addedDivider = true;
 		}
 		let groupTime = getGroupTime(group);
