@@ -39,7 +39,7 @@ export default function FocusContextProvider({ children }: any) {
 	const [secondsElapsed, setSecondsElapsed] = useState(0);
 	const focusStateDupe = useRef(defaultContextState);
 	const [focusState, setFocusState] = useLocalStorage<FocusModeState>({
-		key: "focusState2",
+		key: "focus",
 		serialize: (state) => superjson.stringify(state),
 		deserialize: (str) => {
 			try {
@@ -49,6 +49,12 @@ export default function FocusContextProvider({ children }: any) {
 			}
 		},
 	});
+
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			window.localStorage.removeItem("focusState");
+		}
+	}, []);
 
 	const updateSeconds = () => {
 		if (!focusStateDupe.current.startTime) {
