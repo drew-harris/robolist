@@ -8,7 +8,9 @@ import {
 	CalendarPlus,
 	CalendarTime,
 	List,
+	MailFast,
 	Moon2,
+	Pencil,
 	Plus,
 	School,
 	Settings,
@@ -16,6 +18,7 @@ import {
 import NewClassModal from "../modals/NewClassModal";
 import NewDailyTaskModal from "../modals/NewDailyTaskModal";
 import NewTaskModal from "../modals/NewTaskModal";
+import SendFeedbackModal from "../modals/SendFeedbackModal";
 
 interface SpotlightMenuProps {
 	children: React.ReactNode;
@@ -61,6 +64,18 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
 					children: <NewDailyTaskModal />,
 					title: "New Daily Task",
 					// size: "auto",
+				});
+			},
+		},
+		{
+			title: "Leave Feedback",
+			icon: <MailFast />,
+			id: "feedback",
+			onTrigger: () => {
+				openModal({
+					children: <SendFeedbackModal />,
+					title: "Leave Feedback",
+					size: "lg",
 				});
 			},
 		},
