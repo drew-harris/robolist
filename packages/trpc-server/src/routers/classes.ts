@@ -22,6 +22,14 @@ export const classes = createRouter()
 					where: {
 						userId: ctx.user.id,
 					},
+					orderBy: [
+						{
+							createdAt: "desc",
+						},
+						{
+							id: "desc",
+						},
+					],
 				});
 				return classes;
 			} catch (error) {

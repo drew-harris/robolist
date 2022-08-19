@@ -1,5 +1,4 @@
 import { Box, Group, Paper, Skeleton } from "@mantine/core";
-import React from "react";
 import { TaskOptionProps } from "../data-display/Task";
 
 const TaskSkeleton = ({ checkbox = false, ...props }: TaskOptionProps) => {

@@ -1,5 +1,6 @@
 import {
 	ActionIcon,
+	Box,
 	Group,
 	MantineTheme,
 	Menu,
@@ -20,11 +21,12 @@ interface ClassSquareProps {
 const ClassSquare = (props: ClassSquareProps) => {
 	const modals = useModals();
 	const { deleteMutation } = useClassMutation();
+
 	const squareSx: Sx = (theme: MantineTheme) => ({
-		backgroundColor:
-			theme.colorScheme == "dark"
-				? theme.fn.darken(theme.colors[props.class.color][8], 0.5)
-				: theme.colors[props.class.color][4],
+		// backgroundColor:
+		// 	theme.colorScheme == "dark"
+		// 		? theme.fn.darken(theme.colors[props.class.color][8], 0.9)
+		// 		: theme.colors[props.class.color][4],
 		padding: theme.spacing.lg,
 		borderRadius: theme.radius.sm,
 		fontWeight: 600,
@@ -32,7 +34,7 @@ const ClassSquare = (props: ClassSquareProps) => {
 
 	const handleDelete = () => {
 		modals.openConfirmModal({
-			title: "Delete Task?",
+			title: "Delete Class?",
 			onConfirm: () => {
 				deleteMutation.mutate(props.class.id);
 			},
@@ -54,7 +56,7 @@ const ClassSquare = (props: ClassSquareProps) => {
 
 	const handleEdit = () => {
 		modals.openModal({
-			title: "Edit Task",
+			title: "Edit Class",
 			children: <EditClassModal class={props.class} />,
 			size: "auto",
 		});
@@ -62,8 +64,27 @@ const ClassSquare = (props: ClassSquareProps) => {
 
 	return (
 		<Paper sx={squareSx} shadow="md">
-			<Group position="apart">
-				{props.class.name}
+			<Group
+				sx={{
+					overflow: "hidden",
+				}}
+				position="apart"
+			>
+				<Group>
+					<Box
+						sx={(theme) => ({
+							borderRadius: "100%",
+							backgroundColor:
+								theme.colors[props.class.color][
+									theme.colorScheme == "dark" ? 8 : 4
+								],
+							width: theme.spacing.lg,
+							height: theme.spacing.lg,
+						})}
+					></Box>
+					<Text>{props.class.name}</Text>
+				</Group>
+
 				<Menu>
 					<Menu.Target>
 						<ActionIcon size="sm">

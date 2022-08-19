@@ -7,7 +7,6 @@ import { Clock } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import useTaskMutation from "../../hooks/useTaskMutation";
-import { canReschedule } from "../../utils/tasks";
 import ClassIdPicker from "../input/ClassIdPicker";
 import HeatmapDatePicker from "../input/HeatmapDatePicker";
 

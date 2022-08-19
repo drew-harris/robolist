@@ -1,4 +1,4 @@
-import { Box, Container, Title } from "@mantine/core";
+import { Box, Container, Paper, Title } from "@mantine/core";
 import { useContext, useState } from "react";
 import DateTaskContainer from "../../components/containers/DateTaskContainer";
 import CalendarHeatmapDatePicker from "../../components/input/CalendarHeatmapDatePicker";
@@ -21,17 +21,19 @@ export default function CalendarPage() {
 			<Title order={2}>Calendar</Title>
 			<Container
 				sx={(theme) => ({
-					maxWidth: theme.breakpoints.sm,
+					// maxWidth: theme.breakpoints.sm,
 					gap: theme.spacing.lg,
 				})}
 			>
-				<CalendarHeatmapDatePicker
-					hideOutsideDates
-					firstDayOfWeek={settings.firstDayOfWeek}
-					fullWidth
-					selectedDate={selectedDate}
-					onSelectDate={setSelectedDate}
-				/>
+				<Paper p="sm" radius="md">
+					<CalendarHeatmapDatePicker
+						hideOutsideDates
+						firstDayOfWeek={settings.firstDayOfWeek}
+						fullWidth
+						selectedDate={selectedDate}
+						onSelectDate={setSelectedDate}
+					/>
+				</Paper>
 			</Container>
 			{!selectedDate && (
 				<CenterInfo mt="xl" text="Select a date to see tasks" />
