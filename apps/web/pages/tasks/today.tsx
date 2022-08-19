@@ -70,8 +70,7 @@ export default function TodayTasksPage({}: TodayTasksPageProps) {
 			/>
 			{settings.useDailyTasks && (
 				<>
-					<Divider my="lg" />
-					<Title mb="md" order={4}>
+					<Title mb="md" mt="xl" order={4}>
 						Daily Tasks
 					</Title>
 					{error && (
