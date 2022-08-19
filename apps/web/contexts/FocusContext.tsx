@@ -139,7 +139,7 @@ export default function FocusContextProvider({ children }: any) {
 				...focusState,
 				task: {
 					...focusState.task,
-					workTime: focusState?.task?.workTime + min,
+					workTime: focusState?.task?.workTime || 0 + min,
 				},
 			});
 		},

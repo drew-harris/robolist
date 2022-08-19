@@ -128,17 +128,6 @@ export default function SettingsPage() {
 					<Tabs.Panel value="behavior">
 						<Setting
 							isSwitch
-							title="Time Estimation"
-							description="Estimate how long tasks will take (recommended)"
-						>
-							<Switch
-								{...form.getInputProps("useTimeEstimate")}
-								checked={form.values.useTimeEstimate}
-								size="md"
-							/>
-						</Setting>
-						<Setting
-							isSwitch
 							title="Focus Timer"
 							description="Race against the estimate and keep track of how long you've worked"
 						>

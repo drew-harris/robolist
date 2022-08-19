@@ -80,24 +80,22 @@ export default function EditTaskModal({
 						mt="lg"
 					>
 						<ClassIdPicker form={form} />
-						{settings.useTimeEstimate && (
-							<TextInput
-								value={form.values.workTime?.toString() || ""}
-								onChange={(e) => {
-									const num = parseInt(e.target.value);
-									if (num === NaN) {
-										form.setFieldValue("workTime", 0);
-									} else {
-										form.setFieldValue("workTime", num);
-									}
-								}}
-								label="Estimated Work Time (minutes)"
-								inputMode="numeric"
-								type="number"
-								min={0}
-								icon={<Clock size={18} />}
-							/>
-						)}
+						<TextInput
+							value={form.values.workTime?.toString() || ""}
+							onChange={(e) => {
+								const num = parseInt(e.target.value);
+								if (num === NaN) {
+									form.setFieldValue("workTime", 0);
+								} else {
+									form.setFieldValue("workTime", num);
+								}
+							}}
+							label="Estimated Work Time (minutes)"
+							inputMode="numeric"
+							type="number"
+							min={0}
+							icon={<Clock size={18} />}
+						/>
 					</Box>
 				</MediaQuery>
 				<MediaQuery smallerThan={"xs"} styles={{ flexDirection: "column" }}>

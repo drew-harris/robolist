@@ -33,6 +33,7 @@ export default function TaskCheckbox({ task, disabled }: TaskCheckboxProps) {
 	return (
 		<Box>
 			<Checkbox
+				size="sm"
 				aria-label="Complete task"
 				checked={task.complete}
 				onChange={onCheck}

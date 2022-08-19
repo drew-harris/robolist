@@ -43,6 +43,15 @@ export default function HeatmapDatePicker(props: DatePickerProps) {
 		return 0;
 	};
 
+	const hasSimpleTasks = (date: Date, dates: DateAggregation[]): boolean => {
+		for (let i = 0; i < dates.length; i++) {
+			if (dates[i].workDate.getTime() === date.getTime()) {
+				return dates[i].simpleTasksCount > 0;
+			}
+		}
+		return false;
+	};
+
 	const getDateStyle = (
 		date: Date,
 		modifiers: DayModifiers
@@ -57,10 +66,23 @@ export default function HeatmapDatePicker(props: DatePickerProps) {
 			return style;
 		}
 		const count = getCountOfDate(date, agg);
+		const hasSimple = hasSimpleTasks(date, agg);
 		if (count) {
 			style = {
 				...style,
-				backgroundColor: theme.fn.rgba(getHeatmapColor(count / maxCount), 0.2),
+				backgroundColor: theme.fn.rgba(getHeatmapColor(count / maxCount), 0.4),
+			};
+		} else if (hasSimple) {
+			style = {
+				...style,
+				backgroundColor:
+					theme.colorScheme == "light"
+						? theme.fn.rgba(theme.colors.gray[5], 0.2)
+						: theme.fn.rgba(theme.colors.gray[9], 1),
+				color:
+					theme.colorScheme == "light"
+						? theme.colors.gray[9]
+						: theme.colors.gray[1],
 			};
 		} else {
 			style = {
@@ -96,11 +118,7 @@ export default function HeatmapDatePicker(props: DatePickerProps) {
 		const hours = getMinutesForDay(date);
 		const isToday = dateIsToday(date);
 		return (
-			<Tooltip
-				label={hours + " min."}
-				disabled={!hours || !settings.useTimeEstimate}
-				openDelay={500}
-			>
+			<Tooltip label={hours + " min."} disabled={!hours} openDelay={500}>
 				<Box
 					sx={{
 						position: "relative",

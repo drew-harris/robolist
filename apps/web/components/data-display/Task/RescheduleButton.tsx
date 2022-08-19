@@ -73,7 +73,7 @@ export default function RescheduleButton(props: RescheduleButtonProps) {
 			<Modal
 				opened={opened}
 				onClose={() => setOpened(false)}
-				title="Choose new date"
+				title="Reschedule"
 			>
 				<CalendarHeatmapDatePicker
 					selectedDate={selectedDate}

@@ -74,11 +74,12 @@ const Task = ({
 	const { deleteMutation, checkMutation } = useTaskMutation();
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
 
-	const checkboxElement = settings.useFocusMode ? (
-		<TaskPlayButton task={task} />
-	) : (
-		<TaskCheckbox task={task} disabled={disableCheck} key={task.id} />
-	);
+	const checkboxElement =
+		task.workTime && settings.useFocusMode ? (
+			<TaskPlayButton task={task} />
+		) : (
+			<TaskCheckbox task={task} disabled={disableCheck} key={task.id} />
+		);
 
 	const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
 	const isLateWork =
@@ -245,9 +246,7 @@ const Task = ({
 							{rescheduleButton && <RescheduleButton task={task} />}
 							{menuComponent}
 						</Group>
-						{settings.useTimeEstimate && (
-							<Text size="sm">{task.workTime + "min."}</Text>
-						)}
+						{task.workTime && <Text size="sm">{task.workTime + "min."}</Text>}
 					</Group>
 				</Stack>
 			</Paper>
@@ -280,9 +279,7 @@ const Task = ({
 					)}
 				</Group>
 				<Group>
-					{settings.useTimeEstimate && (
-						<Text size="sm">{task.workTime + "min."}</Text>
-					)}
+					{task.workTime && <Text size="sm">{task.workTime + "min."}</Text>}
 					{rescheduleButton && <RescheduleButton task={task} />}
 					{menuComponent}
 				</Group>
