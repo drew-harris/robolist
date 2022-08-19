@@ -1,4 +1,5 @@
 import {
+	Box,
 	Button,
 	Select,
 	Space,
@@ -10,13 +11,15 @@ import {
 	useMantineTheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { openModal } from "@mantine/modals";
 import { useQueryClient } from "@tanstack/react-query";
 import { deleteCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
-import { Paint, ThreeDCubeSphere, User } from "tabler-icons-react";
+import { MailFast, Paint, ThreeDCubeSphere, User } from "tabler-icons-react";
 import { Settings } from "types";
 import ThemeColorSelector from "../components/input/ThemeColorSelector";
+import SendFeedbackModal from "../components/modals/SendFeedbackModal";
 import Setting from "../components/small/Setting";
 import { FocusContext } from "../contexts/FocusContext";
 import { SettingsContext } from "../contexts/SettingsContext";
@@ -41,12 +44,32 @@ export default function SettingsPage() {
 		marginTop: theme.spacing.md,
 		marginInline: theme.spacing.md,
 		gap: theme.spacing.lg,
-		// maxWidth: 250,
 	});
 
 	return (
 		<>
-			<Title order={2}>Settings</Title>
+			<Box
+				sx={{
+					display: "flex",
+					justifyContent: "space-between",
+				}}
+			>
+				<Title order={2}>Settings</Title>
+				<Button
+					variant="subtle"
+					onClick={() => {
+						openModal({
+							children: <SendFeedbackModal />,
+							title: "Leave Feedback",
+							size: "lg",
+						});
+					}}
+					leftIcon={<MailFast />}
+					size="xs"
+				>
+					Leave Feedback
+				</Button>
+			</Box>
 			<Space h={theme.spacing.md} />
 			<form>
 				<Tabs defaultValue="appearance">
@@ -168,6 +191,7 @@ export default function SettingsPage() {
 								deleteCookie("jwt");
 								window.localStorage.removeItem("jwt");
 								window.localStorage.removeItem("focusState");
+								window.localStorage.removeItem("settings");
 								focusFn.cancel();
 								queryClient.removeQueries();
 								router.replace("/login");
