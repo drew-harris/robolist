@@ -39,7 +39,7 @@ export default function FocusContextProvider({ children }: any) {
 	const [secondsElapsed, setSecondsElapsed] = useState(0);
 	const focusStateDupe = useRef(defaultContextState);
 	const [focusState, setFocusState] = useLocalStorage<FocusModeState>({
-		key: "focusState",
+		key: "focusState2",
 		serialize: (state) => superjson.stringify(state),
 		deserialize: (str) => {
 			try {
