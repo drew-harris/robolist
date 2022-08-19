@@ -11,7 +11,6 @@ import {
 	MediaQuery,
 	Navbar,
 	NavLink,
-	Space,
 	ThemeIcon,
 	Tooltip,
 	useMantineTheme,
@@ -31,7 +30,6 @@ import {
 	School,
 	Settings,
 } from "tabler-icons-react";
-import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import FocusModeDisplay from "../affixes/FocusModeDisplay";
 import { ColorSchemeToggle } from "../ColorSchemeToggle";

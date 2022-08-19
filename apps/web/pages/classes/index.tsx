@@ -1,5 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Box, Center, Loader, SimpleGrid, Title } from "@mantine/core";
+import { Box, Center, Loader, SimpleGrid, Stack, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Class } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
@@ -47,7 +47,7 @@ const ClassesPage = () => {
 				</Center>
 			)}
 			{classes && classes.length == 0 && <CenterInfo text="No classes yet" />}
-			<SimpleGrid ref={parent} cols={isMobile ? 1 : 4}>
+			<SimpleGrid ref={parent} cols={isMobile ? 1 : 3}>
 				{classElements}
 			</SimpleGrid>
 		</>

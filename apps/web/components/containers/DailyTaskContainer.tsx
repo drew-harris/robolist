@@ -1,5 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Box, Stack, Sx } from "@mantine/core";
+import { Box, Sx } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { DailyWithClass } from "types";
 import { InferQueryOutput } from "../../utils/trpc";
@@ -51,6 +51,7 @@ function RealDailyTaskContainer({
 	...props
 }: DailyTaskContainerProps & { boxSx?: Sx }) {
 	const [parent] = useAutoAnimate<HTMLDivElement>();
+
 	const elements = tasks
 		? tasks.map((task: DailyWithClass) => {
 				return <DailyTask {...props} key={task.id} task={task} />;
