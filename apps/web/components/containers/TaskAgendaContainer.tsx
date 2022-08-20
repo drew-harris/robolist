@@ -9,6 +9,7 @@ import {
 } from "../../utils/client";
 import Task, { TaskOptionProps } from "../data-display/Task";
 import DemoTask from "../demo/DemoTask";
+import DayLabelSkeleton from "../skeletons/DayLabelSkeleton";
 import TaskSkeleton from "../skeletons/TaskSkeleton";
 
 type TaskContainerProps = TaskOptionProps & {
@@ -31,7 +32,10 @@ export default function TaskAgendaContainer({
 		return (
 			<Stack spacing="sm">
 				{[...Array(skeletonLength)].map((e, i) => (
-					<TaskSkeleton key={i} {...props} />
+					<>
+						<DayLabelSkeleton />
+						<TaskSkeleton key={i} {...props} />
+					</>
 				))}
 			</Stack>
 		);

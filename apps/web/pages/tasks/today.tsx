@@ -10,6 +10,7 @@ import NewTaskButton from "../../components/small/NewTaskButton";
 import TodayTimeSum from "../../components/small/TodayTimeSum";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import useInitialPrefetch from "../../hooks/useInitialPrefetch";
+import useSkeletonCount from "../../hooks/useSkeletonCount";
 import { getWeekdayNumber } from "../../utils/client";
 import { trpc, vanilla } from "../../utils/trpc";
 
@@ -28,13 +29,18 @@ export default function TodayTasksPage({}: TodayTasksPageProps) {
 		status: dailyStatus,
 		data: dailyTasks,
 		error: dailyError,
-	} = trpc.useQuery(["daily.on-dates", [getWeekdayNumber()]]);
+	} = trpc.useQuery(["daily.on-dates", [getWeekdayNumber()]], {
+		ssr: false,
+	});
 
 	const { settings } = useContext(SettingsContext);
 
 	useInitialPrefetch();
 
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
+
+	const skeletonCount = useSkeletonCount("today", tasks);
+	const dailySkeletoncount = useSkeletonCount("daily-today", dailyTasks);
 
 	return (
 		<>
@@ -63,7 +69,7 @@ export default function TodayTasksPage({}: TodayTasksPageProps) {
 			)}
 			<TaskContainer
 				loading={status == "loading"}
-				skeletonLength={3}
+				skeletonLength={skeletonCount}
 				checkbox
 				menu={{ delete: true, edit: true }}
 				tasks={tasks}
@@ -80,7 +86,7 @@ export default function TodayTasksPage({}: TodayTasksPageProps) {
 						/>
 					)}
 					<DailyTaskContainer
-						skeletonLength={1}
+						skeletonLength={dailySkeletoncount}
 						grid
 						loading={dailyStatus === "loading"}
 						tasks={dailyTasks}

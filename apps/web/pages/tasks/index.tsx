@@ -5,6 +5,7 @@ import TaskAgendaContainer from "../../components/containers/TaskAgendaContainer
 import CenterInfo from "../../components/small/CenterInfo";
 import NewTaskButton from "../../components/small/NewTaskButton";
 import useInitialPrefetch from "../../hooks/useInitialPrefetch";
+import useSkeletonCount from "../../hooks/useSkeletonCount";
 import { vanilla } from "../../utils/trpc";
 
 export default function TasksPage() {
@@ -17,6 +18,7 @@ export default function TasksPage() {
 	);
 
 	useInitialPrefetch();
+	const skeletonCount = useSkeletonCount("agenda", tasks);
 
 	return (
 		<>
@@ -43,8 +45,9 @@ export default function TasksPage() {
 			<TaskAgendaContainer
 				menu={{ delete: true, edit: true }}
 				rescheduleButton
-				skeletonLength={5}
+				skeletonLength={skeletonCount}
 				loading={status === "loading" && !error}
+				// loading={true}
 				tasks={tasks}
 			/>
 		</>
