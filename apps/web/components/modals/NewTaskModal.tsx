@@ -108,6 +108,7 @@ export default function NewTaskModal() {
 				color: "green",
 			});
 			queryClient.invalidateQueries(["tasks"]);
+			queryClient.invalidateQueries(["dates"]);
 			logEvent("create_task", {
 				value: values.title,
 				category: "tasks",
