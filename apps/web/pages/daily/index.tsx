@@ -4,16 +4,21 @@ import { Plus } from "tabler-icons-react";
 import DailyTaskContainer from "../../components/containers/DailyTaskContainer";
 import NewDailyTaskModal from "../../components/modals/NewDailyTaskModal";
 import CenterInfo from "../../components/small/CenterInfo";
+import useSkeletonCount from "../../hooks/useSkeletonCount";
 import { trpc } from "../../utils/trpc";
 
 export default function DailyTasksPage() {
-	const { data, error, status } = trpc.useQuery(["daily.all"]);
+	const { data, error, status } = trpc.useQuery(["daily.all"], {
+		ssr: false,
+	});
 	const open = () => {
 		openModal({
 			children: <NewDailyTaskModal />,
 			title: "New Daily Task",
 		});
 	};
+
+	const skeletonCount = useSkeletonCount("daily-tasks", data);
 
 	return (
 		<>
@@ -33,8 +38,10 @@ export default function DailyTasksPage() {
 			<DailyTaskContainer
 				menu={{ delete: true, edit: true }}
 				tasks={data}
+				skeletonLength={skeletonCount}
 				showBadges
 				loading={status === "loading"}
+				// loading={true}
 			/>
 		</>
 	);
