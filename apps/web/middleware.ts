@@ -18,7 +18,7 @@ const accountPaths = ["/login", "/signup"];
 export function middleware(request: NextRequest) {
 	const path = request.nextUrl.pathname;
 	const isBeforeRelease =
-		new Date().getTime() < new Date("2022-08-21T15:58:00.000Z").getTime();
+		new Date().getTime() < new Date("2022-08-21T14:00:00.000Z").getTime();
 	const cookie = request.cookies.get("jwt");
 
 	if (cookie) {
