@@ -60,7 +60,7 @@ export default function SignUp() {
 				category: "user",
 				value: values.email,
 			});
-			router.replace("/tasks");
+			router.replace("/classes");
 		} else {
 			setError(data.error?.message || "Unknown error");
 			setLoading(false);
