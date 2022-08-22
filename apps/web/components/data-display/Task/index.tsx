@@ -174,6 +174,7 @@ const Task = ({
 						Delete
 					</Menu.Item>
 				)}
+				<Menu.Label>Due {getHumanDateString(task.dueDate)}</Menu.Label>
 			</Menu.Dropdown>
 		</Menu>
 	) : null;
