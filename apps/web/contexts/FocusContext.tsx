@@ -138,16 +138,17 @@ export default function FocusContextProvider({ children }: any) {
 		},
 
 		addTime: (min: number) => {
-			if (!focusState.task) {
+			if (!focusState.task || !focusState.task.workTime) {
 				return;
 			}
 			setFocusState({
 				...focusState,
 				task: {
 					...focusState.task,
-					workTime: focusState?.task?.workTime || 0 + min,
+					workTime: focusState?.task?.workTime + min,
 				},
 			});
+			updateSeconds();
 		},
 
 		startTask(task: TaskWithClass) {
