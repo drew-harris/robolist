@@ -7,6 +7,7 @@ import {
 	CalendarEvent,
 	CalendarPlus,
 	CalendarTime,
+	Columns,
 	List,
 	MailFast,
 	Moon2,
@@ -104,19 +105,27 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
 			},
 		},
 		{
-			title: "Daily Tasks",
-			icon: <CalendarTime />,
-			id: "settings",
-			onTrigger: () => {
-				router.replace("/daily");
-			},
-		},
-		{
 			title: "Calendar",
 			icon: <CalendarEvent />,
 			id: "calendar",
 			onTrigger: () => {
 				router.replace("/calendar");
+			},
+		},
+		{
+			title: "Details",
+			icon: <Columns />,
+			id: "details",
+			onTrigger: () => {
+				router.replace("/tasks/details");
+			},
+		},
+		{
+			title: "Daily Tasks",
+			icon: <CalendarTime />,
+			id: "settings",
+			onTrigger: () => {
+				router.replace("/daily");
 			},
 		},
 

@@ -11,9 +11,11 @@ import {
 } from "../clientapi/tasks";
 import { FocusContext } from "../contexts/FocusContext";
 import { getHumanDateString } from "../utils/client";
+import { trpc } from "../utils/trpc";
 
 export default function useTaskMutation() {
 	const queryClient = useQueryClient();
+	const trpcClient = trpc.useContext();
 	const focus = useContext(FocusContext);
 
 	const deleteMutation = useMutation(
@@ -36,6 +38,7 @@ export default function useTaskMutation() {
 					focus.fn.cancel();
 				}
 				await queryClient.invalidateQueries(["tasks"]);
+				await trpcClient.invalidateQueries("tasks.details");
 			},
 
 			onError: async (task: TaskWithClass) => {
@@ -49,6 +52,7 @@ export default function useTaskMutation() {
 					}
 				);
 				await queryClient.invalidateQueries(["tasks"]);
+				await trpcClient.invalidateQueries("tasks.details");
 				showNotification({
 					message: "Error deleting task",
 					color: "red",
@@ -79,6 +83,7 @@ export default function useTaskMutation() {
 			},
 			onSettled: async () => {
 				await queryClient.invalidateQueries(["tasks"]);
+				await trpcClient.invalidateQueries("tasks.details");
 				await queryClient.invalidateQueries(["dates"]);
 				await queryClient.prefetchQuery(["dates"], () => {
 					return getDateAggregation();
@@ -117,10 +122,12 @@ export default function useTaskMutation() {
 
 			onSuccess: async () => {
 				await queryClient.invalidateQueries(["tasks"]);
+				await trpcClient.invalidateQueries("tasks.details");
 			},
 
 			onError: async (err, state) => {
 				await queryClient.invalidateQueries(["tasks"]);
+				await trpcClient.invalidateQueries("tasks.details");
 				await queryClient.setQueriesData(
 					["tasks"],
 					(oldData: TaskWithClass[] | undefined) => {
@@ -212,6 +219,7 @@ export default function useTaskMutation() {
 
 			onSettled: async () => {
 				await queryClient.invalidateQueries(["tasks"]);
+				await trpcClient.invalidateQueries("tasks.details");
 				await queryClient.invalidateQueries(["dates"]);
 				await queryClient.prefetchQuery(["dates"], () => {
 					return getDateAggregation();

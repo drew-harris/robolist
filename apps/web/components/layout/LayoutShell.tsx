@@ -12,7 +12,6 @@ import {
 	MediaQuery,
 	Navbar,
 	NavLink,
-	Space,
 	ThemeIcon,
 	Tooltip,
 	useMantineTheme,
@@ -26,13 +25,14 @@ import {
 	Calendar,
 	CalendarTime,
 	Clock,
+	Columns,
 	Command,
+	GridPattern,
 	Hourglass,
 	List,
 	School,
 	Settings,
 } from "tabler-icons-react";
-import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import FocusModeContentSpacer from "../affixes/FocusModeContentSpacer";
 import FocusModeDisplay from "../affixes/FocusModeDisplay";
@@ -66,9 +66,18 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
 	let tasksGroup: SidebarLink[] = [
 		{ href: "/tasks/today", label: "Today", icon: <Clock /> },
-		{ href: "/tasks", label: "All Tasks", icon: <List /> },
+		{ href: "/tasks", label: "Agenda", icon: <List /> },
 		{ href: "/calendar", label: "Calendar", icon: <Calendar /> },
 	];
+
+	if (!isMobile) {
+		tasksGroup.push({
+			href: "/tasks/details",
+			label: "Details",
+			icon: <Columns />,
+			isBeta: true,
+		});
+	}
 
 	if (settings.useDailyTasks) {
 		tasksGroup.push({ href: "/daily", label: "Daily", icon: <CalendarTime /> });
@@ -95,7 +104,16 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			return (
 				<Link href={link.href} id={link.href}>
 					<NavLink
-						rightSection={link.isBeta ? <Badge size="sm">Beta</Badge> : null}
+						rightSection={
+							link.isBeta ? (
+								<Tooltip
+									withinPortal
+									label="Unstable feature. Looking for feedback"
+								>
+									<Badge size="sm">BETA</Badge>
+								</Tooltip>
+							) : null
+						}
 						onClick={() => {
 							setOpened(false);
 						}}
