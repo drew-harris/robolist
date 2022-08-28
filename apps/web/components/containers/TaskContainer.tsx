@@ -1,5 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Stack } from "@mantine/core";
+import { Stack, Table } from "@mantine/core";
 import { TaskWithClass } from "types";
 import Task, { TaskOptionProps } from "../data-display/Task";
 import DetailedTask from "../detailed-task";
@@ -57,9 +57,11 @@ function RealTaskContainer({ tasks, as, ...props }: TaskContainerProps) {
 		  })
 		: null;
 
+	if (as === "detailed") {
+		return <Table>{taskElements}</Table>;
+	}
 	return (
-		<Stack spacing={as === "detailed" ? 0 : "sm"} ref={parent}>
-			{as === "detailed" ? <DetailedTaskHeader /> : null}
+		<Stack spacing="sm" ref={parent}>
 			{taskElements}
 		</Stack>
 	);

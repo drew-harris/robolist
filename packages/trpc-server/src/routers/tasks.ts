@@ -53,7 +53,7 @@ export const tasks = createRouter()
 				.default("workDate"),
 			page: z.number().default(1),
 			perPage: z.number().default(10),
-			classId: z.string().optional(),
+			classId: z.string().nullable(),
 		}),
 		resolve: async ({ ctx, input }) => {
 			try {
