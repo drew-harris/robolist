@@ -68,13 +68,16 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 		{ href: "/tasks/today", label: "Today", icon: <Clock /> },
 		{ href: "/tasks", label: "Agenda", icon: <List /> },
 		{ href: "/calendar", label: "Calendar", icon: <Calendar /> },
-		{
+	];
+
+	if (!isMobile) {
+		tasksGroup.push({
 			href: "/tasks/details",
 			label: "Details",
 			icon: <Columns />,
 			isBeta: true,
-		},
-	];
+		});
+	}
 
 	if (settings.useDailyTasks) {
 		tasksGroup.push({ href: "/daily", label: "Daily", icon: <CalendarTime /> });
@@ -101,7 +104,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			return (
 				<Link href={link.href} id={link.href}>
 					<NavLink
-						rightSection={link.isBeta ? <Badge size="sm">NEW</Badge> : null}
+						rightSection={link.isBeta ? <Badge size="sm">BETA</Badge> : null}
 						onClick={() => {
 							setOpened(false);
 						}}
