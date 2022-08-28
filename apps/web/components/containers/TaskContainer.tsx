@@ -6,6 +6,7 @@ import TaskSkeleton from "../skeletons/TaskSkeleton";
 
 type TaskContainerProps = TaskOptionProps & {
 	tasks: TaskWithClass[] | undefined;
+	oldTasks?: TaskWithClass[] | null;
 	skeletonLength?: number;
 	loading?: boolean;
 	disableAnimation?: boolean;
@@ -13,12 +14,13 @@ type TaskContainerProps = TaskOptionProps & {
 
 export default function TaskContainer({
 	tasks,
+	oldTasks,
 	loading = false,
 	skeletonLength = 8,
 	disableAnimation = false,
 	...props
 }: TaskContainerProps) {
-	if (loading || !tasks) {
+	if (loading && !oldTasks) {
 		return (
 			<Stack spacing="sm">
 				{[...Array(skeletonLength)].map((e, i) => (
@@ -28,7 +30,7 @@ export default function TaskContainer({
 		);
 	}
 
-	return <RealTaskContainer tasks={tasks} {...props} />;
+	return <RealTaskContainer tasks={tasks || oldTasks || []} {...props} />;
 }
 
 function RealTaskContainer({ tasks, ...props }: TaskContainerProps) {

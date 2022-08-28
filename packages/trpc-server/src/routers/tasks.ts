@@ -1,4 +1,6 @@
+import { Prisma } from "@prisma/client";
 import superjson from "superjson";
+import { z } from "zod";
 import { createRouter } from "../server/context";
 import { getPrismaPool } from "../utils";
 
@@ -36,6 +38,44 @@ export const tasks = createRouter()
 			});
 
 			return tasks;
+		},
+	})
+
+	.query("details", {
+		input: z.object({
+			sortBy: z
+				.enum(["id", ...Object.values(Prisma.TaskScalarFieldEnum)])
+				.default("workDate"),
+			page: z.number().default(1),
+			perPage: z.number().default(10),
+			classId: z.string().optional(),
+		}),
+		resolve: async ({ ctx, input }) => {
+			try {
+				const prisma = await getPrismaPool();
+				const tasks = await prisma.task.findMany({
+					where: {
+						user: {
+							id: ctx.user.id,
+						},
+						classId: input.classId ? input.classId : undefined,
+					},
+					orderBy: [
+						{ [input.sortBy]: input.sortBy === "updatedAt" ? "desc" : "asc" },
+
+						{ workDate: "asc" },
+					],
+					include: {
+						class: true,
+					},
+					take: input.perPage,
+					skip: (input.page - 1) * input.perPage,
+				});
+				return tasks;
+			} catch (error: any) {
+				console.error(error.message);
+				throw new Error("Unable to get tasks");
+			}
 		},
 	})
 

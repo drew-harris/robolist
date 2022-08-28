@@ -16,6 +16,7 @@ import { Clock } from "tabler-icons-react";
 import { APINewTaskRequest } from "types";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import { logEvent } from "../../lib/ga";
+import { trpc } from "../../utils/trpc";
 import ClassIdPicker from "../input/ClassIdPicker";
 import HeatmapDatePicker from "../input/HeatmapDatePicker";
 
@@ -108,6 +109,9 @@ export default function NewTaskModal() {
 				color: "green",
 			});
 			queryClient.invalidateQueries(["tasks"]);
+
+			const trpcClient = trpc.useContext();
+			trpcClient.invalidateQueries("tasks.details");
 			queryClient.invalidateQueries(["dates"]);
 			logEvent("create_task", {
 				value: values.title,

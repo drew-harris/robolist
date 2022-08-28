@@ -12,7 +12,6 @@ import {
 	MediaQuery,
 	Navbar,
 	NavLink,
-	Space,
 	ThemeIcon,
 	Tooltip,
 	useMantineTheme,
@@ -26,13 +25,14 @@ import {
 	Calendar,
 	CalendarTime,
 	Clock,
+	Columns,
 	Command,
+	GridPattern,
 	Hourglass,
 	List,
 	School,
 	Settings,
 } from "tabler-icons-react";
-import { FocusContext } from "../../contexts/FocusContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import FocusModeContentSpacer from "../affixes/FocusModeContentSpacer";
 import FocusModeDisplay from "../affixes/FocusModeDisplay";
@@ -66,8 +66,14 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
 	let tasksGroup: SidebarLink[] = [
 		{ href: "/tasks/today", label: "Today", icon: <Clock /> },
-		{ href: "/tasks", label: "All Tasks", icon: <List /> },
+		{ href: "/tasks", label: "Agenda", icon: <List /> },
 		{ href: "/calendar", label: "Calendar", icon: <Calendar /> },
+		{
+			href: "/tasks/details",
+			label: "Details",
+			icon: <Columns />,
+			isBeta: true,
+		},
 	];
 
 	if (settings.useDailyTasks) {
@@ -95,7 +101,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			return (
 				<Link href={link.href} id={link.href}>
 					<NavLink
-						rightSection={link.isBeta ? <Badge size="sm">Beta</Badge> : null}
+						rightSection={link.isBeta ? <Badge size="sm">NEW</Badge> : null}
 						onClick={() => {
 							setOpened(false);
 						}}
