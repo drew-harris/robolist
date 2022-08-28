@@ -48,7 +48,7 @@ export default function TaskPlayButton({ task }: TaskPlayButtonProps) {
 	};
 
 	if (task.complete) {
-		return <BsCheck size={iconSize} />;
+		return <BsCheck style={{ marginTop: 4 }} size={iconSize} />;
 	}
 
 	return (

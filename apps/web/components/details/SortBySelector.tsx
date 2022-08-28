@@ -1,7 +1,5 @@
-import { Select, SelectItem } from "@mantine/core";
-import { SelectSharedProps } from "@mantine/core/lib/Select/Select";
+import { Select } from "@mantine/core";
 import type { Prisma } from "@prisma/client";
-import { stableValueHash } from "react-query/types/core/utils";
 
 export type SortByValueOptions = Prisma.TaskScalarFieldEnum;
 
@@ -19,16 +17,20 @@ export default function SortBySelector({
 			value: "dueDate",
 		},
 		{
-			label: "Last Updated",
-			value: "updatedAt",
-		},
-		{
 			value: "workDate",
 			label: "Work Date",
 		},
 		{
 			value: "complete",
 			label: "Complete",
+		},
+		{
+			value: "createdAt",
+			label: "Recently Created",
+		},
+		{
+			label: "Recently Updated",
+			value: "updatedAt",
 		},
 	];
 
@@ -37,6 +39,7 @@ export default function SortBySelector({
 			onChange={(value) => setValue(value as SortByValueOptions)}
 			data={realOptions}
 			value={value}
+			label="Sort By"
 		></Select>
 	);
 }

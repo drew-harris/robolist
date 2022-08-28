@@ -8,7 +8,6 @@ import SortBySelector, {
 import CenterInfo from "../../components/small/CenterInfo";
 import useSkeletonCount from "../../hooks/useSkeletonCount";
 import { InferQueryOutput, vanilla } from "../../utils/trpc";
-
 export default function TaskDetailsPage() {
 	const [sortBy, setSortBy] = useState<SortByValueOptions>("dueDate");
 
@@ -36,13 +35,12 @@ export default function TaskDetailsPage() {
 					display: "flex",
 					justifyContent: "space-between",
 				}}
-				mb="lg"
+				mb="xl"
 			>
 				<Title mb="md" order={2}>
 					Details
 				</Title>
 				<Group>
-					<Text>Sort By: </Text>
 					<SortBySelector value={sortBy} setValue={setSortBy} />
 				</Group>
 			</Box>

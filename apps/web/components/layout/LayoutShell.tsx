@@ -104,7 +104,16 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			return (
 				<Link href={link.href} id={link.href}>
 					<NavLink
-						rightSection={link.isBeta ? <Badge size="sm">BETA</Badge> : null}
+						rightSection={
+							link.isBeta ? (
+								<Tooltip
+									withinPortal
+									label="Unstable feature. Looking for feedback"
+								>
+									<Badge size="sm">BETA</Badge>
+								</Tooltip>
+							) : null
+						}
 						onClick={() => {
 							setOpened(false);
 						}}

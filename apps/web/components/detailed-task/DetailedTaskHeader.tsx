@@ -21,7 +21,7 @@ export default function DetailedTaskHeader() {
 			<Heading text={"Work Date"} />
 			<Heading text={"Due Date"} />
 			<Heading text={"Work Time"} />
-			<Box sx={{ width: 24 }}></Box>
+			<Box sx={{ width: 64 }}></Box>
 		</Box>
 	);
 }

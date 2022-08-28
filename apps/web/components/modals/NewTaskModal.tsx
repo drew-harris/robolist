@@ -110,8 +110,6 @@ export default function NewTaskModal() {
 			});
 			queryClient.invalidateQueries(["tasks"]);
 
-			const trpcClient = trpc.useContext();
-			trpcClient.invalidateQueries("tasks.details");
 			queryClient.invalidateQueries(["dates"]);
 			logEvent("create_task", {
 				value: values.title,

@@ -55,7 +55,7 @@ export default function RescheduleButton(props: RescheduleButtonProps) {
 	};
 
 	if (!canReschedule(task, settings)) {
-		return <Box sx={{ width: "1px" }}></Box>;
+		return <Box sx={{ width: "22px" }}></Box>;
 	}
 
 	return (
