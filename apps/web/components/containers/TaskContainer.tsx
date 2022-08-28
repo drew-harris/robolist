@@ -57,11 +57,9 @@ function RealTaskContainer({ tasks, as, ...props }: TaskContainerProps) {
 		  })
 		: null;
 
-	if (as === "detailed") {
-		return <Table>{taskElements}</Table>;
-	}
 	return (
-		<Stack spacing="sm" ref={parent}>
+		<Stack spacing={as === "detailed" ? 0 : "sm"} ref={parent}>
+			{as === "detailed" ? <DetailedTaskHeader /> : null}
 			{taskElements}
 		</Stack>
 	);

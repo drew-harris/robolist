@@ -52,7 +52,7 @@ export default function DetailedTask({ task, isShaded }: detailedTaskProps) {
 			/>
 		);
 	return (
-		<tr>
+		<Box sx={gridSx} p="sm">
 			<Box mr="0">{checkboxElement}</Box>
 			<Text weight="bolder" pr="sm">
 				{task.title}
@@ -94,6 +94,6 @@ export default function DetailedTask({ task, isShaded }: detailedTaskProps) {
 					showDueDate={false}
 				/>
 			</Group>
-		</tr>
+		</Box>
 	);
 }

@@ -108,7 +108,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 							link.isBeta ? (
 								<Tooltip
 									withinPortal
-									label="Unstable feature. Looking for feedback"
+									label="Preview feature, Looking for feedback"
 								>
 									<Badge size="sm">BETA</Badge>
 								</Tooltip>

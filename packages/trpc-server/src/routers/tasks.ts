@@ -150,4 +150,26 @@ export const tasks = createRouter()
 				throw new Error("Error getting tasks");
 			}
 		},
+	})
+	.query("pagecount", {
+		input: z.object({
+			perPage: z.number().default(10),
+			classId: z.string().nullable(),
+		}),
+		resolve: async ({ ctx, input }) => {
+			try {
+				const prisma = await getPrismaPool();
+				const threeDaysFromNow = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3);
+				const taskCount = await prisma.task.count({
+					where: {
+						user: {
+							id: ctx.user.id,
+						},
+						classId: input.classId ? input.classId : undefined,
+						OR: [{ dueDate: { lte: threeDaysFromNow } }, { complete: false }],
+					},
+				});
+				return Math.ceil(taskCount / input.perPage);
+			} catch (error: any) {}
+		},
 	});
