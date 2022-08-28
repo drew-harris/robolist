@@ -1,8 +1,6 @@
 import {
-	ActionIcon,
 	Badge,
 	Group,
-	Menu,
 	Paper,
 	PaperProps,
 	Space,
@@ -14,21 +12,14 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
 import { useContext } from "react";
-import {
-	AlertTriangle,
-	Check,
-	Dots,
-	Pencil,
-	Rotate2,
-	Trash,
-} from "tabler-icons-react";
+import { AlertTriangle } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
 import { getHumanDateString } from "../../../utils/client";
-import EditTaskModal from "../../modals/EditTaskModal";
 import RescheduleButton from "./RescheduleButton";
 import TaskCheckbox from "./TaskCheckbox";
+import TaskMenu from "./TaskMenu";
 import TaskPlayButton from "./TaskPlayButton";
 
 type TaskProps = TaskOptionProps & {
@@ -91,93 +82,6 @@ const Task = ({
 			onTaskClick(task);
 		}
 	};
-
-	const promptDelete = () => {
-		modals.openConfirmModal({
-			title: "Delete Task?",
-			onConfirm: () => {
-				deleteMutation.mutate(task);
-			},
-			children: (
-				<>
-					<Text size="sm">Are you sure you want to delete this task?</Text>
-				</>
-			),
-			labels: {
-				confirm: "Delete",
-				cancel: "Cancel",
-			},
-			confirmProps: {
-				color: "red",
-			},
-		});
-	};
-
-	const promptEdit = () => {
-		modals.openModal({
-			children: <EditTaskModal task={task} />,
-			title: "Edit Task",
-			size: "lg",
-		});
-	};
-
-	const completeMenuOption = () => {
-		if (!task.workTime) {
-			return null;
-		} else if (checkbox && task.complete) {
-			return (
-				<Menu.Item
-					onClick={() => {
-						checkMutation.mutate({
-							id: task.id,
-							complete: false,
-						});
-					}}
-					icon={<Rotate2 />}
-				>
-					Undo Complete
-				</Menu.Item>
-			);
-		} else {
-			return (
-				<Menu.Item
-					onClick={() => {
-						checkMutation.mutate({
-							id: task.id,
-							complete: true,
-						});
-					}}
-					icon={<Check />}
-				>
-					Mark Complete
-				</Menu.Item>
-			);
-		}
-	};
-
-	const menuComponent = menuOptions ? (
-		<Menu position="bottom-end" withinPortal={true}>
-			<Menu.Target>
-				<ActionIcon size="sm">
-					<Dots></Dots>
-				</ActionIcon>
-			</Menu.Target>
-			<Menu.Dropdown>
-				{completeMenuOption()}
-				{menuOptions.edit && (
-					<Menu.Item onClick={promptEdit} icon={<Pencil />}>
-						Edit
-					</Menu.Item>
-				)}
-				{menuOptions.delete && (
-					<Menu.Item color="red" onClick={promptDelete} icon={<Trash />}>
-						Delete
-					</Menu.Item>
-				)}
-				<Menu.Label>Due {getHumanDateString(task.dueDate)}</Menu.Label>
-			</Menu.Dropdown>
-		</Menu>
-	) : null;
 
 	const paperSx: Sx = (theme) => {
 		let border: string | undefined;
@@ -253,7 +157,7 @@ const Task = ({
 						<Group>
 							{checkbox && checkboxElement}
 							{rescheduleButton && <RescheduleButton task={task} />}
-							{menuComponent}
+							<TaskMenu task={task} options={menuOptions || {}} />
 						</Group>
 						{task.workTime && <Text size="sm">{task.workTime + "min."}</Text>}
 					</Group>
@@ -290,7 +194,7 @@ const Task = ({
 				<Group>
 					{task.workTime && <Text size="sm">{task.workTime + "min."}</Text>}
 					{rescheduleButton && <RescheduleButton task={task} />}
-					{menuComponent}
+					<TaskMenu task={task} options={menuOptions || {}} />
 				</Group>
 			</Group>
 		</Paper>

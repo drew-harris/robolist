@@ -1,4 +1,4 @@
-import { ActionIcon, Modal, Tooltip } from "@mantine/core";
+import { ActionIcon, Box, Modal, Tooltip } from "@mantine/core";
 import { useContext, useMemo, useState } from "react";
 import { Rotate360 } from "tabler-icons-react";
 import { TaskWithClass } from "types";
@@ -55,7 +55,7 @@ export default function RescheduleButton(props: RescheduleButtonProps) {
 	};
 
 	if (!canReschedule(task, settings)) {
-		return null;
+		return <Box sx={{ width: "22px" }}></Box>;
 	}
 
 	return (
