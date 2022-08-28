@@ -1,8 +1,12 @@
 import { Box, Text } from "@mantine/core";
-import { gridSettings } from ".";
+import { endSx, gridSettings } from ".";
 
-const Heading = ({ text }: { text: string }) => {
-	return <Text weight="bold">{text}</Text>;
+const Heading = ({ text, end = false }: { text: string; end?: boolean }) => {
+	return (
+		<Text sx={end ? endSx : undefined} weight="bold">
+			{text}
+		</Text>
+	);
 };
 export default function DetailedTaskHeader() {
 	return (
@@ -18,10 +22,10 @@ export default function DetailedTaskHeader() {
 			<Box></Box>
 			<Heading text={"Title"} />
 			<Heading text={"Class"} />
-			<Heading text={"Work Date"} />
-			<Heading text={"Due Date"} />
-			<Heading text={"Work Time"} />
-			<Box sx={{ width: 64 }}></Box>
+			<Heading end text={"Work Date"} />
+			<Heading end text={"Due Date"} />
+			<Heading end text={"Work Time"} />
+			<Box ml="xl" sx={{ width: 64 }}></Box>
 		</Box>
 	);
 }

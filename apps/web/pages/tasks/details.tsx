@@ -1,22 +1,59 @@
-import { Box, Group, Title, Text } from "@mantine/core";
+import { Box, Group, Title, Text, Pagination, Center } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { usePagination } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import TaskContainer from "../../components/containers/TaskContainer";
 import SortBySelector, {
 	SortByValueOptions,
 } from "../../components/details/SortBySelector";
+import ClassIdPicker from "../../components/input/ClassIdPicker";
 import CenterInfo from "../../components/small/CenterInfo";
 import useSkeletonCount from "../../hooks/useSkeletonCount";
-import { InferQueryOutput, vanilla } from "../../utils/trpc";
+import { InferQueryOutput, trpc, vanilla } from "../../utils/trpc";
+
 export default function TaskDetailsPage() {
 	const [sortBy, setSortBy] = useState<SortByValueOptions>("dueDate");
+
+	// TODO: use a multi-select for classIds
+	const form = useForm({
+		initialValues: {
+			classId: null,
+		},
+	});
+	const perPage = 10;
+	const { data: pageCount } = trpc.useQuery(
+		[
+			"tasks.pagecount",
+			{
+				classId: form.values.classId,
+				perPage,
+			},
+		],
+		{ ssr: false }
+	);
+	const pagination = usePagination({
+		total: pageCount || 0,
+		initialPage: 1,
+	});
 
 	const { data, status, error } = useQuery<
 		InferQueryOutput<"tasks.details">,
 		Error
-	>(["tasks", { sortBy }], () => {
-		return vanilla.query("tasks.details", { sortBy: sortBy });
-	});
+	>(
+		[
+			"tasks",
+			{ sortBy, classId: form.values.classId, page: pagination.active },
+		],
+		() => {
+			return vanilla.query("tasks.details", {
+				sortBy: sortBy,
+				classId: form.values.classId,
+				perPage,
+				page: pagination.active,
+			});
+		}
+	);
 
 	const [oldTasks, setOldTasks] =
 		useState<InferQueryOutput<"tasks.details"> | null>(null);
@@ -41,6 +78,7 @@ export default function TaskDetailsPage() {
 					Details
 				</Title>
 				<Group>
+					<ClassIdPicker placeholder="All Classes" form={form} />
 					<SortBySelector value={sortBy} setValue={setSortBy} />
 				</Group>
 			</Box>
@@ -62,6 +100,15 @@ export default function TaskDetailsPage() {
 				checkbox={true}
 				tasks={data}
 			/>
+			{pageCount && pageCount > 1 && (
+				<Center mt="lg">
+					<Pagination
+						onChange={(page) => pagination.setPage(page)}
+						page={pagination.active}
+						total={pageCount || 0}
+					/>
+				</Center>
+			)}
 		</>
 	);
 }

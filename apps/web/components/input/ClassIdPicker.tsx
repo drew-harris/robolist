@@ -7,6 +7,7 @@ import { vanilla } from "../../utils/trpc";
 
 interface IdPickerProps {
 	form: UseFormReturnType<any>;
+	placeholder?: string;
 }
 
 export default function ClassIdPicker(props: IdPickerProps) {
@@ -25,6 +26,7 @@ export default function ClassIdPicker(props: IdPickerProps) {
 		  })
 		: [];
 
+	const placeholder = props.placeholder || "No Class";
 	return (
 		<Select
 			{...props.form.getInputProps("classId")}
@@ -32,7 +34,7 @@ export default function ClassIdPicker(props: IdPickerProps) {
 			icon={status === "loading" ? <Loader size={18} /> : <School size={18} />}
 			data={classLabels}
 			disabled={!classes || classes.length === 0}
-			placeholder={classes && classes.length === 0 ? "No Classes" : "No Class"}
+			placeholder={classes && classes.length === 0 ? "No Classes" : placeholder}
 			clearable={true}
 		></Select>
 	);

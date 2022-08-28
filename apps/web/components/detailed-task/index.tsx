@@ -17,6 +17,9 @@ export const gridSettings: Sx = {
 	gridTemplateColumns: "35px 2fr 1fr 1fr 1fr 1fr auto",
 	alignItems: "center",
 };
+export const endSx: Sx = {
+	justifySelf: "end",
+};
 
 export default function DetailedTask({ task, isShaded }: detailedTaskProps) {
 	const isMobile = useMediaQuery("(max-width: 900px)", false);
@@ -49,7 +52,7 @@ export default function DetailedTask({ task, isShaded }: detailedTaskProps) {
 			/>
 		);
 	return (
-		<Box sx={gridSx} p="md">
+		<Box sx={gridSx} p="sm">
 			<Box mr="0">{checkboxElement}</Box>
 			<Text weight="bolder" pr="sm">
 				{task.title}
@@ -59,7 +62,7 @@ export default function DetailedTask({ task, isShaded }: detailedTaskProps) {
 					<Badge color={task.class?.color}>{task.class?.name}</Badge>
 				) : null}
 			</Box>
-			<Text>
+			<Text sx={endSx}>
 				{task.workDate.toLocaleDateString("en-us", {
 					day: "numeric",
 					month: "short",
@@ -69,15 +72,19 @@ export default function DetailedTask({ task, isShaded }: detailedTaskProps) {
 				label="Due in the next 24 hours"
 				disabled={task.dueDate > tomorrow}
 			>
-				<Text color={tomorrow > task.dueDate ? "yellow" : undefined}>
+				<Text sx={endSx} color={tomorrow > task.dueDate ? "yellow" : undefined}>
 					{task.dueDate.toLocaleDateString("en-us", {
 						day: "numeric",
 						month: "short",
 					})}
 				</Text>
 			</Tooltip>
-			{task.workTime ? <Text>{task.workTime + "min."}</Text> : <Box />}
-			<Group>
+			{task.workTime ? (
+				<Text sx={endSx}>{task.workTime + "min."}</Text>
+			) : (
+				<Box />
+			)}
+			<Group sx={endSx} ml="xl">
 				<Box>
 					<RescheduleButton task={task} />
 				</Box>

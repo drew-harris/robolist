@@ -1,5 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Stack } from "@mantine/core";
+import { Stack, Table } from "@mantine/core";
 import { TaskWithClass } from "types";
 import Task, { TaskOptionProps } from "../data-display/Task";
 import DetailedTask from "../detailed-task";
