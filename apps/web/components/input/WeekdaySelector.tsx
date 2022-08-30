@@ -1,4 +1,4 @@
-import { Box, Group, Paper, Text } from "@mantine/core";
+import { Group, Paper, Text } from "@mantine/core";
 import { useContext } from "react";
 import { SettingsContext } from "../../contexts/SettingsContext";
 

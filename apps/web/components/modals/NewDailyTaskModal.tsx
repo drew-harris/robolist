@@ -1,12 +1,4 @@
-import {
-	Box,
-	Button,
-	Checkbox,
-	Group,
-	Stack,
-	Text,
-	TextInput,
-} from "@mantine/core";
+import { Box, Button, Group, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { closeAllModals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
