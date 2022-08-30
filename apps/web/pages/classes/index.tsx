@@ -1,7 +1,6 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Box, Center, Loader, SimpleGrid, Stack, Title } from "@mantine/core";
+import { Box, SimpleGrid, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { Class } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import ClassSquare from "../../components/data-display/ClassSquare";
 import ClassSkeleton from "../../components/skeletons/ClassSkeleton";

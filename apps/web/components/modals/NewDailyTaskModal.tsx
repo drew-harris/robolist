@@ -12,17 +12,18 @@ import { closeAllModals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 import useDailyMutation from "../../hooks/useDailyMutation";
 import ClassIdPicker from "../input/ClassIdPicker";
+import WeekdaySelector from "../input/WeekdaySelector";
 
 interface IForm {
 	title: string;
 	classId: string | null;
-	days: string[];
+	days: number[];
 }
 
 export default function NewDailyTaskModal() {
 	const form = useForm<IForm>({
 		initialValues: {
-			days: [],
+			days: [] as number[],
 			title: "",
 			classId: null,
 		},
@@ -35,28 +36,12 @@ export default function NewDailyTaskModal() {
 
 	const { createDaily } = useDailyMutation();
 
-	const makeCheckboxes = (): JSX.Element[] => {
-		const days = [
-			"Sunday",
-			"Monday",
-			"Tuesday",
-			"Wednesday",
-			"Thursday",
-			"Friday",
-			"Saturday",
-		];
-		return days.map((day, index) => (
-			<Checkbox value={index.toString()} key={day} label={day} />
-		));
-	};
-
 	const handleSubmit = (values: IForm) => {
-		const numberDays = values.days.map((day) => parseInt(day)).sort();
 		try {
 			createDaily.mutate({
 				title: values.title,
 				classId: values.classId,
-				days: numberDays,
+				days: values.days,
 			});
 			closeAllModals();
 		} catch (error: any) {
@@ -83,9 +68,7 @@ export default function NewDailyTaskModal() {
 							Select Days
 						</Text>
 						<Button
-							onClick={() =>
-								form.setFieldValue("days", ["0", "1", "2", "3", "4", "5", "6"])
-							}
+							onClick={() => form.setFieldValue("days", [0, 1, 2, 3, 4, 5, 6])}
 							size="xs"
 							variant="subtle"
 						>
@@ -99,12 +82,15 @@ export default function NewDailyTaskModal() {
 							None
 						</Button>
 					</Group>
-					<Checkbox.Group
-						sx={{ padding: 0, margin: 0 }}
-						{...form.getInputProps("days")}
-					>
-						{makeCheckboxes()}
-					</Checkbox.Group>
+					<WeekdaySelector
+						value={form.values.days}
+						onChange={(nums) => form.setFieldValue("days", nums)}
+					/>
+					{form.errors.days && (
+						<Text color="red" size="xs" weight={500}>
+							{form.errors.days}
+						</Text>
+					)}
 					<Button mt="md" fullWidth type="submit">
 						Create
 					</Button>
