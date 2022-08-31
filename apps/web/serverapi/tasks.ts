@@ -1,39 +1,6 @@
 import { TaskWithClass } from "types";
 import { getPrismaPool } from "./prismapool";
 
-export async function getTasksFromUserId(
-	userId: string
-): Promise<TaskWithClass[]> {
-	try {
-		const prisma = getPrismaPool();
-		const tasks = await prisma.task.findMany({
-			where: {
-				user: {
-					id: userId,
-				},
-			},
-			orderBy: [
-				{
-					workDate: "asc",
-				},
-				{
-					complete: "asc",
-				},
-				{
-					updatedAt: "desc",
-				},
-			],
-			include: {
-				class: true,
-			},
-		});
-		return tasks;
-	} catch (error) {
-		console.error(error);
-		throw new Error("Error getting classes");
-	}
-}
-
 export async function getTodayTasksFromId(
 	userId: string
 ): Promise<TaskWithClass[]> {
