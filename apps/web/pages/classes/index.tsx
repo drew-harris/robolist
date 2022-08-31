@@ -7,7 +7,7 @@ import ClassSquare from "../../components/data-display/ClassSquare";
 import CenterInfo from "../../components/small/CenterInfo";
 import NewClassButton from "../../components/small/NewClassButton";
 import useInitialPrefetch from "../../hooks/useInitialPrefetch";
-import { vanilla } from "../../utils/trpc";
+import { InferQueryOutput, vanilla } from "../../utils/trpc";
 
 const ClassesPage = () => {
 	const [parent] = useAutoAnimate<HTMLDivElement>();
@@ -16,7 +16,9 @@ const ClassesPage = () => {
 		data: classes,
 		error,
 		status,
-	} = useQuery<Class[], Error>(["classes"], () => vanilla.query("classes.all"));
+	} = useQuery<InferQueryOutput<"classes.all">, Error>(["classes"], () =>
+		vanilla.query("classes.all")
+	);
 
 	useInitialPrefetch();
 

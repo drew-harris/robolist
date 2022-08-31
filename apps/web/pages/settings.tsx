@@ -184,21 +184,25 @@ export default function SettingsPage() {
 						</Setting>
 					</Tabs.Panel>
 					<Tabs.Panel value="account">
-						<Button
-							variant="light"
-							m="lg"
-							onClick={() => {
-								deleteCookie("jwt");
-								window.localStorage.removeItem("jwt");
-								window.localStorage.removeItem("focusState");
-								window.localStorage.removeItem("settings");
-								focusFn.cancel();
-								queryClient.removeQueries();
-								router.replace("/login");
-							}}
-						>
-							Sign Out
-						</Button>
+						<Stack p="lg" spacing="xl" align="flex-start">
+							<Button onClick={() => router.replace("/canvas/connect")}>
+								Connect Canvas Account
+							</Button>
+							<Button
+								variant="light"
+								onClick={() => {
+									deleteCookie("jwt");
+									window.localStorage.removeItem("jwt");
+									window.localStorage.removeItem("focusState");
+									window.localStorage.removeItem("settings");
+									focusFn.cancel();
+									queryClient.removeQueries();
+									router.replace("/login");
+								}}
+							>
+								Sign Out
+							</Button>
+						</Stack>
 					</Tabs.Panel>
 				</Tabs>
 			</form>
