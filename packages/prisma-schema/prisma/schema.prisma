@@ -8,14 +8,25 @@ datasource db {
 }
 
 model User {
-  id       String @id @unique @default(uuid())
-  email    String @unique
-  password String
+  id            String         @id @unique @default(uuid())
+  email         String         @unique
+  password      String
+  tasks         Task[]
+  classes       Class[]
+  dailies       Daily[]
+  feedback      Feedback[]
+  canvasAccount CanvasAccount?
+}
 
-  tasks    Task[]
-  classes  Class[]
-  dailies  Daily[]
-  feedback Feedback[]
+model CanvasAccount {
+  id   Int     @id @unique
+  name String?
+
+  token String
+  url   String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
 }
 
 model Task {

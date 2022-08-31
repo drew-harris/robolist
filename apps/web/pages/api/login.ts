@@ -34,6 +34,9 @@ async function handler(
 			where: {
 				email: body.email,
 			},
+			include: {
+				canvasAccount: true,
+			},
 		});
 
 		if (!user) {
@@ -54,10 +57,8 @@ async function handler(
 		// Sign jwt
 		let jwt: string;
 		try {
-			const payload: UserWithoutPassword = {
-				email: user.email,
-				id: user.id,
-			};
+			const { password, ...rest } = user;
+			const payload = rest;
 
 			const secret: JWT.Secret | undefined = process.env.JWT_SECRET;
 			if (!secret) {

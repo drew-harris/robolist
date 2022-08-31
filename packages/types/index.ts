@@ -1,5 +1,9 @@
-import type { Class, Daily, Task, User } from "@prisma/client";
-export type UserWithoutPassword = Omit<User, "password">;
+import type { CanvasAccount, Class, Daily, Task, User } from "@prisma/client";
+export type UserWithoutPassword = Omit<UserWithCanvas, "password">;
+
+export type UserWithCanvas = User & {
+	canvasAccount?: CanvasAccount | null;
+};
 
 export * from "./api";
 export * from "./focus";

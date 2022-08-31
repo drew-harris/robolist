@@ -5,7 +5,7 @@ import * as EmailValidator from "email-validator";
 import * as JWT from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import { log, withAxiom } from "next-axiom";
-import type { APIRegisterResponse } from "types";
+import type { APIRegisterResponse, UserWithCanvas } from "types";
 import { UserWithoutPassword } from "types";
 import { getPrismaPool } from "../../serverapi/prismapool";
 
@@ -70,12 +70,15 @@ async function handler(
 	const hashed = await bcrypt.hash(body.password, salt);
 
 	// Save to database
-	let user: User;
+	let user: UserWithCanvas;
 	try {
 		user = await prisma.user.create({
 			data: {
 				email: body.email,
 				password: hashed,
+			},
+			include: {
+				canvasAccount: true,
 			},
 		});
 	} catch (error: any) {
@@ -93,10 +96,8 @@ async function handler(
 	// Sign jwt
 	let jwt: string;
 	try {
-		const payload: UserWithoutPassword = {
-			email: user.email,
-			id: user.id,
-		};
+		const { password, ...rest } = user;
+		const payload = rest;
 
 		const secret: JWT.Secret | undefined = process.env.JWT_SECRET;
 		if (!secret) {
