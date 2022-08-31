@@ -17,6 +17,18 @@ export default function useInitialPrefetch() {
 		queryClient.prefetchQuery(["classes"], () => vanilla.query("classes.all"));
 		queryClient.prefetchQuery(["dates"], getDateAggregation);
 
+		queryClient.prefetchQuery(
+			["tasks", { sortBy: "dueDate", classId: null, page: 1 }],
+			() => {
+				return vanilla.query("tasks.details", {
+					sortBy: "dueDate",
+					classId: null,
+					perPage: 10,
+					page: 1,
+				});
+			}
+		);
+
 		trpcQueryClient.prefetchQuery(["daily.all"]);
 		trpcQueryClient.prefetchQuery(["daily.on-dates", [getWeekdayNumber()]]);
 	}, [queryClient]);
