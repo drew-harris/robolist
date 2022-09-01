@@ -54,7 +54,8 @@ export default function CanvasClassLink({
 						};
 					})}
 					onChange={changeLink}
-					placeholder="Link to Canvas Class"
+					label="Link with Canvas"
+					placeholder="Select class from Canvas"
 				></Select>
 			)}
 		</Box>

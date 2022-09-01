@@ -55,7 +55,8 @@ export const tasks = createRouter()
 		}),
 		resolve: async ({ ctx, input }) => {
 			try {
-				const threeDaysFromNow = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3);
+				const threeDaysFromNow = new Date(Date.now() - 1000 * 60 * 60 * 24 * 3);
+				threeDaysFromNow.setHours(0, 0, 0, 0);
 				const tasks = await ctx.prisma.task.findMany({
 					where: {
 						AND: [
@@ -64,12 +65,9 @@ export const tasks = createRouter()
 									id: ctx.user.id,
 								},
 								classId: input.classId ? input.classId : undefined,
-							},
-							{
-								OR: [
-									{ dueDate: { lte: threeDaysFromNow } },
-									{ complete: false },
-								],
+								dueDate: {
+									gte: threeDaysFromNow,
+								},
 							},
 						],
 					},
