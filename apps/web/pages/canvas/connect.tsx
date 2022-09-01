@@ -1,6 +1,8 @@
 import {
+	Box,
 	Button,
 	Center,
+	Group,
 	Loader,
 	Stack,
 	Stepper,
@@ -67,19 +69,25 @@ export default function CanvasConnectPage() {
 	};
 
 	const validateConnection = () => {
-		connectMutation.mutate(form.values, {
-			onSuccess: (result) => {
-				setCheckAccount(result);
-				console.log("Setting cookie to ", result.jwt);
-				setCookie("jwt", result.jwt, {
-					maxAge: 60 * 60 * 24 * 365,
-				});
-				trpcClient.invalidateQueries("theme-and-settings");
+		connectMutation.mutate(
+			{
+				token: form.values.token,
+				url: `https://${form.values.url}.instructure.com`,
 			},
-			onError: (error) => {
-				console.log(error);
-			},
-		});
+			{
+				onSuccess: (result) => {
+					setCheckAccount(result);
+					console.log("Setting cookie to ", result.jwt);
+					setCookie("jwt", result.jwt, {
+						maxAge: 60 * 60 * 24 * 365,
+					});
+					trpcClient.invalidateQueries("theme-and-settings");
+				},
+				onError: (error) => {
+					console.log(error);
+				},
+			}
+		);
 	};
 
 	const restartProcess = () => {
@@ -103,12 +111,16 @@ export default function CanvasConnectPage() {
 		});
 	};
 
-	if (user?.canvasAccount) {
+	if (user?.canvasAccount && stepperPage === 0) {
 		return (
 			<Stack align="flex-start">
 				<Title order={2}>Connect Canvas LMS Account</Title>
 				<Text>You are already connected to Canvas</Text>
-				<Button onClick={disconnectAccount} color={"red"}>
+				<Button
+					loading={disconnectMutation.status === "loading"}
+					onClick={disconnectAccount}
+					color={"red"}
+				>
 					Disconnect Account
 				</Button>
 			</Stack>
@@ -135,15 +147,25 @@ export default function CanvasConnectPage() {
 				</Stepper.Step>
 				<Stepper.Step label="Enter School URL" icon={<Link />}>
 					<Stack align="center" sx={{ maxWidth: 500, margin: "auto" }}>
-						<TextInput
-							{...form.getInputProps("url")}
-							wrapperProps={{
-								sx: {
-									width: "100%",
-								},
-							}}
-							label="School URL"
-						/>
+						<Group spacing={2}>
+							<Text>https://</Text>
+							<Box sx={{ textAlign: "center" }}>
+								<TextInput
+									size="sm"
+									variant="light"
+									sx={(theme) => ({
+										borderBottom: `1px solid ${theme.colors.gray[4]}`,
+										display: "grid",
+										textAlign: "inherit",
+										width: 50,
+										padding: 0,
+										margin: 0,
+									})}
+									{...form.getInputProps("url")}
+								/>
+							</Box>
+							<Text>.instructure.com</Text>
+						</Group>
 						<Button onClick={submitUrl}> Submit </Button>
 					</Stack>
 				</Stepper.Step>
