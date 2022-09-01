@@ -24,7 +24,7 @@ export const canvas = createRouter()
 		resolve: async ({ ctx, input }) => {
 			try {
 				console.log("feching classes");
-				const response = await fetch(
+				const responsePromise = fetch(
 					`${ctx.canvas.url}/api/v1/users/self/courses?enrollment_state=active`,
 					{
 						headers: {
@@ -33,56 +33,49 @@ export const canvas = createRouter()
 					}
 				);
 
+				// Get connected classes
+				const classesPromise = ctx.prisma.class.findMany({
+					where: {
+						userId: ctx.user.id,
+						NOT: {
+							canvasId: null,
+						},
+					},
+				});
+
+				if (!input.excludeConnected) {
+					const response = await responsePromise;
+
+					if (!response.ok) {
+						console.log(response);
+						throw new Error("Failed to fetch classes");
+					}
+
+					return (await response.json()) as Course[];
+				}
+
+				const [response, classes] = await Promise.all([
+					responsePromise,
+					classesPromise,
+				]);
+
 				if (!response.ok) {
 					console.log(response);
 					throw new Error("Failed to fetch classes");
 				}
 
-				const courses = (await response.json()) as Course[];
+				const allCourses = (await response.json()) as Course[];
+
+				const courses = allCourses.filter((course) => {
+					if (
+						classes.filter((_class) => _class.canvasId == course.id).length == 0
+					)
+						return true;
+				});
 				return courses;
 			} catch (error) {
 				console.error(error);
 				throw new Error("Could not fetch courses");
-			}
-		},
-	})
-	.mutation("link-class", {
-		input: z.object({
-			classId: z.string(),
-			canvasClassId: z.number(),
-		}),
-		resolve: async ({ ctx, input }) => {
-			try {
-				// Verify that the user has that class
-				const response = await fetch(
-					`${ctx.canvas.url}/api/v1/courses/${input.canvasClassId}`,
-					{
-						headers: {
-							Authorization: "Bearer " + ctx.canvas.token,
-						},
-					}
-				);
-
-				if (!response.ok) {
-					throw new Error("You do not belong to this class");
-				}
-
-				const data = (await response.json()) as Course;
-
-				const newClass = await ctx.prisma.class.update({
-					where: {
-						id: input.classId,
-					},
-					data: {
-						canvasId: input.canvasClassId,
-						canvasName: data.course_code || data.name,
-						canvasUUID: data.uuid,
-					},
-				});
-
-				return newClass;
-			} catch (error) {
-				throw new Error("There was an error linking your class");
 			}
 		},
 	});

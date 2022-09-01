@@ -53,6 +53,7 @@ export default function EditClassModal({
 				/>
 				{user?.canvasAccount && (
 					<CanvasClassLink
+						placeHolder={initialClass.canvasName || undefined}
 						value={form.values.canvasClassId || null}
 						setValue={(value) => {
 							form.setFieldValue("canvasClassId", value);
@@ -66,7 +67,6 @@ export default function EditClassModal({
 				<Button type="submit" color={form.values.color} size="md">
 					Submit
 				</Button>
-				<Text>{form.values.canvasClassId}</Text>
 			</Stack>
 		</form>
 	);

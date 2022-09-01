@@ -8,13 +8,18 @@ import { trpc } from "../../../utils/trpc";
 export interface CanvasClassLinkProps extends BoxProps {
 	value: number | null;
 	setValue: (value: number | null) => void;
+	placeHolder?: string;
 }
 export default function CanvasClassLink({
 	value,
 	setValue,
+	placeHolder,
 	...boxProps
 }: CanvasClassLinkProps) {
-	const { data, status } = trpc.useQuery(["canvas.courses", {}]);
+	const { data, status } = trpc.useQuery([
+		"canvas.courses",
+		{ excludeConnected: true },
+	]);
 
 	const convertAndSetValue = (value: string | null) => {
 		setValue(value ? parseInt(value) : null);
@@ -33,7 +38,7 @@ export default function CanvasClassLink({
 					})}
 					onChange={convertAndSetValue}
 					label="Link with Canvas"
-					placeholder="Select class from Canvas"
+					placeholder={placeHolder || "Select class from Canvas"}
 				></Select>
 			)}
 		</Box>
