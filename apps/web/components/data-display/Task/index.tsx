@@ -143,11 +143,6 @@ const Task = ({
 						<Text weight="bolder" size="sm">
 							{task.title}
 						</Text>
-						{task.canvasName && (
-							<Text color="dimmed" size="sm">
-								{task.canvasName}
-							</Text>
-						)}
 						<Group>
 							{task.class && !hideClassLabel && (
 								<>
@@ -180,11 +175,6 @@ const Task = ({
 					<Text weight="bolder" size="sm">
 						{task.title}
 					</Text>
-					{task.canvasName && (
-						<Text color="dimmed" size="sm">
-							{task.canvasName}
-						</Text>
-					)}
 					<Group>
 						<TimeBadges />
 						{task.class && !hideClassLabel && (

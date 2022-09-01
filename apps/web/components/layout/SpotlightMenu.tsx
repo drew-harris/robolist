@@ -11,14 +11,13 @@ import {
 	List,
 	MailFast,
 	Moon2,
-	Pencil,
 	Plus,
 	School,
 	Settings,
 } from "tabler-icons-react";
 import NewClassModal from "../modals/NewClassModal";
+import NewCustomTaskModal from "../modals/NewCustomTaskModal";
 import NewDailyTaskModal from "../modals/NewDailyTaskModal";
-import NewTaskModal from "../modals/NewTaskModal";
 import SendFeedbackModal from "../modals/SendFeedbackModal";
 
 interface SpotlightMenuProps {
@@ -37,7 +36,7 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
 			keywords: ["new", "task", "create", "todo"],
 			onTrigger: () => {
 				openModal({
-					children: <NewTaskModal />,
+					children: <NewCustomTaskModal />,
 					title: "New Task",
 					size: "lg",
 				});

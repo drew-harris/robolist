@@ -16,11 +16,10 @@ import { Clock } from "tabler-icons-react";
 import { APINewTaskRequest } from "types";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import { logEvent } from "../../lib/ga";
-import { trpc } from "../../utils/trpc";
 import ClassIdPicker from "../input/ClassIdPicker";
 import HeatmapDatePicker from "../input/HeatmapDatePicker";
 
-export default function NewTaskModal() {
+export default function NewCustomTaskModal() {
 	const [loading, setLoading] = useState(false);
 	const [maxDate, setMaxDate] = useState<Date | null>(null);
 
