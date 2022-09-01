@@ -1,17 +1,13 @@
+import { closeAllModals, closeModal } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { APICompleteRequest, RescheduleInput, TaskWithClass } from "types";
 import { getDateAggregation } from "../clientapi/dates";
-import {
-	deleteTask,
-	markTaskStatus,
-	rescheduleTask,
-	updateTask,
-} from "../clientapi/tasks";
+import { deleteTask, markTaskStatus, rescheduleTask } from "../clientapi/tasks";
 import { FocusContext } from "../contexts/FocusContext";
 import { getHumanDateString } from "../utils/client";
-import { trpc } from "../utils/trpc";
+import { InferMutationInput, trpc, vanilla } from "../utils/trpc";
 
 export default function useTaskMutation() {
 	const queryClient = useQueryClient();
@@ -153,7 +149,7 @@ export default function useTaskMutation() {
 
 	const editMutation = useMutation(
 		(task: Partial<TaskWithClass>) => {
-			return updateTask(task);
+			return vanilla.mutation("tasks.edit", task);
 		},
 		{
 			onMutate: async (partial) => {
@@ -228,5 +224,33 @@ export default function useTaskMutation() {
 		}
 	);
 
-	return { deleteMutation, rescheduleMutation, checkMutation, editMutation };
+	const syncTaskMutation = useMutation(
+		(input: InferMutationInput<"canvas.link-task">) => {
+			return vanilla.mutation("canvas.link-task", input);
+		},
+		{
+			onError: async (err: any, input, context) => {
+				showNotification({
+					message: err?.message || "Error syncing task",
+					color: "red",
+				});
+			},
+			onSuccess: async (data, input, context) => {
+				closeAllModals();
+			},
+			onSettled: async () => {
+				await queryClient.invalidateQueries(["tasks"]);
+				await trpcClient.invalidateQueries("tasks.details");
+				await trpcClient.invalidateQueries("canvas.list-course-assignments");
+			},
+		}
+	);
+
+	return {
+		deleteMutation,
+		rescheduleMutation,
+		checkMutation,
+		editMutation,
+		syncTaskMutation,
+	};
 }

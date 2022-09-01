@@ -39,6 +39,11 @@ model Task {
   updatedAt   DateTime @updatedAt
   workDate    DateTime
 
+  canvasId          Int?
+  canvasName        String?
+  canvasDescription String? // Html fragment
+  canvasURL         String?
+
   workTime Int? // Estimate time for work
 
   user   User   @relation(fields: [userId], references: [id])

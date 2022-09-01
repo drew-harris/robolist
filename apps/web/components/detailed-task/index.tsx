@@ -86,7 +86,7 @@ export default function DetailedTask({ task, isShaded }: detailedTaskProps) {
 			)}
 			<Group sx={endSx} ml="xl">
 				<Box>
-					<RescheduleButton task={task} />
+					<RescheduleButton includeGap={true} task={task} />
 				</Box>
 				<TaskMenu
 					task={task}

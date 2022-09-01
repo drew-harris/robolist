@@ -1,6 +1,8 @@
 import { Prisma } from "@prisma/client";
 import superjson from "superjson";
-import { z } from "zod";
+import { TaskWithClass } from "types";
+import { z, ZodAny, ZodType } from "zod";
+import { updateTask } from "../../../../apps/web/clientapi/tasks";
 import { createRouter } from "../server/context";
 import { prisma } from "../server/db";
 
@@ -14,15 +16,19 @@ export const tasks = createRouter()
 	})
 	.query("all", {
 		resolve: async ({ ctx }) => {
-			const threeDaysFromNow = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3);
-			const tasks = ctx.prisma.task.findMany({
+			const threeDaysAgo = new Date(Date.now() - 1000 * 60 * 60 * 24 * 3);
+			const tasks = await ctx.prisma.task.findMany({
 				where: {
-					user: {
-						id: ctx.user.id,
-					},
-					dueDate: {
-						lte: threeDaysFromNow,
-					},
+					AND: [
+						{
+							user: {
+								id: ctx.user.id,
+							},
+							dueDate: {
+								gte: threeDaysAgo,
+							},
+						},
+					],
 				},
 				orderBy: [
 					{
@@ -173,5 +179,44 @@ export const tasks = createRouter()
 				});
 				return Math.ceil(taskCount / input.perPage);
 			} catch (error: any) {}
+		},
+	})
+
+	.mutation("edit", {
+		input: z.any({}) as ZodType<Partial<TaskWithClass>>,
+		resolve: async ({ ctx, input }) => {
+			const doc: Partial<TaskWithClass> = input;
+			const id = doc.id as string;
+			if (!doc.id) {
+				throw new Error("Missing Id");
+			}
+
+			console.log(doc);
+
+			const classDoc = doc.classId
+				? {
+						connect: {
+							id: doc.classId,
+						},
+				  }
+				: { disconnect: true };
+
+			const updatedTask = await ctx.prisma.task.update({
+				where: { id },
+				data: {
+					id: doc.id,
+					title: doc.title,
+					complete: doc.complete,
+					description: doc.description,
+					workDate: doc.workDate || undefined,
+					dueDate: doc.dueDate || undefined,
+					workTime: doc.workTime,
+					class: classDoc,
+				},
+				include: {
+					class: true,
+				},
+			});
+			return updatedTask;
 		},
 	});

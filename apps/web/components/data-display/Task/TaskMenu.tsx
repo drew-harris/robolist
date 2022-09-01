@@ -6,6 +6,7 @@ import { TaskMenuOptions } from ".";
 import useTaskMutation from "../../../hooks/useTaskMutation";
 import { getHumanDateString } from "../../../utils/client";
 import EditTaskModal from "../../modals/EditTaskModal";
+import SyncTaskModal from "../../modals/SyncTaskModal";
 
 export default function TaskMenu({
 	options,
@@ -48,6 +49,12 @@ export default function TaskMenu({
 		});
 	};
 
+	const promptSync = () => {
+		modals.openModal({
+			children: <SyncTaskModal task={task} />,
+			title: "Sync Task",
+		});
+	};
 	const completeMenuOption = () => {
 		if (!task.workTime) {
 			return null;
@@ -100,6 +107,9 @@ export default function TaskMenu({
 					<Menu.Item color="red" onClick={promptDelete} icon={<Trash />}>
 						Delete
 					</Menu.Item>
+				)}
+				{!task.canvasId && task.class?.canvasId && (
+					<Menu.Item onClick={promptSync}>Sync</Menu.Item>
 				)}
 				{showDueDate && (
 					<Menu.Label>Due {getHumanDateString(task.dueDate)}</Menu.Label>

@@ -11,6 +11,7 @@ import {
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
+import { text } from "node:stream/consumers";
 import { useContext } from "react";
 import { AlertTriangle } from "tabler-icons-react";
 import { TaskWithClass } from "types";
@@ -142,6 +143,11 @@ const Task = ({
 						<Text weight="bolder" size="sm">
 							{task.title}
 						</Text>
+						{task.canvasName && (
+							<Text color="dimmed" size="sm">
+								{task.canvasName}
+							</Text>
+						)}
 						<Group>
 							{task.class && !hideClassLabel && (
 								<>
@@ -174,6 +180,11 @@ const Task = ({
 					<Text weight="bolder" size="sm">
 						{task.title}
 					</Text>
+					{task.canvasName && (
+						<Text color="dimmed" size="sm">
+							{task.canvasName}
+						</Text>
+					)}
 					<Group>
 						<TimeBadges />
 						{task.class && !hideClassLabel && (
