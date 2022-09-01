@@ -1,7 +1,6 @@
-import { createRouter } from "../server/context";
-import { z } from "zod";
-import { User } from "canvas-api-ts";
 import { Course } from "canvas-api-ts/dist/api/responseTypes";
+import { z } from "zod";
+import { createRouter } from "../server/context";
 export const canvas = createRouter()
 	.middleware(({ ctx, next }) => {
 		if (!ctx.user) {
@@ -76,7 +75,7 @@ export const canvas = createRouter()
 					},
 					data: {
 						canvasId: input.canvasClassId,
-						canvasName: data.course_code,
+						canvasName: data.course_code || data.name,
 						canvasUUID: data.uuid,
 					},
 				});
