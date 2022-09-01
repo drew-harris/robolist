@@ -101,13 +101,13 @@ export default function TaskDetailsPage() {
 				tasks={data}
 			/>
 			<Center mt="lg">
-				{pageCount && pageCount > 1 && (
+				{pageCount && pageCount > 1 && data && data.length > 0 ? (
 					<Pagination
 						onChange={(page) => pagination.setPage(page)}
 						page={pagination.active}
 						total={pageCount || 0}
 					/>
-				)}
+				) : null}
 			</Center>
 		</>
 	);
