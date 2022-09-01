@@ -100,15 +100,15 @@ export default function TaskDetailsPage() {
 				checkbox={true}
 				tasks={data}
 			/>
-			{pageCount && pageCount > 1 && (
-				<Center mt="lg">
+			<Center mt="lg">
+				{pageCount && pageCount > 1 && (
 					<Pagination
 						onChange={(page) => pagination.setPage(page)}
 						page={pagination.active}
 						total={pageCount || 0}
 					/>
-				</Center>
-			)}
+				)}
+			</Center>
 		</>
 	);
 }
