@@ -1,9 +1,8 @@
 import { Prisma } from "@prisma/client";
 import superjson from "superjson";
 import { z } from "zod";
-import complete from "../../../../apps/web/pages/api/tasks/complete";
 import { createRouter } from "../server/context";
-import { getPrismaPool } from "../utils";
+import { prisma } from "../server/db";
 
 export const tasks = createRouter()
 	.transformer(superjson)
@@ -11,13 +10,12 @@ export const tasks = createRouter()
 		if (!ctx.user) {
 			throw new Error("Unauthorized");
 		}
-		return next({ ctx: { user: ctx.user } });
+		return next({ ctx: { user: ctx.user, prisma } });
 	})
 	.query("all", {
 		resolve: async ({ ctx }) => {
-			const prisma = getPrismaPool();
 			const threeDaysFromNow = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3);
-			const tasks = prisma.task.findMany({
+			const tasks = ctx.prisma.task.findMany({
 				where: {
 					user: {
 						id: ctx.user.id,
@@ -57,9 +55,8 @@ export const tasks = createRouter()
 		}),
 		resolve: async ({ ctx, input }) => {
 			try {
-				const prisma = await getPrismaPool();
 				const threeDaysFromNow = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3);
-				const tasks = await prisma.task.findMany({
+				const tasks = await ctx.prisma.task.findMany({
 					where: {
 						user: {
 							id: ctx.user.id,
@@ -99,8 +96,7 @@ export const tasks = createRouter()
 					today.getTime() - 24 * 60 * 60 * 1000
 				);
 
-				const prisma = getPrismaPool();
-				const tasks = await prisma.task.findMany({
+				const tasks = await ctx.prisma.task.findMany({
 					where: {
 						OR: [
 							{
@@ -158,9 +154,8 @@ export const tasks = createRouter()
 		}),
 		resolve: async ({ ctx, input }) => {
 			try {
-				const prisma = await getPrismaPool();
 				const threeDaysFromNow = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3);
-				const taskCount = await prisma.task.count({
+				const taskCount = await ctx.prisma.task.count({
 					where: {
 						user: {
 							id: ctx.user.id,

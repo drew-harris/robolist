@@ -1,7 +1,6 @@
 import {
 	ColorScheme,
 	ColorSchemeProvider,
-	JsonInput,
 	MantineColor,
 	MantineProvider,
 	MantineThemeOverride,
@@ -41,13 +40,14 @@ function MyApp(props: any) {
 
 	const preferredColorScheme = useColorScheme("dark");
 
-	const [refreshTheme, setRefreshTheme] = useState(true);
-	useEffect(() => {
-		setRefreshTheme(false);
-	}, []);
-
 	const { data: settingsAndTheme } = trpc.useQuery(["theme-and-settings"], {
-		enabled: refreshTheme,
+		// enabled: refreshTheme,
+		refetchOnWindowFocus: false,
+		refetchOnMount: false,
+		refetchOnReconnect: false,
+		onSettled: () => {
+			console.log("Refreshed theme");
+		},
 	});
 
 	const trpcClient = trpc.useContext();

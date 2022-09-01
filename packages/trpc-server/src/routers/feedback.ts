@@ -1,13 +1,13 @@
 import { z } from "zod";
 import { createRouter } from "../server/context";
-import { getPrismaPool } from "../utils";
+import { prisma } from "../server/db";
 
 export const feedback = createRouter()
 	.middleware(({ ctx, next }) => {
 		if (!ctx.user) {
 			throw new Error("Unauthorized");
 		}
-		return next({ ctx: { user: ctx.user } });
+		return next({ ctx: { user: ctx.user, prisma } });
 	})
 	.mutation("create", {
 		input: z.string(),
@@ -16,8 +16,7 @@ export const feedback = createRouter()
 				throw new Error("Feedback is too short");
 			}
 			try {
-				const prisma = getPrismaPool();
-				await prisma.feedback.create({
+				await ctx.prisma.feedback.create({
 					data: {
 						text: input,
 						user: {

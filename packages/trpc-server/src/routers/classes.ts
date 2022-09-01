@@ -3,7 +3,6 @@ import superjson from "superjson";
 import { colorChoices } from "types";
 import { z } from "zod";
 import { createRouter } from "../server/context";
-import { getPrismaPool } from "../utils";
 export const classes = createRouter()
 	.transformer(superjson)
 
@@ -11,14 +10,13 @@ export const classes = createRouter()
 		if (!ctx.user) {
 			throw new Error("Unauthorized");
 		}
-		return next({ ctx: { user: ctx.user } });
+		return next({ ctx: { user: ctx.user, prisma: ctx.prisma } });
 	})
 
 	.query("all", {
 		resolve: async ({ ctx }) => {
 			try {
-				const prisma = getPrismaPool();
-				const classes = await prisma.class.findMany({
+				const classes = await ctx.prisma.class.findMany({
 					where: {
 						userId: ctx.user.id,
 					},
@@ -50,9 +48,7 @@ export const classes = createRouter()
 			}
 
 			try {
-				const prisma = getPrismaPool();
-
-				const currentClass = await prisma.class.findFirst({
+				const currentClass = await ctx.prisma.class.findFirst({
 					where: {
 						userId: ctx.user.id,
 						name: input.name,
@@ -72,7 +68,7 @@ export const classes = createRouter()
 					name: input.name,
 				};
 
-				const createdClass: Class = await prisma.class.create({
+				const createdClass: Class = await ctx.prisma.class.create({
 					data: createDoc,
 				});
 
@@ -88,8 +84,7 @@ export const classes = createRouter()
 		input: z.string(),
 		resolve: async ({ ctx, input: id }) => {
 			try {
-				const prisma = getPrismaPool();
-				await prisma.class.delete({
+				await ctx.prisma.class.delete({
 					where: {
 						id: id,
 					},
@@ -112,8 +107,7 @@ export const classes = createRouter()
 			}
 
 			try {
-				const prisma = getPrismaPool();
-				await prisma.class.update({
+				await ctx.prisma.class.update({
 					where: {
 						id: input.id,
 					},

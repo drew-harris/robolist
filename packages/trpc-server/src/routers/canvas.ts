@@ -2,14 +2,13 @@ import type { User } from "canvas-api-ts/dist/api/responseTypes";
 import * as JWT from "jsonwebtoken";
 import z from "zod";
 import { createRouter } from "../server/context";
-import { getPrismaPool } from "../utils";
 
 export const canvas = createRouter()
 	.middleware(({ ctx, next }) => {
 		if (!ctx.user) {
 			throw new Error("Unauthorized");
 		}
-		return next({ ctx: { user: ctx.user } });
+		return next({ ctx: { user: ctx.user, prisma: ctx.prisma } });
 	})
 	.mutation("verify-info", {
 		input: z.object({
@@ -35,7 +34,7 @@ export const canvas = createRouter()
 				throw new Error("Could not verify token");
 			}
 			try {
-				const prisma = getPrismaPool();
+				const prisma = ctx.prisma;
 
 				const newUser = await prisma.user.update({
 					data: {
@@ -81,8 +80,7 @@ export const canvas = createRouter()
 	.mutation("disconnect-account", {
 		resolve: async ({ ctx }) => {
 			try {
-				const prisma = getPrismaPool();
-				const newUser = await prisma.user.update({
+				const newUser = await ctx.prisma.user.update({
 					where: {
 						id: ctx.user.id,
 					},
