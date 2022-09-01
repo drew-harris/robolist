@@ -10,8 +10,10 @@ import {
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import { Class } from "@prisma/client";
-import { Dots, Pencil, Trash } from "tabler-icons-react";
+import { useContext } from "react";
+import { Dots, Pencil, School, Trash } from "tabler-icons-react";
 import useClassMutation from "../../hooks/useClassMutation";
+import { UserContext } from "../../pages/_app";
 import EditClassModal from "../modals/EditClassModal";
 
 interface ClassSquareProps {
@@ -21,12 +23,9 @@ interface ClassSquareProps {
 const ClassSquare = (props: ClassSquareProps) => {
 	const modals = useModals();
 	const { deleteMutation } = useClassMutation();
+	const user = useContext(UserContext);
 
 	const squareSx: Sx = (theme: MantineTheme) => ({
-		// backgroundColor:
-		// 	theme.colorScheme == "dark"
-		// 		? theme.fn.darken(theme.colors[props.class.color][8], 0.9)
-		// 		: theme.colors[props.class.color][4],
 		padding: theme.spacing.lg,
 		borderRadius: theme.radius.sm,
 		fontWeight: 600,
@@ -69,6 +68,7 @@ const ClassSquare = (props: ClassSquareProps) => {
 					overflow: "hidden",
 				}}
 				position="apart"
+				align="flex-start"
 			>
 				<Group>
 					<Box
@@ -102,6 +102,11 @@ const ClassSquare = (props: ClassSquareProps) => {
 					</Menu.Dropdown>
 				</Menu>
 			</Group>
+			{props.class.canvasId && (
+				<Text mt="sm" size="xs" color="dimmed">
+					{props.class.canvasName}
+				</Text>
+			)}
 		</Paper>
 	);
 };

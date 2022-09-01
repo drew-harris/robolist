@@ -22,14 +22,14 @@ import {
 import { UserContext } from "../_app";
 
 export default function CanvasConnectPage() {
-	const connectMutation = trpc.useMutation("canvas.verify-info", {
+	const connectMutation = trpc.useMutation("canvas-info.verify-info", {
 		ssr: false,
 	});
 
 	const trpcClient = trpc.useContext();
 	const user = useContext(UserContext);
 
-	const form = useForm<InferMutationInput<"canvas.verify-info">>({
+	const form = useForm<InferMutationInput<"canvas-info.verify-info">>({
 		initialValues: {
 			token: "",
 			url: "",
@@ -49,7 +49,7 @@ export default function CanvasConnectPage() {
 	});
 
 	const [checkAccount, setCheckAccount] =
-		useState<InferMutationOutput<"canvas.verify-info"> | null>(null);
+		useState<InferMutationOutput<"canvas-info.verify-info"> | null>(null);
 
 	const submitToken = () => {
 		form.validateField("token");
@@ -100,7 +100,7 @@ export default function CanvasConnectPage() {
 
 	const [stepperPage, setStepperPage] = useState(0);
 
-	const disconnectMutation = trpc.useMutation("canvas.disconnect-account");
+	const disconnectMutation = trpc.useMutation("canvas-info.disconnect-account");
 	const disconnectAccount = () => {
 		disconnectMutation.mutate(undefined, {
 			onSuccess: (data) => {

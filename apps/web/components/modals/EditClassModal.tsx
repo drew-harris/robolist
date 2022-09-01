@@ -2,8 +2,12 @@ import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useModals } from "@mantine/modals";
 import { Class } from "@prisma/client";
+import { useContext, useState } from "react";
 import useClassMutation from "../../hooks/useClassMutation";
+import useUser from "../../hooks/useUser";
+import { UserContext } from "../../pages/_app";
 import { InferMutationInput } from "../../utils/trpc";
+import CanvasClassLink from "../input/canvas/CanvasClassLink";
 import ThemeColorSelector from "../input/ThemeColorSelector";
 
 interface EditClassModalProps {
@@ -15,6 +19,8 @@ export default function EditClassModal({
 }: EditClassModalProps) {
 	const modals = useModals();
 	const { editMutation } = useClassMutation();
+	const user = useUser();
+	const [connectLoading, setConnectLoading] = useState(false);
 
 	const form = useForm<InferMutationInput<"classes.edit">>({
 		initialValues: {
@@ -41,11 +47,23 @@ export default function EditClassModal({
 					{...form.getInputProps("name")}
 					label="Class Name"
 				/>
+				{user?.canvasAccount && (
+					<CanvasClassLink
+						setLoading={setConnectLoading}
+						class={initialClass}
+					/>
+				)}
 				<ThemeColorSelector
 					value={form.values.color || "blue"}
 					onChange={handleColorChange}
 				/>
-				<Button type="submit" color={form.values.color} size="md">
+				<Button
+					type="submit"
+					color={form.values.color}
+					size="md"
+					// loading={connectLoading}
+					disabled={connectLoading}
+				>
 					Submit
 				</Button>
 			</Stack>

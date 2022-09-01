@@ -41,6 +41,7 @@ export async function createContext(opts?: trpcNext.CreateNextContextOptions) {
 		prisma,
 	};
 }
+
 type Context = trpc.inferAsyncReturnType<typeof createContext>;
 
 // Helper function to create a router with your app's context

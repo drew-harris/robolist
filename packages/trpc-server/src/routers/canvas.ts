@@ -1,112 +1,89 @@
-import type { User } from "canvas-api-ts/dist/api/responseTypes";
-import * as JWT from "jsonwebtoken";
-import z from "zod";
 import { createRouter } from "../server/context";
-
+import { z } from "zod";
+import { User } from "canvas-api-ts";
+import { Course } from "canvas-api-ts/dist/api/responseTypes";
 export const canvas = createRouter()
 	.middleware(({ ctx, next }) => {
 		if (!ctx.user) {
 			throw new Error("Unauthorized");
 		}
-		return next({ ctx: { user: ctx.user, prisma: ctx.prisma } });
+		if (!ctx.user.canvasAccount) {
+			throw new Error("No Canvas account linked");
+		}
+		return next({
+			ctx: {
+				user: ctx.user,
+				prisma: ctx.prisma,
+				canvas: ctx.user.canvasAccount,
+			},
+		});
 	})
-	.mutation("verify-info", {
+	.query("courses", {
 		input: z.object({
-			url: z.string().url(),
-			token: z.string(),
+			excludeConnected: z.boolean().optional().default(false),
 		}),
-		resolve: async ({ input, ctx }) => {
-			// Test if url and token work
-			let user: User;
+		resolve: async ({ ctx, input }) => {
 			try {
-				const fullUrl = input.url + "/api/v1/users/self";
-				const res = await fetch(fullUrl, {
-					headers: {
-						Authorization: "Bearer " + input.token,
-					},
-				});
-
-				user = await res.json();
-				if (!res.ok) {
-					throw new Error("Invalid token");
-				}
-			} catch (error) {
-				throw new Error("Could not verify token");
-			}
-			try {
-				const prisma = ctx.prisma;
-
-				const newUser = await prisma.user.update({
-					data: {
-						canvasAccount: {
-							upsert: {
-								create: {
-									id: user.id,
-									name: user.name,
-									token: input.token,
-									url: input.url,
-								},
-								update: {
-									id: user.id,
-									name: user.name,
-									token: input.token,
-									url: input.url,
-								},
-							},
+				console.log("feching classes");
+				const response = await fetch(
+					`${ctx.canvas.url}/api/v1/users/self/courses?enrollment_state=active`,
+					{
+						headers: {
+							Authorization: `Bearer ${ctx.canvas.token}`,
 						},
-					},
-					where: {
-						id: ctx.user.id,
-					},
-					include: {
-						canvasAccount: true,
-					},
-				});
-				let jwt: string;
-				const { password, ...rest } = newUser;
-				const payload = rest;
+					}
+				);
 
-				const secret: JWT.Secret | undefined = process.env.JWT_SECRET;
-				if (!secret) {
-					throw new Error("JWT_SECRET is not set");
+				if (!response.ok) {
+					console.log(response);
+					throw new Error("Failed to fetch classes");
 				}
-				jwt = JWT.sign(payload, secret);
-				return { jwt: jwt, success: true, account: newUser.canvasAccount };
+
+				const courses = (await response.json()) as Course[];
+				return courses;
 			} catch (error) {
-				throw new Error("Could not update records");
+				console.error(error);
+				throw new Error("Could not fetch courses");
 			}
 		},
 	})
-	.mutation("disconnect-account", {
-		resolve: async ({ ctx }) => {
+	.mutation("link-class", {
+		input: z.object({
+			classId: z.string(),
+			canvasClassId: z.number(),
+		}),
+		resolve: async ({ ctx, input }) => {
 			try {
-				const newUser = await ctx.prisma.user.update({
+				// Verify that the user has that class
+				const response = await fetch(
+					`${ctx.canvas.url}/api/v1/courses/${input.canvasClassId}`,
+					{
+						headers: {
+							Authorization: "Bearer " + ctx.canvas.token,
+						},
+					}
+				);
+
+				if (!response.ok) {
+					throw new Error("You do not belong to this class");
+				}
+
+				const data = (await response.json()) as Course;
+
+				const newClass = await ctx.prisma.class.update({
 					where: {
-						id: ctx.user.id,
+						id: input.classId,
 					},
 					data: {
-						canvasAccount: {
-							delete: true,
-						},
-					},
-					include: {
-						canvasAccount: true,
+						canvasId: input.canvasClassId,
+						canvasName: data.course_code,
+						canvasUUID: data.uuid,
 					},
 				});
 
-				let jwt: string;
-				const { password, ...rest } = newUser;
-				const payload = rest;
-
-				const secret: JWT.Secret | undefined = process.env.JWT_SECRET;
-				if (!secret) {
-					throw new Error("JWT_SECRET is not set");
-				}
-				jwt = JWT.sign(payload, secret);
-				return { jwt: jwt, success: true, account: newUser.canvasAccount };
+				return newClass;
 			} catch (error) {
-				console.error(error);
-				throw new Error("Could not update records");
+				throw new Error("There was an error linking your class");
 			}
 		},
 	});

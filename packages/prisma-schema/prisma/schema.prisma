@@ -59,6 +59,10 @@ model Class {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  canvasId   Int?
+  canvasUUID String?
+  canvasName String?
+
   tasks   Task[]
   dailies Daily[]
 }
