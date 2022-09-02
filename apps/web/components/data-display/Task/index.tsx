@@ -199,11 +199,9 @@ const Task = ({
 					{task.workTime && <Text size="sm">{task.workTime + "min."}</Text>}
 					{task.canvasId && task.canvasURL && (
 						<Link href={task.canvasURL}>
-							<Tooltip label="View on Canvas">
-								<ActionIcon>
-									<CanvasLogo size={16} />
-								</ActionIcon>
-							</Tooltip>
+							<ActionIcon component="a">
+								<CanvasLogo size={16} />
+							</ActionIcon>
 						</Link>
 					)}
 					{rescheduleButton && <RescheduleButton task={task} />}
