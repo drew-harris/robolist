@@ -5,7 +5,6 @@ import { log, withAxiom } from "next-axiom";
 import {
 	APICreateTaskResponse,
 	APINewTaskRequest,
-	APITasksOrError,
 	UserWithoutPassword,
 } from "types";
 import { getPrismaPool } from "../../../serverapi/prismapool";

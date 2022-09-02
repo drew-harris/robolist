@@ -1,8 +1,7 @@
 import { Prisma } from "@prisma/client";
 import superjson from "superjson";
 import { TaskWithClass } from "types";
-import { z, ZodAny, ZodType } from "zod";
-import { updateTask } from "../../../../apps/web/clientapi/tasks";
+import { z, ZodType } from "zod";
 import { createRouter } from "../server/context";
 import { prisma } from "../server/db";
 
@@ -218,5 +217,56 @@ export const tasks = createRouter()
 				},
 			});
 			return updatedTask;
+		},
+	})
+
+	.mutation("create-task", {
+		input: z.object({
+			workTime: z.number().nullable(),
+			title: z.string(),
+			dueDate: z.date(),
+			workDate: z.date(),
+			canvasId: z.number().nullable(),
+			canvasName: z.string().nullable(),
+			canvasDescription: z.string().nullable(),
+			canvasURL: z.string().nullable(),
+			classId: z.string().nullable(),
+		}),
+		resolve: async ({ ctx, input }) => {
+			const due = new Date(input.dueDate);
+			due.setHours(0, 0, 0, 0);
+			const classDoc = input.classId
+				? {
+						connect: {
+							id: input.classId,
+						},
+				  }
+				: undefined;
+			try {
+				const task = await ctx.prisma.task.create({
+					data: {
+						title: input.title,
+						workTime: input.workTime,
+						dueDate: due,
+						workDate: input.workDate,
+						canvasId: input.canvasId,
+						canvasName: input.canvasName,
+						canvasDescription: input.canvasDescription,
+						canvasURL: input.canvasURL,
+						class: classDoc,
+						user: {
+							connect: {
+								id: ctx.user.id,
+							},
+						},
+					},
+				});
+				return task;
+			} catch (error: unknown) {
+				if (error instanceof Error) {
+					throw Error;
+				}
+				throw new Error("Failed to create task");
+			}
 		},
 	});

@@ -1,5 +1,6 @@
 import { Assignment, Course } from "canvas-api-ts/dist/api/responseTypes";
-import { z } from "zod";
+import { APINewTaskRequest } from "types";
+import { z, ZodType } from "zod";
 import { createRouter } from "../server/context";
 export const canvas = createRouter()
 	.middleware(({ ctx, next }) => {
@@ -114,7 +115,6 @@ export const canvas = createRouter()
 				]);
 
 				const data: any[] = await response.json();
-				console.log(data);
 				const assignments = data.map(
 					(calEvent) => calEvent.assignment
 				) as Assignment[];

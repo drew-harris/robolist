@@ -129,7 +129,6 @@ export const classes = createRouter()
 			canvasClassId: z.number().nullable(),
 		}),
 		resolve: async ({ ctx, input }) => {
-			console.log("CCID:", input.canvasClassId);
 			if (input.color && !colorChoices.includes(input.color)) {
 				throw new Error("Invalid color");
 			}
