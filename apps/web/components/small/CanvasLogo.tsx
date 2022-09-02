@@ -1,18 +1,24 @@
-import { Box, useMantineTheme } from "@mantine/core";
+import { Box, BoxProps, useMantineTheme } from "@mantine/core";
 import Image from "next/image";
 
-interface CanvasLogoProps {
-	size?: number;
+interface CanvasLogoProps extends BoxProps {
+	size?: number | "fill";
 }
-export default function CanvasLogo({ size = 20 }: CanvasLogoProps) {
+export default function CanvasLogo({
+	size = 20,
+	...boxProps
+}: CanvasLogoProps) {
 	const theme = useMantineTheme();
 	if (theme.colorScheme === "dark") {
 		return (
 			<Box
+				{...boxProps}
 				sx={{
-					width: size,
-					height: size,
+					width: size != "fill" ? size : "100%",
+					height: size != "fill" ? size : "100%",
 					position: "relative",
+					display: "grid",
+					placeItems: "center",
 				}}
 			>
 				<Image
@@ -26,7 +32,16 @@ export default function CanvasLogo({ size = 20 }: CanvasLogoProps) {
 		);
 	}
 	return (
-		<Box sx={{ width: size, height: size, position: "relative" }}>
+		<Box
+			{...boxProps}
+			sx={{
+				width: size != "fill" ? size : "100%",
+				height: size != "fill" ? size : "100%",
+				display: "grid",
+				placeItems: "center",
+				position: "relative",
+			}}
+		>
 			<Image
 				style={{
 					border: "1px solid lime",

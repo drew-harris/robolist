@@ -75,7 +75,6 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			href: "/tasks/details",
 			label: "Details",
 			icon: <Columns />,
-			isBeta: true,
 		});
 	}
 

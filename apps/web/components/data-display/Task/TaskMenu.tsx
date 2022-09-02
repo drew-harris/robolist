@@ -7,6 +7,7 @@ import useTaskMutation from "../../../hooks/useTaskMutation";
 import { getHumanDateString } from "../../../utils/client";
 import EditTaskModal from "../../modals/EditTaskModal";
 import SyncTaskModal from "../../modals/SyncTaskModal";
+import CanvasLogo from "../../small/CanvasLogo";
 
 export default function TaskMenu({
 	options,
@@ -49,7 +50,7 @@ export default function TaskMenu({
 		});
 	};
 
-	const promptSync = () => {
+	const promptLink = () => {
 		modals.openModal({
 			children: <SyncTaskModal task={task} />,
 			title: "Sync Task",
@@ -109,7 +110,12 @@ export default function TaskMenu({
 					</Menu.Item>
 				)}
 				{!task.canvasId && task.class?.canvasId && (
-					<Menu.Item onClick={promptSync}>Sync</Menu.Item>
+					<Menu.Item
+						icon={<CanvasLogo mx={3} size={18} />}
+						onClick={promptLink}
+					>
+						Link with Canvas
+					</Menu.Item>
 				)}
 				{showDueDate && (
 					<Menu.Label>Due {getHumanDateString(task.dueDate)}</Menu.Label>

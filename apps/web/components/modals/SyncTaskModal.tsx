@@ -7,6 +7,7 @@ import {
 	Text,
 	UnstyledButton,
 } from "@mantine/core";
+import { assign } from "cypress/types/lodash";
 import { TaskWithClass } from "types";
 import useTaskMutation from "../../hooks/useTaskMutation";
 import { trpc } from "../../utils/trpc";
@@ -14,7 +15,7 @@ import { trpc } from "../../utils/trpc";
 interface SyncTaskModalProps {
 	task: TaskWithClass;
 }
-export default function SyncTaskModal({ task }: SyncTaskModalProps) {
+export default function LinkTaskModal({ task }: SyncTaskModalProps) {
 	const { data: assignments, status } = trpc.useQuery([
 		"canvas.list-course-assignments",
 		{ courseId: task!.class!.canvasId, excludeLinked: true },
@@ -38,6 +39,11 @@ export default function SyncTaskModal({ task }: SyncTaskModalProps) {
 			{status === "loading" && (
 				<Center>
 					<Loader />
+				</Center>
+			)}
+			{assignments && assignments.length === 0 && (
+				<Center>
+					<Text>No assignments found</Text>
 				</Center>
 			)}
 			{assignments?.map((assignment) => (
