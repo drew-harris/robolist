@@ -163,7 +163,7 @@ const Task = ({
 							{rescheduleButton && <RescheduleButton task={task} />}
 							{task.canvasId && task.canvasURL && (
 								<Tooltip label="Open on Canvas">
-									<a href={task.canvasURL} target="_blank">
+									<a rel="noreferrer" href={task.canvasURL} target="_blank">
 										<ActionIcon component="a">
 											<CanvasLogo size={16} />
 										</ActionIcon>
@@ -209,7 +209,7 @@ const Task = ({
 					{rescheduleButton && <RescheduleButton task={task} />}
 					{task.canvasId && task.canvasURL && (
 						<Tooltip label="Open on Canvas">
-							<a href={task.canvasURL} target="_blank">
+							<a rel="noreferrer" href={task.canvasURL} target="_blank">
 								<ActionIcon component="a">
 									<CanvasLogo size={18} />
 								</ActionIcon>
