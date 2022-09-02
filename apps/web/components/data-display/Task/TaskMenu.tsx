@@ -6,7 +6,7 @@ import { TaskMenuOptions } from ".";
 import useTaskMutation from "../../../hooks/useTaskMutation";
 import { getHumanDateString } from "../../../utils/client";
 import EditTaskModal from "../../modals/EditTaskModal";
-import SyncTaskModal from "../../modals/SyncTaskModal";
+import LinkTaskModal from "../../modals/LinkTaskModal";
 import CanvasLogo from "../../small/CanvasLogo";
 
 export default function TaskMenu({
@@ -52,8 +52,8 @@ export default function TaskMenu({
 
 	const promptLink = () => {
 		modals.openModal({
-			children: <SyncTaskModal task={task} />,
-			title: "Sync Task",
+			children: <LinkTaskModal task={task} />,
+			title: "Link Task",
 		});
 	};
 	const completeMenuOption = () => {

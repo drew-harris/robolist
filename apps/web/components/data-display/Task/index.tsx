@@ -161,6 +161,15 @@ const Task = ({
 						<Group>
 							{checkbox && checkboxElement}
 							{rescheduleButton && <RescheduleButton task={task} />}
+							{task.canvasId && task.canvasURL && (
+								<Tooltip label="Open on Canvas">
+									<a href={task.canvasURL} target="_blank">
+										<ActionIcon component="a">
+											<CanvasLogo size={16} />
+										</ActionIcon>
+									</a>
+								</Tooltip>
+							)}
 							<TaskMenu task={task} options={menuOptions || {}} />
 						</Group>
 						{task.workTime && <Text size="sm">{task.workTime + "min."}</Text>}
@@ -197,14 +206,16 @@ const Task = ({
 				</Group>
 				<Group>
 					{task.workTime && <Text size="sm">{task.workTime + "min."}</Text>}
-					{task.canvasId && task.canvasURL && (
-						<Link href={task.canvasURL}>
-							<ActionIcon component="a">
-								<CanvasLogo size={16} />
-							</ActionIcon>
-						</Link>
-					)}
 					{rescheduleButton && <RescheduleButton task={task} />}
+					{task.canvasId && task.canvasURL && (
+						<Tooltip label="Open on Canvas">
+							<a href={task.canvasURL} target="_blank">
+								<ActionIcon component="a">
+									<CanvasLogo size={18} />
+								</ActionIcon>
+							</a>
+						</Tooltip>
+					)}
 					<TaskMenu task={task} options={menuOptions || {}} />
 				</Group>
 			</Group>

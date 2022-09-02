@@ -15,6 +15,7 @@ import {
 	School,
 	Settings,
 } from "tabler-icons-react";
+import GeneralNewTaskModal from "../modals/GeneralNewTaskModal";
 import NewClassModal from "../modals/NewClassModal";
 import NewCustomTaskModal from "../modals/NewCustomTaskModal";
 import NewDailyTaskModal from "../modals/NewDailyTaskModal";
@@ -36,7 +37,7 @@ export default function SpotlightMenu({ children }: SpotlightMenuProps) {
 			keywords: ["new", "task", "create", "todo"],
 			onTrigger: () => {
 				openModal({
-					children: <NewCustomTaskModal />,
+					children: <GeneralNewTaskModal />,
 					title: "New Task",
 					size: "lg",
 				});

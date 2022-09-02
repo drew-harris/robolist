@@ -188,7 +188,7 @@ export default function SettingsPage() {
 						<Stack p="lg" spacing="xl" align="flex-start">
 							<Button
 								onClick={() => router.replace("/canvas/connect")}
-								leftIcon={<CanvasLogo size={40} pl="xl" />}
+								leftIcon={<CanvasLogo size={20} pl="xl" />}
 							>
 								Connect Canvas Account
 							</Button>

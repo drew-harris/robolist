@@ -1,5 +1,4 @@
 import {
-	Box,
 	Center,
 	Loader,
 	Paper,
@@ -7,7 +6,6 @@ import {
 	Text,
 	UnstyledButton,
 } from "@mantine/core";
-import { assign } from "cypress/types/lodash";
 import { TaskWithClass } from "types";
 import useTaskMutation from "../../hooks/useTaskMutation";
 import { trpc } from "../../utils/trpc";

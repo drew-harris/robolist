@@ -12,8 +12,9 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { setCookie } from "cookies-next";
+import Link from "next/link";
 import { useContext, useState } from "react";
-import { Check, Link, LockAccess } from "tabler-icons-react";
+import { Check, Link as LinkIcon, LockAccess } from "tabler-icons-react";
 import {
 	InferMutationInput,
 	InferMutationOutput,
@@ -142,10 +143,16 @@ export default function CanvasConnectPage() {
 							}}
 							label="Token"
 						/>
-						<Button onClick={submitToken}> Submit </Button>
+						<Button
+							disabled={form.values.token.length < 12}
+							onClick={submitToken}
+						>
+							{" "}
+							Next{" "}
+						</Button>
 					</Stack>
 				</Stepper.Step>
-				<Stepper.Step label="Enter School URL" icon={<Link />}>
+				<Stepper.Step label="Enter School URL" icon={<LinkIcon />}>
 					<Stack align="center" sx={{ maxWidth: 500, margin: "auto" }}>
 						<Group spacing={2}>
 							<Text>https://</Text>
@@ -166,7 +173,9 @@ export default function CanvasConnectPage() {
 							</Box>
 							<Text>.instructure.com</Text>
 						</Group>
-						<Button onClick={submitUrl}> Submit </Button>
+						<Button disabled={form.values.url.length === 0} onClick={submitUrl}>
+							Next
+						</Button>
 					</Stack>
 				</Stepper.Step>
 				<Stepper.Step label="Verify Info" icon={<Check />}>
@@ -184,7 +193,9 @@ export default function CanvasConnectPage() {
 					{connectMutation.status === "success" && (
 						<Stack align="center">
 							<Text>Successfully Connected Your Account</Text>
-							<Text color="green">{checkAccount?.account?.name}</Text>
+							<Link href="/classes">
+								<Button variant="subtle">Link My Classes</Button>
+							</Link>
 						</Stack>
 					)}
 				</Stepper.Step>
