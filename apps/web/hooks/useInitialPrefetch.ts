@@ -31,5 +31,9 @@ export default function useInitialPrefetch() {
 
 		trpcQueryClient.prefetchQuery(["daily.all"]);
 		trpcQueryClient.prefetchQuery(["daily.on-dates", [getWeekdayNumber()]]);
+
+		queryClient.prefetchQuery(["upcoming-assignments"], () => {
+			return vanilla.query("canvas.list-upcoming", { excludeAdded: true });
+		});
 	}, [queryClient]);
 }

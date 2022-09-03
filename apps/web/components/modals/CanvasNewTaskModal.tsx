@@ -19,7 +19,6 @@ import { useMediaQuery } from "@mantine/hooks";
 import { closeAllModals } from "@mantine/modals";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Assignment } from "canvas-api-ts/dist/api/responseTypes";
-import { format } from "path";
 import { useContext, useState } from "react";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import { getHumanDateString } from "../../utils/client";
@@ -129,11 +128,17 @@ export default function CanvasNewTaskModal() {
 		maxDate.setDate(maxDate.getDate() - 1);
 	}
 
+	const today = new Date();
+	today.setHours(0, 0, 0, 0);
+
 	return (
 		<Stack mt="md" m={isMobile ? 0 : "md"} ref={parent}>
-			<LoadingOverlay visible={addTaskMutation.status === "loading"} />
+			<LoadingOverlay
+				key="loading"
+				visible={addTaskMutation.status === "loading"}
+			/>
 			{upcomingAssignments.length === 0 && (
-				<Center>
+				<Center key="nowarning">
 					<Text>You have no upcoming assignments</Text>
 				</Center>
 			)}
@@ -143,7 +148,7 @@ export default function CanvasNewTaskModal() {
 				}
 				return (
 					<AssignmentChoice
-						id={assignment.id}
+						key={assignment.id}
 						selectedAssignment={selectedAssignment}
 						assignment={assignment}
 						setSelectedAssignment={(assignment) => {
@@ -155,29 +160,31 @@ export default function CanvasNewTaskModal() {
 				);
 			})}
 			{selectedAssignment && [
-				<MediaQuery
-					smallerThan={"xs"}
-					styles={{ flexDirection: "column", display: "flex" }}
-				>
-					<Box
-						sx={(theme) => ({
-							display: "grid",
-							gridTemplateColumns: "1fr 1fr",
-							gap: theme.spacing.md,
-						})}
+				<form key="submit" onSubmit={workInfoForm.onSubmit(submit)}>
+					<MediaQuery
+						key="workinfo"
+						smallerThan={"xs"}
+						styles={{ flexDirection: "column", display: "flex" }}
 					>
-						<NumberInput
-							{...workInfoForm.getInputProps("workTime")}
-							label="Work Time"
-						></NumberInput>
-						<HeatmapDatePicker
-							clearable={false}
-							{...workInfoForm.getInputProps("workDate")}
-							maxDate={maxDate}
-						/>
-					</Box>
-				</MediaQuery>,
-				<form onSubmit={workInfoForm.onSubmit(submit)}>
+						<Box
+							sx={(theme) => ({
+								display: "grid",
+								gridTemplateColumns: "1fr 1fr",
+								gap: theme.spacing.md,
+							})}
+						>
+							<NumberInput
+								{...workInfoForm.getInputProps("workTime")}
+								label="Work Time"
+							></NumberInput>
+							<HeatmapDatePicker
+								clearable={false}
+								{...workInfoForm.getInputProps("workDate")}
+								maxDate={maxDate}
+								minDate={today}
+							/>
+						</Box>
+					</MediaQuery>
 					<Button
 						disabled={!workInfoForm.values.workDate}
 						type="submit"
@@ -193,7 +200,6 @@ export default function CanvasNewTaskModal() {
 }
 
 interface AssignmentChoiceProps {
-	id: number;
 	assignment: InferQueryOutput<"canvas.list-upcoming">[0];
 	classes: InferQueryOutput<"classes.all">;
 	setSelectedAssignment: (assignment: Assignment | null) => void;
@@ -201,7 +207,6 @@ interface AssignmentChoiceProps {
 }
 
 const AssignmentChoice = ({
-	id,
 	assignment,
 	classes,
 	setSelectedAssignment,
