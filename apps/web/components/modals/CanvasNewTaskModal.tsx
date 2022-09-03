@@ -12,15 +12,15 @@ import {
 	Paper,
 	Stack,
 	Text,
-	TextInput,
 } from "@mantine/core";
 import { DatePickerProps } from "@mantine/dates";
 import { useForm } from "@mantine/form";
+import { useMediaQuery } from "@mantine/hooks";
 import { closeAllModals } from "@mantine/modals";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Assignment } from "canvas-api-ts/dist/api/responseTypes";
+import { format } from "path";
 import { useContext, useState } from "react";
-import { TypeOf } from "zod";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import { getHumanDateString } from "../../utils/client";
 import { InferQueryOutput, trpc, vanilla } from "../../utils/trpc";
@@ -33,6 +33,7 @@ interface TWorkInfoForm {
 
 export default function CanvasNewTaskModal() {
 	const [parent] = useAutoAnimate<HTMLDivElement>();
+	const isMobile = useMediaQuery("(max-width: 900px)", false);
 	const queryClient = useQueryClient();
 	const {
 		data: upcomingAssignments,
@@ -124,14 +125,18 @@ export default function CanvasNewTaskModal() {
 	const maxDate = selectedAssignment?.due_at
 		? new Date(selectedAssignment.due_at)
 		: null;
-	// Subtract a day
 	if (maxDate) {
 		maxDate.setDate(maxDate.getDate() - 1);
 	}
 
 	return (
-		<Stack m="md" ref={parent}>
+		<Stack mt="md" m={isMobile ? 0 : "md"} ref={parent}>
 			<LoadingOverlay visible={addTaskMutation.status === "loading"} />
+			{upcomingAssignments.length === 0 && (
+				<Center>
+					<Text>You have no upcoming assignments</Text>
+				</Center>
+			)}
 			{upcomingAssignments.map((assignment) => {
 				if (selectedAssignment && selectedAssignment.id != assignment.id) {
 					return null;
@@ -141,7 +146,10 @@ export default function CanvasNewTaskModal() {
 						id={assignment.id}
 						selectedAssignment={selectedAssignment}
 						assignment={assignment}
-						setSelectedAssignment={setSelectedAssignment}
+						setSelectedAssignment={(assignment) => {
+							setSelectedAssignment(assignment);
+							workInfoForm.reset();
+						}}
 						classes={classes}
 					/>
 				);
@@ -170,7 +178,12 @@ export default function CanvasNewTaskModal() {
 					</Box>
 				</MediaQuery>,
 				<form onSubmit={workInfoForm.onSubmit(submit)}>
-					<Button type="submit" fullWidth mt="sm">
+					<Button
+						disabled={!workInfoForm.values.workDate}
+						type="submit"
+						fullWidth
+						mt="sm"
+					>
 						Submit
 					</Button>
 				</form>,
@@ -183,7 +196,7 @@ interface AssignmentChoiceProps {
 	id: number;
 	assignment: InferQueryOutput<"canvas.list-upcoming">[0];
 	classes: InferQueryOutput<"classes.all">;
-	setSelectedAssignment: (id: Assignment | null) => void;
+	setSelectedAssignment: (assignment: Assignment | null) => void;
 	selectedAssignment: InferQueryOutput<"canvas.list-upcoming">[0] | null;
 }
 
@@ -216,6 +229,7 @@ const AssignmentChoice = ({
 			sx={(theme) => ({
 				backgroundColor:
 					theme.colorScheme === "dark" ? theme.colors.dark[6] : "#fff",
+				cursor: "pointer",
 			})}
 		>
 			<Group position="apart">
