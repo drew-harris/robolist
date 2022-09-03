@@ -220,7 +220,7 @@ export const tasks = createRouter()
 		},
 	})
 
-	.mutation("create-task", {
+	.mutation("create", {
 		input: z.object({
 			workTime: z.number().nullable(),
 			title: z.string(),

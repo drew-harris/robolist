@@ -1,6 +1,5 @@
 import { Assignment, Course } from "canvas-api-ts/dist/api/responseTypes";
-import { APINewTaskRequest } from "types";
-import { z, ZodType } from "zod";
+import { z } from "zod";
 import { createRouter } from "../server/context";
 export const canvas = createRouter()
 	.middleware(({ ctx, next }) => {
@@ -88,7 +87,7 @@ export const canvas = createRouter()
 		resolve: async ({ ctx, input }) => {
 			try {
 				const responsePromise = fetch(
-					`${ctx.canvas.url}/api/v1/users/self/upcoming_events `,
+					`${ctx.canvas.url}/api/v1/users/self/upcoming_events`,
 					{
 						headers: {
 							Authorization: `Bearer ${ctx.canvas.token}`,
