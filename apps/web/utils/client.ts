@@ -57,7 +57,6 @@ export function getHumanDateString(date: Date): string {
 export const reduceDates = (arr: TaskWithClass[] | TDemoTask[]) => {
 	const dates: any[][] = [];
 	// Iterate through array of objects
-	console.log("REDUCING DATES", arr);
 	for (let i = 0; i < arr.length; i++) {
 		// Check if date is in one of the groups
 		const index = dates.findIndex((group) => {
@@ -77,8 +76,6 @@ export const reduceDates = (arr: TaskWithClass[] | TDemoTask[]) => {
 			dates[index].push(arr[i]);
 		}
 	}
-
-	console.log("REDUCED DATES", dates);
 
 	return dates;
 };
