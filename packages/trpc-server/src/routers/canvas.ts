@@ -98,7 +98,20 @@ export const canvas = createRouter()
 				if (!input.excludeAdded) {
 					const response = await responsePromise;
 					const data: any[] = await response.json();
-					return data.map((calEvent) => calEvent.assignment) as Assignment[];
+					return data
+						.map((calEvent) => calEvent.assignment)
+						.map((assignment: Assignment) => {
+							let dueAt = new Date(assignment.due_at);
+							// Copied from below
+							if (dueAt.getHours() == 23 && dueAt.getMinutes() > 50) {
+								dueAt.setDate(dueAt.getDate() + 1);
+								return {
+									...assignment,
+									due_at: dueAt.toUTCString(),
+								};
+							}
+							return assignment;
+						});
 				}
 
 				const tasksPromise = ctx.prisma.task.findMany({
@@ -117,12 +130,25 @@ export const canvas = createRouter()
 				const assignments = data.map(
 					(calEvent) => calEvent.assignment
 				) as Assignment[];
-				return assignments.filter((assignment) => {
-					if (tasks.find((task) => task.canvasId === assignment.id)) {
-						return false;
-					}
-					return true;
-				});
+				return assignments
+					.filter((assignment) => {
+						if (tasks.find((task) => task.canvasId === assignment.id)) {
+							return false;
+						}
+						return true;
+					})
+					.map((assignment) => {
+						// Fix 11:59 times
+						let dueAt = new Date(assignment.due_at);
+						if (dueAt.getHours() == 23 && dueAt.getMinutes() > 50) {
+							dueAt.setDate(dueAt.getDate() + 1);
+							return {
+								...assignment,
+								due_at: dueAt.toUTCString(),
+							};
+						}
+						return assignment;
+					});
 			} catch (error: unknown) {
 				if (error instanceof Error) {
 					throw Error;

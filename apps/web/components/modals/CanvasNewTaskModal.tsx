@@ -138,7 +138,7 @@ export default function CanvasNewTaskModal() {
 				visible={addTaskMutation.status === "loading"}
 			/>
 			{upcomingAssignments.length === 0 && (
-				<Center key="nowarning">
+				<Center mt="md" key="nowarning">
 					<Text>You have no upcoming assignments</Text>
 				</Center>
 			)}
