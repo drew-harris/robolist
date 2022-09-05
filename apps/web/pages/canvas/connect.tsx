@@ -80,7 +80,8 @@ export default function CanvasConnectPage() {
 					setCheckAccount(result);
 					console.log("Setting cookie to ", result.jwt);
 					setCookie("jwt", result.jwt, {
-						maxAge: 60 * 60 * 24 * 365,
+						// 20 days
+						expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 20),
 					});
 					trpcClient.invalidateQueries("theme-and-settings");
 				},

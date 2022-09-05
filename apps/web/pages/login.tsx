@@ -16,8 +16,10 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { APILoginRequest, APIRegisterResponse } from "types";
 import { logEvent } from "../lib/ga";
+import { trpc } from "../utils/trpc";
 const Login = () => {
 	const router = useRouter();
+	const trpcClient = trpc.useContext();
 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -45,6 +47,7 @@ const Login = () => {
 			logEvent("login", {
 				category: "user",
 			});
+			trpcClient.refetchQueries(["theme-and-settings"]);
 			router.replace("/tasks");
 		} else {
 			setError(data.error?.message || "Unknown error");

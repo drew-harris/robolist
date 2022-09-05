@@ -105,7 +105,9 @@ async function handler(
 				error: { message: "Could not load secret to sign credentials" },
 			});
 		}
-		jwt = JWT.sign(payload, secret);
+		jwt = JWT.sign(payload, secret, {
+			expiresIn: "20d",
+		});
 	} catch (error: any) {
 		log.error("Error signing JWT", error.message);
 

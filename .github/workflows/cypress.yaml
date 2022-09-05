@@ -6,25 +6,25 @@ env:
   JWT_SECRET: ${{secrets.JWT_SECRET}}
 
 jobs:
-  test:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
-      - run: npm ci
+  # test:
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  # # Install NPM dependencies, cache them correctly
+  # # and run all Cypress tests
+  # - run: npm ci
 
-      - run: npx prisma generate
-        name: Generate Prisma Package
-        working-directory: packages/prisma-schema
+  # - run: npx prisma generate
+  #   name: Generate Prisma Package
+  #   working-directory: packages/prisma-schema
 
-      - run: npm run database-reset
-        name: Reset Developement Database
+  # - run: npm run database-reset
+  #   name: Reset Developement Database
 
-      - run: npm run ci
-        name: Run Tests
-        working-directory: apps/web
+  # - run: npm run ci
+  #   name: Run Tests
+  #   working-directory: apps/web
 
   preview:
     runs-on: ubuntu-latest

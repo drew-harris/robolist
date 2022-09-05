@@ -34,6 +34,7 @@ import {
 	Settings,
 } from "tabler-icons-react";
 import { SettingsContext } from "../../contexts/SettingsContext";
+import useAccountUpdater from "../../hooks/useAccountUpdater";
 import FocusModeContentSpacer from "../affixes/FocusModeContentSpacer";
 import FocusModeDisplay from "../affixes/FocusModeDisplay";
 import { ColorSchemeToggle } from "../ColorSchemeToggle";
@@ -63,6 +64,8 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 
 	const { settings } = useContext(SettingsContext);
 	const theme = useMantineTheme();
+
+	useAccountUpdater();
 
 	let tasksGroup: SidebarLink[] = [
 		{ href: "/tasks/today", label: "Today", icon: <Clock /> },
