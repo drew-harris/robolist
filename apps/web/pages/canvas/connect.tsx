@@ -107,7 +107,10 @@ export default function CanvasConnectPage() {
 		disconnectMutation.mutate(undefined, {
 			onSuccess: (data) => {
 				console.log(data);
-				setCookie("jwt", data.jwt);
+				setCookie("jwt", data.jwt, {
+					// 2 weeks from now
+					expires: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+				});
 				trpcClient.invalidateQueries("theme-and-settings");
 			},
 		});

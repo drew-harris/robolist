@@ -106,7 +106,7 @@ async function handler(
 			});
 		}
 		jwt = JWT.sign(payload, secret, {
-			expiresIn: "20d",
+			expiresIn: "14d",
 		});
 	} catch (error: any) {
 		log.error("Error signing JWT", error.message);
@@ -117,7 +117,7 @@ async function handler(
 	}
 
 	const date = new Date();
-	date.setDate(Date.now() + 7 * 24 * 60 * 60 * 1000);
+	date.setDate(Date.now() + 14 * 24 * 60 * 60 * 1000);
 
 	setCookie("jwt", jwt, {
 		expires: date,

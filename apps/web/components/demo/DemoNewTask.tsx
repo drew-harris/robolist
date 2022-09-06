@@ -40,9 +40,6 @@ export default function DemoNewTask() {
 	useEffect(() => {
 		form.validateField("workDate");
 		form.validateField("dueDate");
-		if (form.values.title === "access") {
-			setCookie("jwt", "token", { path: "/" });
-		}
 
 		if (form.values.dueDate) {
 			// If due date is today, set it to tomorrow

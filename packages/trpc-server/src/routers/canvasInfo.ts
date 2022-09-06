@@ -42,7 +42,7 @@ export const canvasInfo = createRouter()
 					}
 
 					jwt = JWT.sign(payload, secret, {
-						expiresIn: "20d",
+						expiresIn: "14d",
 					});
 
 					return jwt;
@@ -118,7 +118,7 @@ export const canvasInfo = createRouter()
 				}
 
 				jwt = JWT.sign(payload, secret, {
-					expiresIn: "20d",
+					expiresIn: "14d",
 				});
 				return { jwt: jwt, success: true, account: newUser.canvasAccount };
 			} catch (error) {
@@ -163,7 +163,7 @@ export const canvasInfo = createRouter()
 					throw new Error("JWT_SECRET is not set");
 				}
 				jwt = JWT.sign(payload, secret, {
-					expiresIn: "20d",
+					expiresIn: "14d",
 				});
 				return { jwt: jwt, success: true, account: newUser.canvasAccount };
 			} catch (error) {
