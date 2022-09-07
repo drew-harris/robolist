@@ -13,36 +13,44 @@ import { showNotification } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
 import { Clock } from "tabler-icons-react";
-import { APINewTaskRequest } from "types";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import { logEvent } from "../../lib/ga";
+import { InferMutationInput, trpc } from "../../utils/trpc";
 import ClassIdPicker from "../input/ClassIdPicker";
 import HeatmapDatePicker from "../input/HeatmapDatePicker";
 
 export default function NewCustomTaskModal() {
 	const [loading, setLoading] = useState(false);
 	const [maxDate, setMaxDate] = useState<Date | null>(null);
+	const createMutation = trpc.useMutation("tasks.create");
 
 	const { settings } = useContext(SettingsContext);
 
 	const modals = useModals();
 	const queryClient = useQueryClient();
-	const form = useForm<APINewTaskRequest>({
+	const form = useForm<
+		InferMutationInput<"tasks.create"> & { workDate: null | Date }
+	>({
 		initialValues: {
 			classId: null,
 			dueDate: null,
 			workDate: null,
 			title: "",
-			description: null,
 			workTime: null,
 		},
 		validate: {
-			workDate: (value: Date | null | undefined, form: APINewTaskRequest) => {
+			workDate: (
+				value: Date | null | undefined,
+				form: InferMutationInput<"tasks.create">
+			) => {
 				if (value && form.dueDate && value > form.dueDate) {
 					return "Work date must be before due date";
 				}
 			},
-			dueDate: (value: Date | null | undefined, form: APINewTaskRequest) => {
+			dueDate: (
+				value: Date | null | undefined,
+				form: InferMutationInput<"tasks.create">
+			) => {
 				if (
 					value &&
 					form.workDate &&
@@ -52,6 +60,7 @@ export default function NewCustomTaskModal() {
 				}
 			},
 			title: (value: string) => {
+				if (!value) return "Title Required";
 				if (value.length < 1) {
 					return "Title Required";
 				}
@@ -81,42 +90,28 @@ export default function NewCustomTaskModal() {
 		// eslint-disable-next-line
 	}, [form.values]);
 
-	const submit = async (values: APINewTaskRequest) => {
+	const submit = async (values: InferMutationInput<"tasks.create">) => {
 		setLoading(true);
-		console.log(JSON.stringify(values));
-		const response = await fetch("/api/tasks", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
+		createMutation.mutate(values, {
+			onSettled: () => {
+				queryClient.invalidateQueries(["tasks"]);
+				queryClient.invalidateQueries(["dates"]);
+				logEvent("create_task", {
+					value: values.title,
+					category: "tasks",
+				});
+				modals.closeModal("new-class");
+				setLoading(false);
 			},
-			body: JSON.stringify(values),
-		});
-		if (response.ok) {
-			console.log("success");
-		}
-		const json = await response.json();
-		if (json.error) {
-			console.error(json.error);
-			showNotification({
-				message: json.error.message,
-				color: "red",
-			});
-			setLoading(false);
-		} else {
-			showNotification({
-				message: "Task created",
-				color: "green",
-			});
-			queryClient.invalidateQueries(["tasks"]);
 
-			queryClient.invalidateQueries(["dates"]);
-			logEvent("create_task", {
-				value: values.title,
-				category: "tasks",
-			});
-			console.log(json.task);
-			modals.closeModal("new-class");
-		}
+			onError: (err) => {
+				showNotification({
+					message: err.message,
+					color: "red",
+				});
+			},
+		});
+		//
 	};
 
 	const datePickerProps: DatePickerProps = {
@@ -129,7 +124,7 @@ export default function NewCustomTaskModal() {
 
 	return (
 		<form onSubmit={form.onSubmit(submit)}>
-			<Stack style={{ position: "relative" }} p="sm">
+			<Stack spacing={0} style={{ position: "relative" }} p="sm">
 				<LoadingOverlay radius="sm" visible={loading} />
 				<TextInput {...form.getInputProps("title")} label="Title" />
 				<MediaQuery

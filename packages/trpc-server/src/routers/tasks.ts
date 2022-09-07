@@ -224,15 +224,18 @@ export const tasks = createRouter()
 		input: z.object({
 			workTime: z.number().positive().nullable(),
 			title: z.string(),
-			dueDate: z.date(),
-			workDate: z.date(),
-			canvasId: z.number().nullable(),
-			canvasName: z.string().nullable(),
-			canvasDescription: z.string().nullable(),
-			canvasURL: z.string().nullable(),
-			classId: z.string().nullable(),
+			dueDate: z.date().nullable(),
+			workDate: z.date().nullable(),
+			canvasId: z.number().nullable().optional(),
+			canvasName: z.string().nullable().optional(),
+			canvasDescription: z.string().nullable().optional(),
+			canvasURL: z.string().nullable().optional(),
+			classId: z.string().nullable().optional(),
 		}),
 		resolve: async ({ ctx, input }) => {
+			if (!input.dueDate || !input.workDate) {
+				throw new Error("Dates are null");
+			}
 			const due = new Date(input.dueDate);
 			due.setHours(0, 0, 0, 0);
 			const classDoc = input.classId
