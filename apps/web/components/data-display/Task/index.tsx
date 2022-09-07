@@ -21,6 +21,7 @@ import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
 import { getHumanDateString } from "../../../utils/client";
 import CanvasLogo from "../../small/CanvasLogo";
+import OpenOnCanvasButton from "../../small/OpenOnCanvasButton";
 import RescheduleButton from "./RescheduleButton";
 import TaskCheckbox from "./TaskCheckbox";
 import TaskMenu from "./TaskMenu";
@@ -162,13 +163,7 @@ const Task = ({
 							{checkbox && checkboxElement}
 							{rescheduleButton && <RescheduleButton task={task} />}
 							{task.canvasId && task.canvasURL && (
-								<Tooltip label="Open on Canvas">
-									<a rel="noreferrer" href={task.canvasURL} target="_blank">
-										<ActionIcon component="a">
-											<CanvasLogo size={16} />
-										</ActionIcon>
-									</a>
-								</Tooltip>
+								<OpenOnCanvasButton url={task.canvasURL} />
 							)}
 							<TaskMenu task={task} options={menuOptions || {}} />
 						</Group>
@@ -208,13 +203,7 @@ const Task = ({
 					{task.workTime && <Text size="sm">{task.workTime + "min."}</Text>}
 					{rescheduleButton && <RescheduleButton task={task} />}
 					{task.canvasId && task.canvasURL && (
-						<Tooltip label="Open on Canvas">
-							<a rel="noreferrer" href={task.canvasURL} target="_blank">
-								<ActionIcon component="a">
-									<CanvasLogo size={18} />
-								</ActionIcon>
-							</a>
-						</Tooltip>
+						<OpenOnCanvasButton url={task.canvasURL} />
 					)}
 					<TaskMenu task={task} options={menuOptions || {}} />
 				</Group>

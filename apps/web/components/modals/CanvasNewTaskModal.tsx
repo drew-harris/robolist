@@ -1,5 +1,6 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
+	ActionIcon,
 	Badge,
 	Box,
 	Button,
@@ -24,6 +25,8 @@ import { SettingsContext } from "../../contexts/SettingsContext";
 import { getHumanDateString } from "../../utils/client";
 import { InferQueryOutput, trpc, vanilla } from "../../utils/trpc";
 import HeatmapDatePicker from "../input/HeatmapDatePicker";
+import CanvasLogo from "../small/CanvasLogo";
+import OpenOnCanvasButton from "../small/OpenOnCanvasButton";
 
 interface TWorkInfoForm {
 	workDate: null | Date;
@@ -176,12 +179,14 @@ export default function CanvasNewTaskModal() {
 							<NumberInput
 								{...workInfoForm.getInputProps("workTime")}
 								label="Work Time"
+								placeholder="Optional"
 							></NumberInput>
 							<HeatmapDatePicker
 								clearable={false}
 								{...workInfoForm.getInputProps("workDate")}
 								maxDate={maxDate}
 								minDate={today}
+								placeholder="Select a date"
 							/>
 						</Box>
 					</MediaQuery>
@@ -242,9 +247,12 @@ const AssignmentChoice = ({
 					<Text>{assignment.name}</Text>
 					<Badge color={matchingClass.color}>{matchingClass.name}</Badge>
 				</Group>
-				<Text size="sm" color="dimmed">
-					Due {getHumanDateString(new Date(assignment.due_at))}
-				</Text>
+				<Group>
+					<Text size="sm" color="dimmed">
+						Due {getHumanDateString(new Date(assignment.due_at))}
+					</Text>
+					<OpenOnCanvasButton url={assignment.html_url} />
+				</Group>
 			</Group>
 		</Paper>
 	);
