@@ -222,7 +222,7 @@ export const tasks = createRouter()
 
 	.mutation("create", {
 		input: z.object({
-			workTime: z.number().nullable(),
+			workTime: z.number().positive().nullable(),
 			title: z.string(),
 			dueDate: z.date(),
 			workDate: z.date(),

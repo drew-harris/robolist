@@ -18,6 +18,7 @@ import { DatePickerProps } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import { closeAllModals } from "@mantine/modals";
+import { showNotification } from "@mantine/notifications";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Assignment } from "canvas-api-ts/dist/api/responseTypes";
 import { useContext, useState } from "react";
@@ -69,6 +70,15 @@ export default function CanvasNewTaskModal() {
 			workDate: null,
 			workTime: null,
 		},
+
+		validate: {
+			// Worktime must be positive
+			workTime: (value: number) => {
+				if (value && value <= 0) {
+					return "Work time must be positive";
+				}
+			},
+		},
 	});
 
 	const [page, setPage] = useState<number>(0);
@@ -112,6 +122,11 @@ export default function CanvasNewTaskModal() {
 					queryClient.invalidateQueries(["tasks"]);
 					queryClient.refetchQueries(["upcoming-assignments"]);
 					closeAllModals();
+				},
+				onError: ({ message }) => {
+					showNotification({
+						message: message,
+					});
 				},
 			}
 		);
