@@ -34,6 +34,7 @@ import {
 	Settings,
 } from "tabler-icons-react";
 import { SettingsContext } from "../../contexts/SettingsContext";
+import useAccountUpdater from "../../hooks/useAccountUpdater";
 import FocusModeContentSpacer from "../affixes/FocusModeContentSpacer";
 import FocusModeDisplay from "../affixes/FocusModeDisplay";
 import { ColorSchemeToggle } from "../ColorSchemeToggle";
@@ -64,6 +65,8 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 	const { settings } = useContext(SettingsContext);
 	const theme = useMantineTheme();
 
+	useAccountUpdater();
+
 	let tasksGroup: SidebarLink[] = [
 		{ href: "/tasks/today", label: "Today", icon: <Clock /> },
 		{ href: "/tasks", label: "Agenda", icon: <List /> },
@@ -75,7 +78,6 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 			href: "/tasks/details",
 			label: "Details",
 			icon: <Columns />,
-			isBeta: true,
 		});
 	}
 
@@ -102,7 +104,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 	function SidebarGroup({ links }: SidebarGroupProps) {
 		const elements = links.map((link) => {
 			return (
-				<Link href={link.href} id={link.href}>
+				<Link href={link.href} key={link.href} id={link.href}>
 					<NavLink
 						rightSection={
 							link.isBeta ? (

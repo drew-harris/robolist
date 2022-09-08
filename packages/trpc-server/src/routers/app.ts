@@ -6,12 +6,17 @@ import { classes } from "./classes";
 import { daily } from "./daily";
 import { tasks } from "./tasks";
 import { feedback } from "./feedback";
+import { canvasInfo } from "./canvasInfo";
+import { canvas } from "./canvas";
+
 export const appRouter = createRouter()
 	.transformer(superjson)
 	.merge("tasks.", tasks)
 	.merge("classes.", classes)
 	.merge("daily.", daily)
 	.merge("feedback.", feedback)
+	.merge("canvas-info.", canvasInfo)
+	.merge("canvas.", canvas)
 	.query("theme-and-settings", {
 		resolve: (ctx) => {
 			let settings: Partial<Settings> | null = null;
@@ -21,6 +26,7 @@ export const appRouter = createRouter()
 			return {
 				theme: ctx.ctx.theme as ColorScheme | null,
 				settings,
+				user: ctx.ctx.user,
 			};
 		},
 	});

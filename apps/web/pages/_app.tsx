@@ -15,9 +15,10 @@ import { setCookie } from "cookies-next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Script from "next/script";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import superjson from "superjson";
 import type { AppRouter } from "trpc-server/src/index";
+import { UserWithoutPassword } from "types";
 import FocusTabTitle from "../components/data-display/focus/FocusTabTitle";
 import LayoutShell from "../components/layout/LayoutShell";
 import SpotlightMenu from "../components/layout/SpotlightMenu";
@@ -31,19 +32,22 @@ export { reportWebVitals } from "next-axiom";
 
 const isProduction = process.env.NODE_ENV === "production";
 
+export const UserContext = createContext<UserWithoutPassword | null>(null);
+
 function MyApp(props: any) {
 	// function App(props: AppProps & { colorScheme: ColorScheme }) {
 	const { Component, pageProps } = props;
 
 	const preferredColorScheme = useColorScheme("dark");
 
-	const [refreshTheme, setRefreshTheme] = useState(true);
-	useEffect(() => {
-		setRefreshTheme(false);
-	}, []);
-
 	const { data: settingsAndTheme } = trpc.useQuery(["theme-and-settings"], {
-		enabled: refreshTheme,
+		// enabled: refreshTheme,
+		refetchOnWindowFocus: false,
+		refetchOnMount: false,
+		refetchOnReconnect: false,
+		onSettled: () => {
+			console.log("Refreshed theme");
+		},
 	});
 
 	const trpcClient = trpc.useContext();
@@ -64,6 +68,7 @@ function MyApp(props: any) {
 			trpcClient.setQueryData(["theme-and-settings"], {
 				settings: settingsAndTheme?.settings || null,
 				theme: nextColorScheme,
+				user: settingsAndTheme?.user || null,
 			});
 		}
 	};
@@ -136,36 +141,38 @@ function MyApp(props: any) {
         `}
 			</Script>
 
-			<QueryClientProvider client={queryClient}>
-				{process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
-				{/* <TrpcReactQueryDevtools position="top-left" /> */}
-				<ColorSchemeProvider
-					colorScheme={settingsAndTheme?.theme ?? preferredColorScheme}
-					toggleColorScheme={toggleColorScheme}
-				>
-					<MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
-						<SettingsContextProvider
-							onColorChange={(color) => {
-								setThemeDefaultColor(color);
-							}}
-							ssrSettings={settingsAndTheme?.settings ?? null}
-						>
-							<FocusContextProvider>
-								<ModalsProvider>
-									<NotificationsProvider>
-										<SpotlightMenu>
-											<LayoutShell>
-												<FocusTabTitle />
-												<Component {...pageProps} />
-											</LayoutShell>
-										</SpotlightMenu>
-									</NotificationsProvider>
-								</ModalsProvider>
-							</FocusContextProvider>
-						</SettingsContextProvider>
-					</MantineProvider>
-				</ColorSchemeProvider>
-			</QueryClientProvider>
+			<UserContext.Provider value={settingsAndTheme?.user || null}>
+				<QueryClientProvider client={queryClient}>
+					{process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
+					{/* <TrpcReactQueryDevtools position="top-left" /> */}
+					<ColorSchemeProvider
+						colorScheme={settingsAndTheme?.theme ?? preferredColorScheme}
+						toggleColorScheme={toggleColorScheme}
+					>
+						<MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
+							<SettingsContextProvider
+								onColorChange={(color) => {
+									setThemeDefaultColor(color);
+								}}
+								ssrSettings={settingsAndTheme?.settings ?? null}
+							>
+								<FocusContextProvider>
+									<ModalsProvider>
+										<NotificationsProvider>
+											<SpotlightMenu>
+												<LayoutShell>
+													<FocusTabTitle />
+													<Component {...pageProps} />
+												</LayoutShell>
+											</SpotlightMenu>
+										</NotificationsProvider>
+									</ModalsProvider>
+								</FocusContextProvider>
+							</SettingsContextProvider>
+						</MantineProvider>
+					</ColorSchemeProvider>
+				</QueryClientProvider>
+			</UserContext.Provider>
 		</>
 	);
 }

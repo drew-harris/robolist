@@ -6,6 +6,8 @@ import { TaskMenuOptions } from ".";
 import useTaskMutation from "../../../hooks/useTaskMutation";
 import { getHumanDateString } from "../../../utils/client";
 import EditTaskModal from "../../modals/EditTaskModal";
+import LinkTaskModal from "../../modals/LinkTaskModal";
+import CanvasLogo from "../../small/CanvasLogo";
 
 export default function TaskMenu({
 	options,
@@ -48,6 +50,12 @@ export default function TaskMenu({
 		});
 	};
 
+	const promptLink = () => {
+		modals.openModal({
+			children: <LinkTaskModal task={task} />,
+			title: "Link Task",
+		});
+	};
 	const completeMenuOption = () => {
 		if (!task.workTime) {
 			return null;
@@ -99,6 +107,14 @@ export default function TaskMenu({
 				{options.delete && (
 					<Menu.Item color="red" onClick={promptDelete} icon={<Trash />}>
 						Delete
+					</Menu.Item>
+				)}
+				{!task.canvasId && task.class?.canvasId && (
+					<Menu.Item
+						icon={<CanvasLogo mx={3} size={18} />}
+						onClick={promptLink}
+					>
+						Link with Canvas
 					</Menu.Item>
 				)}
 				{showDueDate && (

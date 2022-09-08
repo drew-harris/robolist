@@ -1,9 +1,11 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useModals } from "@mantine/modals";
 import { Class } from "@prisma/client";
 import useClassMutation from "../../hooks/useClassMutation";
+import useUser from "../../hooks/useUser";
 import { InferMutationInput } from "../../utils/trpc";
+import CanvasClassLink from "../input/canvas/CanvasClassLink";
 import ThemeColorSelector from "../input/ThemeColorSelector";
 
 interface EditClassModalProps {
@@ -15,12 +17,14 @@ export default function EditClassModal({
 }: EditClassModalProps) {
 	const modals = useModals();
 	const { editMutation } = useClassMutation();
+	const user = useUser();
 
 	const form = useForm<InferMutationInput<"classes.edit">>({
 		initialValues: {
 			id: initialClass.id,
 			name: initialClass.name,
 			color: initialClass.color,
+			canvasClassId: initialClass.canvasId,
 		},
 	});
 
@@ -29,7 +33,13 @@ export default function EditClassModal({
 	};
 
 	async function handleSubmit(values: InferMutationInput<"classes.edit">) {
-		editMutation.mutate(values);
+		console.log("running mutation with values", values);
+		editMutation.mutate({
+			id: values.id,
+			name: values.name,
+			color: values.color,
+			canvasClassId: values.canvasClassId,
+		});
 		modals.closeAll();
 	}
 
@@ -41,6 +51,15 @@ export default function EditClassModal({
 					{...form.getInputProps("name")}
 					label="Class Name"
 				/>
+				{user?.canvasAccount && (
+					<CanvasClassLink
+						placeHolder={initialClass.canvasName || undefined}
+						value={form.values.canvasClassId || null}
+						setValue={(value) => {
+							form.setFieldValue("canvasClassId", value);
+						}}
+					/>
+				)}
 				<ThemeColorSelector
 					value={form.values.color || "blue"}
 					onChange={handleColorChange}

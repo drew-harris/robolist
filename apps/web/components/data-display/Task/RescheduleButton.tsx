@@ -10,9 +10,10 @@ import CalendarHeatmapDatePicker from "../../input/CalendarHeatmapDatePicker";
 
 interface RescheduleButtonProps {
 	task: TaskWithClass;
+	includeGap?: boolean;
 }
 export default function RescheduleButton(props: RescheduleButtonProps) {
-	const { task } = props;
+	const { task, includeGap } = props;
 	const [opened, setOpened] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date | null>(task.workDate);
 	const { settings } = useContext(SettingsContext);
@@ -55,7 +56,9 @@ export default function RescheduleButton(props: RescheduleButtonProps) {
 	};
 
 	if (!canReschedule(task, settings)) {
-		return <Box sx={{ width: "22px" }}></Box>;
+		if (includeGap) {
+			return <Box sx={{ width: "22px" }}></Box>;
+		} else return null;
 	}
 
 	return (

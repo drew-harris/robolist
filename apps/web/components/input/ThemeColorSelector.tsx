@@ -1,4 +1,4 @@
-import { ColorSwatch, Group, useMantineTheme } from "@mantine/core";
+import { ColorSwatch, Group, GroupProps, useMantineTheme } from "@mantine/core";
 import { colorChoices } from "types";
 
 interface ThemeColorSelectorProps {
@@ -16,7 +16,7 @@ export default function ThemeColorSelector(props: ThemeColorSelectorProps) {
 		></Swatch>
 	));
 
-	return <Group>{swatchElements}</Group>;
+	return <Group my="md">{swatchElements}</Group>;
 }
 
 interface SwatchProps {
