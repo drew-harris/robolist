@@ -137,27 +137,28 @@ export default function CanvasConnectPage() {
 			<Title order={2}>Connect Canvas LMS Account</Title>
 			<Stepper breakpoint="sm" m="md" size="sm" mt="xl" active={stepperPage}>
 				<Stepper.Step label="Create Token" icon={<LockAccess />}>
-					<Stack align="center" sx={{ maxWidth: 500, margin: "auto" }}>
+					<Stack align="center" sx={{ margin: "auto" }}>
+						<Text>
+							To connect your Canvas account, you need to create a token. Tokens
+							can be created by going to Account &gt; Settings &gt; New Access
+							Token.
+						</Text>
 						<TextInput
 							{...form.getInputProps("token")}
-							wrapperProps={{
-								sx: {
-									width: "100%",
-								},
-							}}
+							wrapperProps={{ sx: { maxWidth: "500px", width: "100%" } }}
 							label="Token"
 						/>
 						<Button
 							disabled={form.values.token.length < 12}
 							onClick={submitToken}
 						>
-							{" "}
-							Next{" "}
+							Next
 						</Button>
 					</Stack>
 				</Stepper.Step>
 				<Stepper.Step label="Enter School URL" icon={<LinkIcon />}>
 					<Stack align="center" sx={{ maxWidth: 500, margin: "auto" }}>
+						<Text>Complete the URL with your school&apos;s Canvas URL.</Text>
 						<Group spacing={2}>
 							<Text>https://</Text>
 							<Box sx={{ textAlign: "center" }}>

@@ -104,7 +104,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
 	function SidebarGroup({ links }: SidebarGroupProps) {
 		const elements = links.map((link) => {
 			return (
-				<Link href={link.href} id={link.href}>
+				<Link href={link.href} key={link.href} id={link.href}>
 					<NavLink
 						rightSection={
 							link.isBeta ? (

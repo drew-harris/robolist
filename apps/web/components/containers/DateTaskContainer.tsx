@@ -1,7 +1,6 @@
 import { Center, Loader } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { TaskWithClass } from "types";
-import { vanilla } from "../../utils/trpc";
+import { InferQueryOutput, vanilla } from "../../utils/trpc";
 import { TaskOptionProps } from "../data-display/Task";
 import CenterInfo from "../small/CenterInfo";
 import TaskContainer from "./TaskContainer";
@@ -18,7 +17,7 @@ export default function DateTaskContainer({
 		data: tasks,
 		error,
 		status,
-	} = useQuery<TaskWithClass[], Error>(
+	} = useQuery<InferQueryOutput<"tasks.by-date">, Error>(
 		["tasks", { date: date.toISOString() }],
 		() => {
 			return vanilla.query("tasks.by-date", date);

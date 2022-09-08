@@ -69,8 +69,9 @@ export const canvas = createRouter()
 				const courses = allCourses.filter((course) => {
 					if (
 						classes.filter((_class) => _class.canvasId == course.id).length == 0
-					)
+					) {
 						return true;
+					}
 				});
 				return courses;
 			} catch (error) {
