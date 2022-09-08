@@ -1,7 +1,7 @@
 import { Center, Loader } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { TaskWithClass } from "types";
-import { getTasksByDate } from "../../clientapi/tasks";
+import { vanilla } from "../../utils/trpc";
 import { TaskOptionProps } from "../data-display/Task";
 import CenterInfo from "../small/CenterInfo";
 import TaskContainer from "./TaskContainer";
@@ -9,6 +9,7 @@ import TaskContainer from "./TaskContainer";
 interface DateTaskContainerProps extends TaskOptionProps {
 	date: Date;
 }
+
 export default function DateTaskContainer({
 	date,
 	...props
@@ -20,7 +21,7 @@ export default function DateTaskContainer({
 	} = useQuery<TaskWithClass[], Error>(
 		["tasks", { date: date.toISOString() }],
 		() => {
-			return getTasksByDate(date);
+			return vanilla.query("tasks.by-date", date);
 		},
 		{}
 	);

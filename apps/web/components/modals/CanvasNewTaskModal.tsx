@@ -1,6 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
-	ActionIcon,
 	Badge,
 	Box,
 	Button,
@@ -26,7 +25,6 @@ import { SettingsContext } from "../../contexts/SettingsContext";
 import { getHumanDateString } from "../../utils/client";
 import { InferQueryOutput, trpc, vanilla } from "../../utils/trpc";
 import HeatmapDatePicker from "../input/HeatmapDatePicker";
-import CanvasLogo from "../small/CanvasLogo";
 import OpenOnCanvasButton from "../small/OpenOnCanvasButton";
 
 interface TWorkInfoForm {

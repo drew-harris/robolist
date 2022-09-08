@@ -57,6 +57,7 @@ export const tasks = createRouter()
 			page: z.number().default(1),
 			perPage: z.number().default(10),
 			classId: z.string().nullable(),
+			hideCompleted: z.boolean().optional().default(false),
 		}),
 		resolve: async ({ ctx, input }) => {
 			try {
@@ -64,17 +65,13 @@ export const tasks = createRouter()
 				threeDaysFromNow.setHours(0, 0, 0, 0);
 				const tasks = await ctx.prisma.task.findMany({
 					where: {
-						AND: [
-							{
-								user: {
-									id: ctx.user.id,
-								},
-								classId: input.classId ? input.classId : undefined,
-								dueDate: {
-									gte: threeDaysFromNow,
-								},
-							},
-						],
+						user: {
+							id: ctx.user.id,
+						},
+						classId: input.classId ? input.classId : undefined,
+						dueDate: {
+							gte: threeDaysFromNow,
+						},
 					},
 					orderBy: [
 						{
@@ -217,6 +214,31 @@ export const tasks = createRouter()
 				},
 			});
 			return updatedTask;
+		},
+	})
+
+	.query("by-date", {
+		input: z.date(),
+		resolve: async ({ ctx, input: date }) => {
+			const sixHoursBefore = new Date(date.getTime() - 6 * 60 * 60 * 1000);
+			const sixHoursAfter = new Date(date.getTime() + 6 * 60 * 60 * 1000);
+			try {
+				const tasks = await prisma.task.findMany({
+					where: {
+						userId: ctx.user.id,
+						workDate: {
+							lte: sixHoursAfter,
+							gte: sixHoursBefore,
+						},
+					},
+					include: {
+						class: true,
+					},
+				});
+				return tasks;
+			} catch (error) {
+				throw new Error("Could not fetch tasks");
+			}
 		},
 	})
 

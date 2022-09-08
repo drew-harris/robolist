@@ -134,26 +134,6 @@ export async function rescheduleTask(
 	}
 }
 
-export async function getTasksByDate(date: Date) {
-	try {
-		const data = await fetch(`/api/dates/${date.toISOString()}`);
-		// Parse with superjson
-		const json = await data.json();
-		if (json.error) {
-			console.error(json.error);
-			throw new Error(json.error.message);
-		}
-		return json.tasks.map((task: any) => {
-			// Fix dates
-			task.dueDate = new Date(task.dueDate);
-			task.workDate = new Date(task.workDate);
-			return task;
-		});
-	} catch (error: any) {
-		throw new Error(error.message);
-	}
-}
-
 export async function updateTask(
 	task: Partial<TaskWithClass>
 ): Promise<TaskWithClass> {
