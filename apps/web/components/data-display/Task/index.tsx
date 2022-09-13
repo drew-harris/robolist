@@ -165,7 +165,9 @@ const Task = ({
 							{task.canvasId && task.canvasURL && (
 								<OpenOnCanvasButton url={task.canvasURL} />
 							)}
-							<TaskMenu task={task} options={menuOptions || {}} />
+							{menuOptions && (
+								<TaskMenu task={task} options={menuOptions || {}} />
+							)}
 						</Group>
 						{task.workTime && <Text size="sm">{task.workTime + "min."}</Text>}
 					</Group>
@@ -205,7 +207,7 @@ const Task = ({
 					{task.canvasId && task.canvasURL && (
 						<OpenOnCanvasButton url={task.canvasURL} />
 					)}
-					<TaskMenu task={task} options={menuOptions || {}} />
+					{menuOptions && <TaskMenu task={task} options={menuOptions || {}} />}
 				</Group>
 			</Group>
 		</Paper>

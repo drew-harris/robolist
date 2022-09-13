@@ -8,17 +8,12 @@ export default function CourseTestPage() {
 		<Box>
 			{data &&
 				data.map((course) => (
-					<Paper p="sm" withBorder my="lg">
-						{Object.entries(course).map(([key, value]) => {
-							if (typeof value === "string" && key != "description") {
-								return (
-									<Text mb="sm">
-										{key}: {value}
-									</Text>
-								);
-							}
-						})}
-					</Paper>
+					<Paper
+						dangerouslySetInnerHTML={{ __html: course.description }}
+						p="sm"
+						withBorder
+						my="lg"
+					></Paper>
 				))}
 		</Box>
 	);
