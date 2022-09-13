@@ -1,4 +1,5 @@
 import {
+	ActionIcon,
 	Badge,
 	Group,
 	Paper,
@@ -11,12 +12,16 @@ import {
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useModals } from "@mantine/modals";
+import Link from "next/link";
+import { text } from "node:stream/consumers";
 import { useContext } from "react";
 import { AlertTriangle } from "tabler-icons-react";
 import { TaskWithClass } from "types";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import useTaskMutation from "../../../hooks/useTaskMutation";
 import { getHumanDateString } from "../../../utils/client";
+import CanvasLogo from "../../small/CanvasLogo";
+import OpenOnCanvasButton from "../../small/OpenOnCanvasButton";
 import RescheduleButton from "./RescheduleButton";
 import TaskCheckbox from "./TaskCheckbox";
 import TaskMenu from "./TaskMenu";
@@ -157,7 +162,12 @@ const Task = ({
 						<Group>
 							{checkbox && checkboxElement}
 							{rescheduleButton && <RescheduleButton task={task} />}
-							<TaskMenu task={task} options={menuOptions || {}} />
+							{task.canvasId && task.canvasURL && (
+								<OpenOnCanvasButton url={task.canvasURL} />
+							)}
+							{menuOptions && (
+								<TaskMenu task={task} options={menuOptions || {}} />
+							)}
 						</Group>
 						{task.workTime && <Text size="sm">{task.workTime + "min."}</Text>}
 					</Group>
@@ -194,7 +204,10 @@ const Task = ({
 				<Group>
 					{task.workTime && <Text size="sm">{task.workTime + "min."}</Text>}
 					{rescheduleButton && <RescheduleButton task={task} />}
-					<TaskMenu task={task} options={menuOptions || {}} />
+					{task.canvasId && task.canvasURL && (
+						<OpenOnCanvasButton url={task.canvasURL} />
+					)}
+					{menuOptions && <TaskMenu task={task} options={menuOptions || {}} />}
 				</Group>
 			</Group>
 		</Paper>

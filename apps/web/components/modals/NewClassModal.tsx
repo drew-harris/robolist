@@ -4,9 +4,11 @@ import { useModals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { APIClassCreate, colorChoices } from "types";
+import { colorChoices } from "types";
+import useUser from "../../hooks/useUser";
 import { logEvent } from "../../lib/ga";
-import { vanilla } from "../../utils/trpc";
+import { InferMutationInput, vanilla } from "../../utils/trpc";
+import CanvasClassLink from "../input/canvas/CanvasClassLink";
 import ThemeColorSelector from "../input/ThemeColorSelector";
 
 export default function NewClassModal() {
@@ -14,10 +16,11 @@ export default function NewClassModal() {
 	const modals = useModals();
 	const queryClient = useQueryClient();
 
-	const form = useForm<APIClassCreate>({
+	const form = useForm<InferMutationInput<"classes.create">>({
 		initialValues: {
 			color: colorChoices[5],
 			name: "",
+			canvasClassId: null,
 		},
 
 		validate: {
@@ -25,11 +28,13 @@ export default function NewClassModal() {
 		},
 	});
 
+	const user = useUser();
+
 	const handleColorChange = (color: string) => {
 		form.setFieldValue("color", color);
 	};
 
-	async function handleSubmit(values: APIClassCreate) {
+	async function handleSubmit(values: typeof form.values) {
 		console.log(values);
 		setLoading(true);
 
@@ -62,6 +67,14 @@ export default function NewClassModal() {
 					{...form.getInputProps("name")}
 					label="Class Name"
 				/>
+				{user?.canvasAccount && (
+					<CanvasClassLink
+						value={form.values.canvasClassId || null}
+						setValue={(value) => {
+							form.setFieldValue("canvasClassId", value);
+						}}
+					/>
+				)}
 				<ThemeColorSelector
 					value={form.values.color}
 					onChange={handleColorChange}

@@ -5,7 +5,7 @@ import { createContext, useEffect } from "react";
 import type { Settings } from "types";
 
 const defaultSettings: Settings = {
-	datePickerFormat: "modal",
+	datePickerFormat: "popover",
 	firstDayOfWeek: "sunday",
 	confettiEffect: true,
 	useFocusMode: true,

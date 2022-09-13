@@ -16,6 +16,7 @@ import { NextRouter, useRouter } from "next/router";
 import { useState } from "react";
 import { APILoginRequest, APIRegisterResponse } from "types";
 import { logEvent } from "../lib/ga";
+import { trpc } from "../utils/trpc";
 
 interface SignupForm extends APILoginRequest {
 	confirmPassword: string;
@@ -23,6 +24,7 @@ interface SignupForm extends APILoginRequest {
 
 export default function SignUp() {
 	const router: NextRouter = useRouter();
+	const trpcClient = trpc.useContext();
 	const form = useForm<SignupForm>({
 		initialValues: {
 			email: "",
@@ -60,6 +62,7 @@ export default function SignUp() {
 				category: "user",
 				value: values.email,
 			});
+			trpcClient.refetchQueries(["theme-and-settings"]);
 			router.replace("/classes");
 		} else {
 			setError(data.error?.message || "Unknown error");

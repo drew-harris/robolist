@@ -14,6 +14,7 @@ export function getUserFromJWT(
 		return {
 			email: payload.email,
 			id: payload.id,
+			canvasAccount: payload.canvasAccount,
 		};
 	} catch (error) {
 		console.error(error);

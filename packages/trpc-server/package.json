@@ -14,11 +14,13 @@
 		"@trpc/next": "^9.27.0",
 		"@trpc/react": "^9.27.0",
 		"@trpc/server": "^9.27.0",
+		"bcrypt": "^5.0.1",
+		"canvas-api-ts": "^0.6.1",
 		"jsonwebtoken": "^8.5.1",
 		"react-query": "^3.39.2",
 		"superjson": "^1.9.1",
+		"types": "*",
 		"typescript": "^4.7.4",
-		"zod": "^3.17.10",
-		"types": "*"
+		"zod": "^3.17.10"
 	}
 }

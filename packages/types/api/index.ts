@@ -34,11 +34,6 @@ export interface APICreateTaskResponse {
 	task?: Task;
 }
 
-export interface APIGetTasksResponse {
-	tasks?: TaskWithClass[];
-	error?: APIError;
-}
-
 export interface APINewTaskRequest {
 	dueDate: Date | null;
 	workDate: Date | null;
@@ -77,11 +72,6 @@ export interface APIRescheduleRequest {
 export interface APIRescheduleResponse {
 	error?: APIError;
 	task?: TaskWithClass;
-}
-
-export interface APIGetTasksResponse {
-	error?: APIError;
-	tasks?: TaskWithClass[];
 }
 
 export interface APITaskOrError {

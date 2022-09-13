@@ -20,6 +20,7 @@ import { MailFast, Paint, ThreeDCubeSphere, User } from "tabler-icons-react";
 import { Settings } from "types";
 import ThemeColorSelector from "../components/input/ThemeColorSelector";
 import SendFeedbackModal from "../components/modals/SendFeedbackModal";
+import CanvasLogo from "../components/small/CanvasLogo";
 import Setting from "../components/small/Setting";
 import { FocusContext } from "../contexts/FocusContext";
 import { SettingsContext } from "../contexts/SettingsContext";
@@ -184,21 +185,28 @@ export default function SettingsPage() {
 						</Setting>
 					</Tabs.Panel>
 					<Tabs.Panel value="account">
-						<Button
-							variant="light"
-							m="lg"
-							onClick={() => {
-								deleteCookie("jwt");
-								window.localStorage.removeItem("jwt");
-								window.localStorage.removeItem("focusState");
-								window.localStorage.removeItem("settings");
-								focusFn.cancel();
-								queryClient.removeQueries();
-								router.replace("/login");
-							}}
-						>
-							Sign Out
-						</Button>
+						<Stack p="lg" spacing="xl" align="flex-start">
+							<Button
+								onClick={() => router.replace("/canvas/connect")}
+								leftIcon={<CanvasLogo size={20} pl="xl" />}
+							>
+								Connect Canvas Account
+							</Button>
+							<Button
+								variant="light"
+								onClick={() => {
+									deleteCookie("jwt");
+									window.localStorage.removeItem("jwt");
+									window.localStorage.removeItem("focusState");
+									window.localStorage.removeItem("settings");
+									focusFn.cancel();
+									queryClient.removeQueries();
+									router.replace("/login");
+								}}
+							>
+								Sign Out
+							</Button>
+						</Stack>
 					</Tabs.Panel>
 				</Tabs>
 			</form>

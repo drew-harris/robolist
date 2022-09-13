@@ -8,6 +8,7 @@ const accessNeededPaths = [
 	"/focus",
 	"/tasks/:path*",
 	"/daily",
+	"/canvas/connect",
 	"/classes",
 	"/calendar",
 ];

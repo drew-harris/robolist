@@ -38,6 +38,7 @@ export default function useClassMutation() {
 				color: classData.color,
 				name: classData.name,
 				id: classData.id,
+				canvasClassId: classData.canvasClassId,
 			});
 		},
 		{

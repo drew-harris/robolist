@@ -34,6 +34,9 @@ async function handler(
 			where: {
 				email: body.email,
 			},
+			include: {
+				canvasAccount: true,
+			},
 		});
 
 		if (!user) {
@@ -54,10 +57,8 @@ async function handler(
 		// Sign jwt
 		let jwt: string;
 		try {
-			const payload: UserWithoutPassword = {
-				email: user.email,
-				id: user.id,
-			};
+			const { password, ...rest } = user;
+			const payload = rest;
 
 			const secret: JWT.Secret | undefined = process.env.JWT_SECRET;
 			if (!secret) {
@@ -66,7 +67,9 @@ async function handler(
 					error: { message: "Could not load secret to sign credentials" },
 				});
 			}
-			jwt = JWT.sign(payload, secret);
+			jwt = JWT.sign(payload, secret, {
+				expiresIn: "14d",
+			});
 		} catch (error: any) {
 			log.error("Error signing JWT", { error: error.message });
 			return res.status(500).json({
@@ -77,8 +80,8 @@ async function handler(
 			});
 		}
 
-		// Date 1 week from now
-		const date = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+		// 2 weeks from now
+		const date = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
 
 		// Expires in 5 weeks
 		setCookie("jwt", jwt, {

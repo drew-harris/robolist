@@ -33,7 +33,7 @@ export default function TaskAgendaContainer({
 			<Stack spacing="sm">
 				{[...Array(skeletonLength)].map((e, i) => (
 					<>
-						<DayLabelSkeleton />
+						<DayLabelSkeleton key={i + "label"} />
 						<TaskSkeleton key={i} {...props} />
 					</>
 				))}
@@ -76,7 +76,7 @@ function RealTaskAgendaContainer({
 
 	const elements: JSX.Element[] = [];
 	let addedDivider = false;
-	groups.forEach((group) => {
+	groups.forEach((group, index) => {
 		if (
 			group[0].workDate >= thisMorning() &&
 			!addedDivider &&
@@ -88,6 +88,7 @@ function RealTaskAgendaContainer({
 					label="Now"
 					variant="solid"
 					labelPosition="center"
+					key={"divider" + index}
 					mb="md"
 					mt="xs"
 				/>
@@ -111,7 +112,7 @@ function RealTaskAgendaContainer({
 			}
 		});
 
-		elements.push(<Space />);
+		elements.push(<Space key={"space-" + index} />);
 	});
 
 	return (

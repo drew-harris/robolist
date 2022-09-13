@@ -5,11 +5,9 @@ import { log, withAxiom } from "next-axiom";
 import {
 	APICreateTaskResponse,
 	APINewTaskRequest,
-	APITasksOrError,
 	UserWithoutPassword,
 } from "types";
 import { getPrismaPool } from "../../../serverapi/prismapool";
-import { getTasksFromUserId } from "../../../serverapi/tasks";
 import { getUserFromJWT, unauthorizedResponse } from "../../../utils/server";
 
 async function createTask(
@@ -66,25 +64,6 @@ async function createTask(
 	}
 }
 
-async function getTasks(
-	req: NextApiRequest,
-	res: NextApiResponse<APITasksOrError>,
-	user: UserWithoutPassword
-) {
-	try {
-		const tasks = await getTasksFromUserId(user.id);
-		log.info("user retrieved tasks", user);
-		return res.json({
-			tasks,
-		});
-	} catch (error: any) {
-		log.error("user tried to retrieve tasks", { error: error.message });
-		return res.status(500).json({
-			error: { message: "Internal Server Error", error: error.message },
-		});
-	}
-}
-
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const jwt = getCookie("jwt", { req, res });
 	const user = getUserFromJWT(jwt?.toString());
@@ -97,7 +76,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method == "POST") {
 		return await createTask(req, res, user);
 	} else if (req.method == "GET") {
-		return await getTasks(req, res, user);
 	} else {
 		return res.status(405).json({ error: { message: "Method not allowed" } });
 	}

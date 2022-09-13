@@ -3,7 +3,7 @@ import superjson from "superjson";
 import { DailyWithClass } from "types";
 import { z } from "zod";
 import { createRouter } from "../server/context";
-import { getPrismaPool } from "../utils";
+import { prisma } from "../server/db";
 
 export const daily = createRouter()
 	.transformer(superjson)
@@ -11,14 +11,13 @@ export const daily = createRouter()
 		if (!ctx.user) {
 			throw new Error("Unauthorized");
 		}
-		return next({ ctx: { user: ctx.user } });
+		return next({ ctx: { user: ctx.user, prisma: prisma } });
 	})
 
 	.query("all", {
 		resolve: async ({ ctx }) => {
 			try {
-				const prisma = getPrismaPool();
-				const dailies = await prisma.daily.findMany({
+				const dailies = await ctx.prisma.daily.findMany({
 					where: {
 						user: {
 							id: ctx.user.id,
@@ -46,7 +45,6 @@ export const daily = createRouter()
 		}),
 		resolve: async ({ ctx, input }) => {
 			try {
-				const prisma = getPrismaPool();
 				const early = new Date();
 				early.setFullYear(early.getFullYear() - 3);
 
@@ -58,7 +56,7 @@ export const daily = createRouter()
 					  }
 					: undefined;
 
-				const dailyTask = prisma.daily.create({
+				const dailyTask = ctx.prisma.daily.create({
 					data: {
 						title: input.title,
 						class: classDoc,
@@ -86,8 +84,7 @@ export const daily = createRouter()
 		input: z.string(),
 		resolve: async ({ ctx, input: id }) => {
 			try {
-				const prisma = getPrismaPool();
-				const updated = await prisma.daily.update({
+				const updated = await ctx.prisma.daily.update({
 					where: {
 						id: id,
 					},
@@ -111,8 +108,7 @@ export const daily = createRouter()
 		resolve: async ({ ctx, input: id }) => {
 			try {
 				const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-				const prisma = getPrismaPool();
-				const updated = await prisma.daily.update({
+				const updated = await ctx.prisma.daily.update({
 					where: {
 						id: id,
 					},
@@ -134,8 +130,7 @@ export const daily = createRouter()
 		input: z.number().array(),
 		resolve: async ({ ctx, input }) => {
 			try {
-				const prisma = getPrismaPool();
-				const dailies: DailyWithClass[] = await prisma.daily.findMany({
+				const dailies: DailyWithClass[] = await ctx.prisma.daily.findMany({
 					where: {
 						user: {
 							id: ctx.user.id,
@@ -161,7 +156,6 @@ export const daily = createRouter()
 	.mutation("delete", {
 		input: z.string(),
 		resolve: async ({ ctx, input: id }) => {
-			const prisma = getPrismaPool();
 			const deleted = await prisma.daily.deleteMany({
 				where: {
 					id: id,
@@ -181,7 +175,6 @@ export const daily = createRouter()
 			})
 			.strict(),
 		resolve: async ({ ctx, input }) => {
-			const prisma = getPrismaPool();
 			try {
 				let classDoc = input.classId
 					? {
@@ -193,7 +186,7 @@ export const daily = createRouter()
 							disconnect: true,
 					  };
 				console.log(classDoc);
-				const updated = await prisma.daily.update({
+				const updated = await ctx.prisma.daily.update({
 					where: {
 						id: input.id,
 					},
