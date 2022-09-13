@@ -54,6 +54,7 @@ export default function SendFeedbackModal() {
 						radius="md"
 					/>
 					<Textarea
+						className="feedback-box"
 						autosize
 						minRows={2}
 						placeholder="Enter your feedback here"

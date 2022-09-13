@@ -87,7 +87,7 @@ const ClassSquare = (props: ClassSquareProps) => {
 
 				<Menu>
 					<Menu.Target>
-						<ActionIcon size="sm">
+						<ActionIcon className="class-menu" size="sm">
 							<Dots />
 						</ActionIcon>
 					</Menu.Target>

@@ -21,6 +21,7 @@ export default function useSkeletonCount(
 		if (newNum !== count) {
 			updateCount(newNum);
 		}
+		/* eslint-disable */
 	}, [group]);
 
 	return count;

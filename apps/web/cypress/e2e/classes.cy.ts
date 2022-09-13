@@ -3,15 +3,38 @@ describe("Classes", () => {
 	beforeEach(() => {
 		cy.login(user.email, user.password);
 	});
-	it("Create new class", () => {
+	it("Edits the first class", () => {
 		cy.visit("/classes");
 		cy.contains("Classes");
-		// cy.get("#newclassbutton").first().click();
+		cy.get(".class-menu").first().click();
+		// Get element containing "Edit"
+		cy.get("*").contains("Edit").click();
+		cy.get("#class-name-input").first().clear().type("Test Class");
+		cy.get("button[type=submit]").click();
+		cy.get("*").contains("Test Class").should("be.visible");
+	});
 
-		// const className = "Stats - " + Math.floor(Math.random() * 100);
-		// cy.get("#class-name-input").type(className);
-		// cy.get("button").contains("Submit").click();
-		// cy.contains(className);
+	it("Adds a new class", () => {
+		cy.visit("/classes");
+		cy.contains("Classes");
+		cy.get("button").contains("New Class").click();
+		const randomInt = Math.floor(Math.random() * 1000);
+		cy.get("#class-name-input")
+			.first()
+			.clear()
+			.type("Another Class-" + randomInt);
+		cy.get("button[type=submit]").click();
+		cy.get("*")
+			.contains("Another Class-" + randomInt)
+			.should("be.visible");
+	});
+
+	it("Deletes A Class", () => {
+		cy.visit("/classes");
+		cy.contains("Classes");
+		cy.get(".class-menu").first().click();
+		cy.get("*").contains("Delete").click();
+		cy.get("*").contains("Delete Class?").should("be.visible");
 	});
 });
 

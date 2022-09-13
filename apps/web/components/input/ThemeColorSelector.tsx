@@ -30,6 +30,7 @@ const Swatch = (props: SwatchProps) => {
 	const borderColor = theme.colorScheme === "dark" ? theme.white : theme.black;
 	return (
 		<ColorSwatch
+			className="color-swatch"
 			style={{
 				borderWidth: props.selected == props.color ? 3 : 0,
 				borderColor,
