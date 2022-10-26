@@ -1,5 +1,5 @@
 import { Class } from "@prisma/client";
-import { APIGetClassesResponse, APISuccessOrError } from "types";
+import { APISuccessOrError } from "types";
 
 export async function deleteClass(id: string): Promise<boolean> {
 	try {

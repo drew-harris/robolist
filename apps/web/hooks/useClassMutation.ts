@@ -12,7 +12,7 @@ export default function useClassMutation() {
 		{
 			onMutate: async (id: string) => {
 				await queryClient.cancelQueries(["classes"]);
-				await queryClient.setQueriesData(
+				queryClient.setQueriesData(
 					["classes"],
 					(oldData: Class[] | undefined) => {
 						return oldData?.filter((c) => c.id !== id);
@@ -44,7 +44,7 @@ export default function useClassMutation() {
 		{
 			onMutate: async (classData: Partial<Class>) => {
 				await queryClient.cancelQueries(["classes"]);
-				await queryClient.setQueriesData(
+				queryClient.setQueriesData(
 					["classes"],
 					(oldData: Class[] | undefined) => {
 						if (!oldData) {

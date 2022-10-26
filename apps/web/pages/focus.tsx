@@ -5,8 +5,8 @@ import BigFocusTimer from "../components/data-display/focus/BigFocusTimer";
 import TodayTaskPicker from "../components/input/TodayTaskPicker";
 import { FocusContext } from "../contexts/FocusContext";
 
-export default function TodayTasksPage(props: any) {
-	const { focusState, fn: focusFn, setFocusState } = useContext(FocusContext);
+export default function TodayTasksPage() {
+	const { focusState, fn: focusFn } = useContext(FocusContext);
 	const selectTask = (task: TaskWithClass) => {
 		focusFn.startTask(task);
 	};

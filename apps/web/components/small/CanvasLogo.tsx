@@ -14,7 +14,7 @@ export default function CanvasLogo({
 			<Box
 				{...boxProps}
 				sx={{
-					width: size != "fill" ? size : "100%",
+					width: size !== "fill" ? size : "100%",
 					height: size != "fill" ? size : "100%",
 					position: "relative",
 					display: "grid",

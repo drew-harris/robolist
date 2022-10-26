@@ -2,6 +2,11 @@ import type { Class } from "@prisma/client";
 import { Prisma, Task } from "@prisma/client";
 import { DateAggregation, TaskWithClass } from "..";
 
+export interface APIError {
+	message: string;
+	error?: string;
+}
+
 export interface APIRegisterResponse {
 	error?: APIError;
 	jwt?: string;
@@ -10,11 +15,6 @@ export interface APIRegisterResponse {
 export interface APILoginRequest {
 	email: string;
 	password: string;
-}
-
-export interface APIError {
-	message: string;
-	error?: string;
 }
 
 export type APIClassCreate = Pick<Class, "color" | "name">;
